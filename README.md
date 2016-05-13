@@ -57,8 +57,8 @@ php yii migrate --migrationPath=vendor/pistol88/yii2-order/migrations
 * defaultStatus - статус нового заказа (по умолчанию 'new')
 * successUrl - урл, куда будет перенаправлен покупатель в случае успешной покупки (по умолчанию /order/info/thanks/)
 * robotEmail - e-mail робота (по умолчанию no-reply@localhost)
-* dateFormat - формат даты (по умолчанию d.m.Y H:i:s)
 * robotName - имя почтового робота (по умолчанию Robot)
+* dateFormat - формат даты (по умолчанию d.m.Y H:i:s)
 * cartService - имя компонента, в которой реализована корзина (по умолчанию cart). Интерфейс смотреть в pistol88/yii2-cart.
 * ordersEmail - почта администратора, туда уходят письма с заказами
 * currency - валюта, по умолчанию рубли
