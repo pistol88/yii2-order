@@ -28,7 +28,7 @@ class OrderController  extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => yii::$app->getModule('order')->adminRoles,
+                        'roles' => $this->module->adminRoles,
                     ]
                 ]
             ],
