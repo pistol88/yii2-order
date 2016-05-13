@@ -1,0 +1,39 @@
+{
+    "name": "pistol88/yii2-order",
+    "description": "yii2-order it's a module for site cart order",
+    "keywords": ["yii2", "yii 2", "application", "order", "shop", "module", "pistol88"],
+    "homepage": "https://github.com/pistol88/yii2-cart",
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "support": {
+        "source": "https://github.com/pistol88/yii2-cart"
+    },
+    "authors": [
+        {
+            "name": "Ilya Pistol",
+            "email": "pistol88@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*",
+        "2amigos/yii2-grid-view-library": "*"
+    },
+    "require-dev": {
+        "yiisoft/yii2-debug": "*",
+        "yiisoft/yii2-gii": "*"
+    },
+    "config": {
+        "process-timeout": 1800
+    },
+    "autoload": {
+        "psr-4": {
+            "pistol88\\order\\": ""
+        }
+    },
+    "extra": {
+        "bootstrap": "pistol88\\order\\Bootstrap"
+    }
+}
