@@ -51,8 +51,23 @@ php yii migrate --migrationPath=vendor/pistol88/yii2-order/migrations
     ]
 ```
 
-Вызвать модуль order для проверки (/?r=order).
+Все настройки модуля:
 
+* orderStatuses - статусы (по умолчанию: 'new' => 'Новый', 'approve' => 'Подтвержден', 'cancel' => 'Отменен', 'process' => 'В обработке', 'done' => 'Выполнен')
+* defaultStatus - статус нового заказа (по умолчанию 'new')
+* successUrl - урл, куда будет перенаправлен покупатель в случае успешной покупки (по умолчанию /order/info/thanks/)
+* robotEmail - e-mail робота (по умолчанию no-reply@localhost)
+* dateFormat - формат даты (по умолчанию d.m.Y H:i:s)
+* robotName - имя почтового робота (по умолчанию Robot)
+* cartService - имя компонента, в которой реализована корзина (по умолчанию cart). Интерфейс смотреть в pistol88/yii2-cart.
+* ordersEmail - почта администратора, туда уходят письма с заказами
+* currency - валюта, по умолчанию рубли
+* currencyPosition - позиция значка валюты относительно цены (before или after)
+* priceFormat - формат цены (по умолчанию [2, '.', ''])
+* adminRoles - список ролей, которые имеют доступ в CRUD заказа (по умолчанию ['admin', 'superadmin'])
+
+Виджеты
+---------------------------------
 За вывод формы заказа отвечает виджет pistol88\order\widgets\OrderForm
 
 ```php

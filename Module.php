@@ -7,8 +7,6 @@ class Module extends \yii\base\Module
 {
     public $orderStatuses = ['new' => 'Новый', 'approve' => 'Подтвержден', 'cancel' => 'Отменен', 'process' => 'В обработке', 'done' => 'Выполнен'];
     public $defaultStatus = 'new';
-    public $deliveryTypes = ['russian_post' => 'Почта России', 'pickup' => 'Самовывоз'];
-    public $payTypes = ['online' => 'Online', 'courier' => 'Курьеру'];
     public $successUrl = '/order/info/thanks/';
     public $robotEmail = "no-reply@localhost";
     public $dateFormat = 'd.m.Y H:i:s';
