@@ -88,7 +88,7 @@ class OrderController  extends Controller
         $model = new Order(['scenario' => 'admin']);
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
-				return $this->redirect(['/order/update', 'id' => $model->id]);
+				return $this->redirect(['order/update', 'id' => $model->id]);
 		}
 		else {
             return $this->render('create', [
