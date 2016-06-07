@@ -17,7 +17,7 @@ use yii\widgets\DetailView;
     <?php if($model->payment) { ?>
         <li><?=$model->payment->name;?></li>
     <?php } ?>
-    <?php if($model->shipping->name) { ?>
+    <?php if($model->shipping) { ?>
         <li><?=$model->shipping->name;?></li>
     <?php } ?>
         

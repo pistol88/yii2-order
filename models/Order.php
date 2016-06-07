@@ -22,7 +22,7 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['client_name', 'phone', 'email'], 'required'],
+            [['status'], 'required'],
             [['status', 'date', 'payment', 'comment'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment'], 'safe'],
@@ -76,12 +76,12 @@ class Order extends \yii\db\ActiveRecord
 
     public function getPayment()
     {
-        return $this->hasOne(PaymentType::className(), ['id' => 'payment_type_id'])->one();
+        return $this->hasOne(PaymentType::className(), ['id' => 'payment_type_id']);
     }
     
     public function getShipping()
     {
-        return $this->hasOne(ShippingType::className(), ['id' => 'shipping_type_id'])->one();
+        return $this->hasOne(ShippingType::className(), ['id' => 'shipping_type_id']);
     }
     
     public function getCount()
@@ -92,6 +92,11 @@ class Order extends \yii\db\ActiveRecord
     public function getFields()
     {
         return $this->hasMany(FieldValue::className(), ['order_id' => 'id']);
+    }
+    
+    public function getAllFields()
+    {
+        return Field::find()->all();
     }
     
     public function getElements($withModel = true)
@@ -128,6 +133,44 @@ class Order extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
+    
+    public function afterSave($insert, $changedAttributes)
+    {
+        if(true) {
+            if($fieldValues = yii::$app->request->post('FieldValue')['value']) {
+                foreach($fieldValues as $field_id => $fieldValue) {
+                    $fieldValueModel = new FieldValue;
+                    $fieldValueModel->value = $fieldValue;
+                    $fieldValueModel->order_id = $this->id;
+                    $fieldValueModel->field_id = $field_id;
+                    $fieldValueModel->save();
+                }
+            }
+
+            $cartService = yii::$app->cart;
+
+            if($elements = $cartService->elements) {
+                foreach($elements as $element) {
+                    $count = $element->getCount();
+
+                    $element->getModel()->minusAmount($count);
+
+                    $orderElementModel = new Element;
+                    $orderElementModel->order_id = $this->id;
+                    $orderElementModel->model = $element->getModel(false);
+                    $orderElementModel->item_id = $element->getItemId();
+                    $orderElementModel->count = $count;
+                    $orderElementModel->price = $element->getPrice();
+                    $orderElementModel->options = json_encode($element->getOptions());
+                    $orderElementModel->description = '';
+                    $orderElementModel->save();
+                }
+            }
+
+            $cartService->truncate();
+        }
+        return true;
     }
     
     public function beforeDelete()

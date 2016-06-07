@@ -11,12 +11,14 @@ use pistol88\order\models\Field;
 use pistol88\order\models\FieldValue;
 use yii\helpers\ArrayHelper;
 
-class OrderForm extends \yii\base\Widget  {
+class OrderForm extends \yii\base\Widget
+{
     
     public $view = 'order-form/form';
     public $elements = [];
     
-    public function run() {
+    public function run()
+    {
         $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
         $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
         

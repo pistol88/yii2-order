@@ -1,13 +1,16 @@
 <?php
-
 namespace pistol88\order\widgets\field_type;
 
-class Checkbox extends \yii\base\Widget  {
-    public $fieldValueModel = null;
+use pistol88\order\models\FieldValue;
+
+class Checkbox extends \yii\base\Widget
+{
     public $fieldModel = null;
     public $form = null;
     
-    public function run() {
-        return $this->form->field($this->fieldValueModel, 'value['.$this->fieldModel->id.']')->label($this->fieldModel->name)->checkbox(['required' => ($this->fieldModel->required == 'yes'),'label' => $this->fieldModel->name]);
+    public function run()
+    {
+        $fieldValueModel = new FieldValue;
+        return $this->form->field($fieldValueModel, 'value['.$this->fieldModel->id.']')->label($this->fieldModel->name)->checkbox(['required' => ($this->fieldModel->required == 'yes'),'label' => $this->fieldModel->name]);
     }
 }

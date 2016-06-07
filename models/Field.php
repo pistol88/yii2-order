@@ -40,7 +40,12 @@ class Field extends \yii\db\ActiveRecord
     
     public function getValue($orderId)
     {
-        return $this->hasOne(FieldValue::className(), ['field_id' => 'id'])->andWhere(['order_id' => $orderId])->one()->value;
+        if($value = $this->hasOne(FieldValue::className(), ['field_id' => 'id'])->andWhere(['order_id' => $orderId])->one()) {
+            return $value->value;
+        }
+        else {
+            return null;
+        }
     }
     
     public function getVariants()

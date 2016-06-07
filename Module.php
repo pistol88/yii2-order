@@ -11,20 +11,32 @@ class Module extends \yii\base\Module
     public $robotEmail = "no-reply@localhost";
     public $dateFormat = 'd.m.Y H:i:s';
     public $robotName = 'Robot';
-    public $cartService = 'cart';
     public $ordersEmail = false;
     public $currency = 'руб.';
     public $currencyPosition = 'after';
     public $priceFormat = [2, '.', ''];
     public $adminRoles = ['admin', 'superadmin'];
     
+    public $userModel = 'common\models\User';
+    public $userSearchModel = 'backend\models\search\UserSearch';
+    
+    public $productModel = 'pistol88\shop\models\Product';
+    public $productSearchModel = 'pistol88\shop\models\product\ProductSearch';
+    
+    public $productCategoriesList = [];
+    public $productCategories = null;
+    
     private $mail;
     
-    public function getCart()
+    public function init()
     {
-        $cart = yii::$app->{$this->cartService};
+        if(is_callable($this->productCategories))
+        {
+            $values = $this->productCategories;
+            $this->productCategoriesList = $values();
+        }
 
-        return $cart;
+        parent::init();
     }
     
     public function getMail()

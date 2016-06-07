@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
 
-$this->title = $model->id;
+$this->title = Yii::t('order', 'Order').' #'.$model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('order', 'Orders'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -14,9 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
         alert('<?= Yii::$app->session->getFlash('reSendDone') ?>');
         </script>
     <?php } ?>
-
-
-    <h1><?=Yii::t('order', 'Order');?> #<?= $model->id ?></h1>
 
     <p>
         <?= Html::a(Yii::t('order', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

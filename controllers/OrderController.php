@@ -88,9 +88,11 @@ class OrderController  extends Controller
         $model = new Order(['scenario' => 'admin']);
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
-				return $this->redirect(['order/update', 'id' => $model->id]);
+            return $this->redirect(['order/view', 'id' => $model->id]);
 		}
 		else {
+            //yii::$app->cart->truncate();
+            
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -105,39 +107,11 @@ class OrderController  extends Controller
             $model->date = date('Y-m-d');
             $model->time = date('H:i:s');
             $model->timestamp = time();
-            $model->status = yii::$app->getModule('order')->defaultStatus;
+            $model->status = $this->module->defaultStatus;
             $model->payment = 'no';
             $model->user_id = yii::$app->user->id;
 
             if($model->save()) {
-                if($fieldValues = yii::$app->request->post('FieldValue')['value']) {
-                    foreach($fieldValues as $field_id => $fieldValue) {
-                        $fieldValueModel = new FieldValue;
-                        $fieldValueModel->value = $fieldValue;
-                        $fieldValueModel->order_id = $model->id;
-                        $fieldValueModel->field_id = $field_id;
-                        $fieldValueModel->save();
-                    }
-                }
-
-                $cartService = yii::$app->getModule('order')->getCart();
-
-                if($elements = $cartService->elements) {
-                    foreach($elements as $element) {
-                        $orderElementModel = new Element;
-                        $orderElementModel->order_id = $model->id;
-                        $orderElementModel->model = $element->getModel(false);
-                        $orderElementModel->item_id = $element->getItemId();
-                        $orderElementModel->count = $element->getCount();
-                        $orderElementModel->price = $element->getPrice();
-                        $orderElementModel->options = json_encode($element->getOptions());
-                        $orderElementModel->description = '';
-                        $orderElementModel->save();
-                    }
-                }
-
-                $cartService->truncate();
-
                 return $this->redirect([yii::$app->getModule('order')->successUrl, 'id' => $model->id, 'payment' => $model->payment_type_id]);
             }
             else {

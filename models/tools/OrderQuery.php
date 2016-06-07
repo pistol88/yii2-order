@@ -2,7 +2,6 @@
 namespace pistol88\order\models\tools;
 
 use yii;
-use yii\web\Session;
 
 class OrderQuery extends \yii\db\ActiveQuery
 {

@@ -27,7 +27,7 @@ class FieldValueVariant extends \yii\db\ActiveRecord
         ];
     }
     
-    public function editField($id, $name, $value)
+    public static function editField($id, $name, $value)
     {
         $setting = FieldValueVariant::findOne($id);
         $setting->$name = $value;

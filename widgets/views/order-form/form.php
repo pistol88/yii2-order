@@ -21,13 +21,13 @@ $widgets = [];
         <?php if($fields = $fieldFind->all()) { ?>
             <div class="row">
                 <?php foreach($fields as $fieldModel) { ?>
-                    <div class="col-lg-12">
+                    <div class="col-lg-12 col-xs-12">
                         <?php
                         if($widget = $fieldModel->type->widget) {
                             if(!$widgets[$widget]) {
                                 $widgets[$widget] = new $widget;
                             }
-                            echo $widgets[$widget]::widget(['form' => $form, 'fieldValueModel' => $fieldValueModel, 'fieldModel' => $fieldModel]);
+                            echo $widgets[$widget]::widget(['form' => $form, 'fieldModel' => $fieldModel]);
                         }
                         else {
                             echo $form->field($fieldValueModel, 'value['.$fieldModel->id.']')->label($fieldModel->name)->textInput(['required' => ($fieldModel->required == 'yes')]);
