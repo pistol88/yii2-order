@@ -1,17 +1,19 @@
 <?php
-
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-$this->title = Yii::t('order', 'Orders');
+$this->title = yii::t('order', 'Orders');
 $this->params['breadcrumbs'][] = $this->title;
+
+use pistol88\order\assets\Asset;
+Asset::register($this);
 ?>
 
 <div class="order-index">
 
     <div class="row">
         <div class="col-lg-6">
-            <?= Html::a(Yii::t('order', 'Create order'), ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a(yii::t('order', 'Create order'), ['create'], ['class' => 'btn btn-success']) ?>
         </div>
         <div class="col-lg-6">
             <?= $this->render('/parts/menu.php'); ?>
@@ -22,6 +24,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="box">
         <div class="box-body">
+            <form action="" class="row search">
+                <div class="col-lg-4 col-md-4">
+                    <input style="width: 180px; float: left;" class="form-control" type="date" name="date_start" value="<?=Html::encode(yii::$app->request->get('date_start'));?>" />
+                    <input style="width: 180px;" class="form-control" type="date" name="date_stop" value="<?=Html::encode(yii::$app->request->get('date_stop'));?>" />
+                </div>
+                
+                <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
+                    <div class="col-lg-2 col-md-4">
+                        <select class="form-control" name="OrderSearch[seller_user_id]">
+                            <option value=""><?=yii::t('order', 'Seller');?></option>
+                            <?php foreach($sellers as $seller) { ?>
+                                <option <?php if($seller->id == yii::$app->request->get('OrderSearch')['seller_user_id']) echo ' selected="selected"';?> value="<?=$seller->id;?>"><?=$seller->username;?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                <?php } ?>
+                <div class="col-lg-2 col-md-4">
+                    <input class="form-control" type="submit" value="<?=Yii::t('order', 'Search');?>" class="btn btn-success" />
+                </div>
+            </form>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
@@ -39,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => yii::t('order', 'Price'),
         				'content' => function($model) {
         					return $model->total;
-        				}
+        				},
         			],
                     'client_name',
                     'phone',
@@ -53,7 +75,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['class' => 'form-control', 'prompt' => Yii::t('order', 'Payment type')]
                         ),
                         'value' => function($model) use ($paymentTypes) {
-                            return $paymentTypes[$model->payment_type_id];
+                            if(isset($paymentTypes[$model->payment_type_id])) {
+                                return $paymentTypes[$model->payment_type_id];
+                            }
                         }
                     ],
                     [
@@ -65,7 +89,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['class' => 'form-control', 'prompt' => Yii::t('order', 'Shipping type')]
                         ),
                         'value' => function($model) use ($shippingTypes) {
-                            return $shippingTypes[$model->shipping_type_id];
+                            if(isset($shippingTypes[$model->shipping_type_id])) {
+                                return $shippingTypes[$model->shipping_type_id];
+                            }
                         }
                     ],
                     [

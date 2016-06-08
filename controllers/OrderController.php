@@ -2,9 +2,9 @@
 namespace pistol88\order\controllers;
 
 use yii;
-use pistol88\order\models\Order;
 use pistol88\order\models\tools\OrderSearch;
 use pistol88\order\models\OrderElement;
+use pistol88\order\models\Order;
 use pistol88\order\models\Element;
 use pistol88\order\models\tools\ElementSearch;
 use pistol88\order\models\Field;
@@ -16,6 +16,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use pistol88\order\events\OrderEvent;
 
 class OrderController  extends Controller
 {
@@ -85,9 +86,15 @@ class OrderController  extends Controller
 
     public function actionCreate()
     {
-        $model = new Order(['scenario' => 'admin']);
+        $orderModel = yii::$app->orderModel;
+
+        $model = new $orderModel;
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
+            $module = $this->module;
+            $orderEvent = new OrderEvent(['model' => $model]);
+            $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
+            
             return $this->redirect(['order/view', 'id' => $model->id]);
 		}
 		else {
@@ -154,7 +161,9 @@ class OrderController  extends Controller
 
     protected function findModel($id)
     {
-        if (($model = Order::findOne($id)) !== null) {
+        $orderModel = yii::$app->orderModel;
+        
+        if (($model = $orderModel::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

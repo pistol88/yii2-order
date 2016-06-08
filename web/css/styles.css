@@ -1,0 +1,11 @@
+.order-index .table td:nth-child(2) {
+    width: 50px;
+}
+
+.order-index .table td:nth-child(3) {
+    width: 100px;
+}
+
+.order-index .table td:nth-child(7), .order-index .table td:nth-child(8) {
+    width: 140px;
+}

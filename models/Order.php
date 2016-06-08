@@ -15,7 +15,8 @@ class Order extends \yii\db\ActiveRecord
         return '{{%order}}';
     }
 
-    public static function find() {
+    public static function find()
+    {
         return new OrderQuery(get_called_class());
     }
 
@@ -26,7 +27,7 @@ class Order extends \yii\db\ActiveRecord
             [['status', 'date', 'payment', 'comment'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment'], 'safe'],
-			[['user_id', 'shipping_type_id', 'payment_type_id'], 'integer'],
+			[['seller_user_id', 'user_id', 'shipping_type_id', 'payment_type_id'], 'integer'],
         ];
     }
 
@@ -45,6 +46,7 @@ class Order extends \yii\db\ActiveRecord
             'status' => yii::t('order', 'Status'),
 			'time' => yii::t('order', 'Time'),
 			'user_id' => yii::t('order', 'User ID'),
+            'seller_user_id' => yii::t('order', 'Seller'),
         ];
     }
 
@@ -113,6 +115,7 @@ class Order extends \yii\db\ActiveRecord
             }
             $returnModels[$element->id] = $element;
         }
+        
         return $returnModels;
     }
 
@@ -135,41 +138,57 @@ class Order extends \yii\db\ActiveRecord
         }
     }
     
+    public function beforeSave($insert)
+    {
+        if(empty($this->seller_user_id)) {
+            $this->seller_user_id = yii::$app->user->id;
+        }
+        
+        if(empty($this->timestamp)) {
+            $this->timestamp = time();
+        }
+        
+        if(empty($this->date)) {
+            $this->date = date('Y-m-d H:i:s');
+        }
+        
+        return true;
+    }
+    
     public function afterSave($insert, $changedAttributes)
     {
-        if(true) {
-            if($fieldValues = yii::$app->request->post('FieldValue')['value']) {
-                foreach($fieldValues as $field_id => $fieldValue) {
-                    $fieldValueModel = new FieldValue;
-                    $fieldValueModel->value = $fieldValue;
-                    $fieldValueModel->order_id = $this->id;
-                    $fieldValueModel->field_id = $field_id;
-                    $fieldValueModel->save();
-                }
+        if($fieldValues = yii::$app->request->post('FieldValue')['value']) {
+            foreach($fieldValues as $field_id => $fieldValue) {
+                $fieldValueModel = new FieldValue;
+                $fieldValueModel->value = $fieldValue;
+                $fieldValueModel->order_id = $this->id;
+                $fieldValueModel->field_id = $field_id;
+                $fieldValueModel->save();
             }
-
-            $cartService = yii::$app->cart;
-
-            if($elements = $cartService->elements) {
-                foreach($elements as $element) {
-                    $count = $element->getCount();
-
-                    $element->getModel()->minusAmount($count);
-
-                    $orderElementModel = new Element;
-                    $orderElementModel->order_id = $this->id;
-                    $orderElementModel->model = $element->getModel(false);
-                    $orderElementModel->item_id = $element->getItemId();
-                    $orderElementModel->count = $count;
-                    $orderElementModel->price = $element->getPrice();
-                    $orderElementModel->options = json_encode($element->getOptions());
-                    $orderElementModel->description = '';
-                    $orderElementModel->save();
-                }
-            }
-
-            $cartService->truncate();
         }
+
+        $cartService = yii::$app->cart;
+
+        if($elements = $cartService->elements) {
+            foreach($elements as $element) {
+                $count = $element->getCount();
+
+                $element->getModel()->minusAmount($count);
+
+                $orderElementModel = new Element;
+                $orderElementModel->order_id = $this->id;
+                $orderElementModel->model = $element->getModel(false);
+                $orderElementModel->item_id = $element->getItemId();
+                $orderElementModel->count = $count;
+                $orderElementModel->price = $element->getPrice();
+                $orderElementModel->options = json_encode($element->getOptions());
+                $orderElementModel->description = '';
+                $orderElementModel->save();
+            }
+        }
+
+        $cartService->truncate();
+
         return true;
     }
     

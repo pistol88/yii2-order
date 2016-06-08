@@ -28,6 +28,7 @@ class m160513_051519_Mass extends Migration
                 'order_info' => Schema::TYPE_TEXT . " COMMENT 'PHP serialize'",
                 'time' => Schema::TYPE_STRING . "(50) NOT NULL",
                 'user_id' => Schema::TYPE_INTEGER . "(11)",
+                'seller_user_id' => Schema::TYPE_INTEGER . "(11)",
                 'date' => Schema::TYPE_DATETIME . "",
                 'payment' => "enum('yes','no')" . " NOT NULL DEFAULT 'no'",
                 'timestamp' => Schema::TYPE_INTEGER . "(11)",

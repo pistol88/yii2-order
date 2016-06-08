@@ -22,7 +22,7 @@ $this->registerJs("pistol88.createorder.updateCartUrl = '".Url::toRoute(['tools/
         <div class="row">
             <div class="col-lg-6">
                 <div class=" panel panel-default">
-                    <div class="panel-heading"><h3>Заказ</h3></div>
+                    <div class="panel-heading"><h3><?=yii::t('order', 'Order');?></h3></div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-6">

@@ -75,7 +75,9 @@ $this->params['breadcrumbs'][] = $this->title;
                    <div class="panel-body">
                        <div class="row">
                            <div class="col-lg-6">
-                               <?= $form->field($model, 'user_id')->textInput(['data-info-service' => Url::toRoute(['tools/user-info'])]) ?>
+                               <label class="control-label" for="order-user_id"><?=Yii::t('order', 'Buyer');?></label>
+                               <?= Html::input('text', 'Order[user_id]', '', ['id' => 'order-user_id', 'class' => 'form-control', 'data-info-service' => Url::toRoute(['tools/user-info'])]) ?>
+                               
                                <p><?=Html::a('<i class="glyphicon glyphicon-search"></i> Найти покупателя', '#usersModal', ['id' => 'choose-user-id', 'data-toggle' => "modal", 'data-target' => "#usersModal"]);?></a></p>
                                <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
                            </div>
@@ -149,7 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <div class="modal fade" id="usersModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -163,7 +165,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <div class="modal fade" id="productsModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

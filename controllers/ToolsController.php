@@ -86,9 +86,24 @@ class ToolsController  extends Controller
         
         $model = new $this->module->userModel;
         
-        if($model = $model::findOne($userId)) {
-            if(isset($model->userProfile)) {
-                $profile = $model->userProfile;
+        $userModel = $model::findOne($userId);
+        
+        $promocode = false;
+        
+        if(!$userModel) {
+            foreach($this->module->userModelCustomFields as $field) {
+                if($userModel = $model::findOne([$field => $userId])) {
+                    if($field == 'promocode') {
+                        $promocode = $userModel->promocode;
+                    }
+                    break;
+                }
+            }
+        }
+        
+        if($userModel) {
+            if(isset($userModel->userProfile)) {
+                $profile = $userModel->userProfile;
                 $fullName = $profile->getFullName();
             }
             else {
@@ -96,10 +111,12 @@ class ToolsController  extends Controller
             }
 
             $json = [
+                'id' => $userModel->id,
                 'status' => 'success',
-                'username' => $model->username,
-                'email' => $model->email,
-                'phone' => $model->phone,
+                'promocode' => $promocode,
+                'username' => $userModel->username,
+                'email' => $userModel->email,
+                'phone' => $userModel->phone,
                 'client_name' => $fullName,
             ];
         } else {

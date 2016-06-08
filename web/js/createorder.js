@@ -32,22 +32,18 @@ pistol88.createorder = {
         var input = $(this);
         userId = $(this).val();
 
-        if(userId > 0) {
+        if(userId != '') {
             $(input).css('opacity', '0.2');
             $.post($(this).data('info-service'), {userId: userId},
                 function(json) {
                     $(input).css('opacity', '1');
                     if(json.status == 'success') {
-                        if($(".order-form input[name='Order[email]']").val() == '') {
-                            $(".order-form input[name='Order[email]']").val(json.email);
-                        }
-
-                        if($(".order-form input[name='Order[phone]']").val() == '') {
-                            $(".order-form input[name='Order[phone]']").val(json.phone);
-                        }
-
-                        if($(".order-form input[name='Order[client_name]']").val() == '') {
-                            $(".order-form input[name='Order[client_name]']").val(json.client_name);
+                        $(".order-form input[name='Order[user_id]']").val(json.id);
+                        $(".order-form input[name='Order[email]']").val(json.email);
+                        $(".order-form input[name='Order[phone]']").val(json.phone);
+                        $(".order-form input[name='Order[client_name]']").val(json.client_name);
+                        if(json.promocode) {
+                            $(".promo-code-enter input").val(json.promocode).change();
                         }
                     }
                     else {

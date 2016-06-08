@@ -38,11 +38,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'client_name',
 			[
 				'attribute' => 'shipping_type_id',
-				'value'		=> $shippingTypes[$model->shipping_type_id],
+				'value'		=> @$shippingTypes[$model->shipping_type_id],
 			],
 			[
 				'attribute' => 'payment_type_id',
-				'value'		=> $paymentTypes[$model->payment_type_id],
+				'value'		=> @$paymentTypes[$model->payment_type_id],
 			],
             'phone',
             'email:email',
