@@ -3,6 +3,7 @@ namespace pistol88\order\controllers;
 
 use yii;
 use pistol88\order\models\Element;
+use pistol88\order\events\ElementEvent;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -34,9 +35,15 @@ class ElementController extends Controller
 
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        
+        $module = $this->module;
+        $orderEvent = new ElementEvent(['model' => $model, 'orderModel' => $model->order, 'productModel' => $model->getModel()]);
+        $this->module->trigger($module::EVENT_ELEMENT_DELETE, $orderEvent);
+        
+        $model->delete();
 
-        return $this->redirect(yii::$app->request->referrer);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     public function actionEditable()

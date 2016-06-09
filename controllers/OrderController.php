@@ -147,7 +147,13 @@ class OrderController  extends Controller
 
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        
+        $module = $this->module;
+        $orderEvent = new OrderEvent(['model' => $model]);
+        $this->module->trigger($module::EVENT_ORDER_DELETE, $orderEvent);
+        
+        $model->delete();
 
         return $this->redirect(['index']);
     }

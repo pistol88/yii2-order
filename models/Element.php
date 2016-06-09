@@ -49,6 +49,28 @@ class Element extends \yii\db\ActiveRecord
 		return $this->hasOne(Order::className(), ['id' => 'order_id']);
 	}
 
+    
+    public function getModel($withCartElementModel = true)
+    {
+        if(!$withCartElementModel) {
+            return $this->model;
+        }
+        
+        $model = '\\'.$this->model;
+        if(is_string($this->model) && class_exists($this->model)) {
+            $productModel = new $model();
+            if ($productModel = $productModel::findOne($this->item_id)) {
+                $model = $productModel;
+            } else {
+                throw new \yii\base\Exception('Element model not found');
+            }
+        } else {
+            throw new \yii\base\Exception('Unknow element model');
+        }
+        
+        return $model;
+    }
+    
     public static function getStatInMoth()
     {
         $query = new Query();
@@ -94,5 +116,12 @@ class Element extends \yii\db\ActiveRecord
         $setting = Element::findOne($id);
         $setting->$name = $value;
         $setting->save();
+    }
+    
+    public function beforeDelete()
+    {
+        $this->getModel()->plusAmount($this->count);
+        
+        return true;
     }
 }

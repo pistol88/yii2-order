@@ -86,23 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
 			],
             'description',
-			[
-				'class' => \dosamigos\grid\EditableColumn::className(),
-				'attribute' => 'count',
-				'content' => function($model) {
-                    if($productModel = $model->product->getProduct()) {
-                        return $model->count;
-                    }
-                    else {
-                        return Yii::t('order', 'Unknow product');
-                    }
-                },
-                'filter' => false,
-				'url' => ['/order/element/editable'],
-				'editableOptions' => [
-					'mode' => 'inline',
-				]
-			],
+			'count',
 			[
 				'class' => \dosamigos\grid\EditableColumn::className(),
 				'attribute' => 'price',
