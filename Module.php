@@ -14,7 +14,7 @@ class Module extends \yii\base\Module
     public $dateFormat = 'd.m.Y H:i:s';
     public $robotName = 'Robot';
     public $ordersEmail = false;
-    public $currency = 'руб.';
+    public $currency = ' р.';
     public $currencyPosition = 'after';
     public $priceFormat = [2, '.', ''];
     public $adminRoles = ['admin', 'superadmin'];

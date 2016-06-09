@@ -77,4 +77,11 @@ return [
     'Seller' => 'Продавец',
     'Promocode' => 'Промокод',
     'Buyer' => 'Покупатель',
+    'Today' => 'Сегодня',
+    'By month' => 'За месяц',
+    'In month' => 'В этом месяце',
+    'Average check' => 'Средний чек',
+    'Turnover' => 'Оборот',
+    'Buyers' => 'Покупателей',
+    'Orders count' => 'Число заказов',
 ];

@@ -3,6 +3,7 @@
 namespace pistol88\order\models;
 
 use yii;
+use yii\db\Query;
 
 class Element extends \yii\db\ActiveRecord
 {
@@ -39,7 +40,53 @@ class Element extends \yii\db\ActiveRecord
     {
         $modelStr = $this->model;
         $productModel = new $modelStr();
+        
         return $this->hasOne($productModel::className(), ['id' => 'item_id'])->one();
+    }
+    
+	public function getOrder()
+    {
+		return $this->hasOne(Order::className(), ['id' => 'order_id']);
+	}
+
+    public static function getStatInMoth()
+    {
+        $query = new Query();
+        $query->addSelect(['sum(count*price) as total, sum(count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
+                ->from ([Element::tableName().' e'])
+                ->leftJoin(Order::tableName().' o','o.id = e.order_id')
+                ->where('DATE_FORMAT(o.date, "%Y-%m") = :date', [':date' => date('Y-m')]);
+
+        $result = $query->one();
+        
+        return array_map('intval', $result);
+    }
+
+    public static function getStatByDate($date)
+    {
+        $query = new Query();
+        $query->addSelect(['sum(count*price) as total, sum(count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
+                ->from ([Element::tableName().' e'])
+                ->leftJoin(Order::tableName().' o','o.id = e.order_id')
+                ->where('DATE_FORMAT(o.date, "%Y-%m-%d") = :date', [':date' => $date]);
+
+        $result = $query->one();
+        
+        return array_map('intval', $result);
+    }
+    
+    public static function getStatByDatePeriod($dateStart, $dateStop)
+    {
+        $query = new Query();
+        $query->addSelect(['sum(count*price) as total, sum(count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
+                ->from ([Element::tableName().' e'])
+                ->leftJoin(Order::tableName().' o','o.id = e.order_id')
+                ->where('o.date >= :dateStart', [':dateStart' => $dateStart])
+                ->andWhere('o.date <= :dateStop', [':dateStop' => $dateStop]);
+
+        $result = $query->one();
+        
+        return array_map('intval', $result);
     }
     
     public static function editField($id, $name, $value)

@@ -9,3 +9,26 @@
 .order-index .table td:nth-child(7), .order-index .table td:nth-child(8) {
     width: 140px;
 }
+
+.order-informer {
+    color: #333;
+    font-size: 16px;
+}
+
+.order-informer .result {
+    background-color: yellow;
+    color: black;
+    padding: 2px;
+    font-size: 12px;
+    
+}
+
+.order-informer .bad-result {
+    background-color: red;
+    color: white;
+}
+
+.order-informer .good-result {
+    background-color: green;
+    color: white;
+}

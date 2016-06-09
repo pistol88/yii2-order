@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\grid\GridView;
+use pistol88\order\widgets\Informer;
 
 $this->title = yii::t('order', 'Orders');
 $this->params['breadcrumbs'][] = $this->title;
@@ -9,8 +10,10 @@ use pistol88\order\assets\Asset;
 Asset::register($this);
 ?>
 
+<div class="informer-widget">
+    <?=Informer::widget();?>
+</div>
 <div class="order-index">
-
     <div class="row">
         <div class="col-lg-6">
             <?= Html::a(yii::t('order', 'Create order'), ['create'], ['class' => 'btn btn-success']) ?>
