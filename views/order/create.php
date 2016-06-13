@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="order-form">
 
         <div class="row">
-            <?php $form = ActiveForm::begin(); ?>
+            <?php $form = ActiveForm::begin(['id' => 'orderForm']); ?>
             <div class="col-lg-6">
                 <div class=" panel panel-default">
                     <div class="panel-heading"><h3>Заказ</h3></div>
@@ -86,10 +86,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
                            </div>
                        </div>
-                       
-                        <div class="form-group offer">
-                            <?= Html::submitButton($model->isNewRecord ? Yii::t('order', 'Create order') : Yii::t('order', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-                        </div>
                    </div>
 
                </div>
@@ -141,6 +137,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="panel-body">
                         <div class="total">
                             <?= CartInformer::widget(['htmlTag' => 'div', 'text' => '{c} на {p}']); ?>
+                        </div>
+                        <div class="form-group offer">
+                            <?= Html::submitButton($model->isNewRecord ? Yii::t('order', 'Create order') : Yii::t('order', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'onclick' => '$("#orderForm").submit();']) ?>
                         </div>
                     </div>
                 </div>
