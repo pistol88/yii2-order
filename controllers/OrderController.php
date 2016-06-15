@@ -60,7 +60,7 @@ class OrderController  extends Controller
 
     public function actionView($id)
     {
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
         $searchModel = new ElementSearch;
         $params = yii::$app->request->queryParams;
         if(empty($params['ElementSearch'])) {
@@ -96,10 +96,8 @@ class OrderController  extends Controller
             $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
             
             return $this->redirect(['order/view', 'id' => $model->id]);
-		}
-		else {
+        } else {
             //yii::$app->cart->truncate();
-            
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -120,13 +118,11 @@ class OrderController  extends Controller
 
             if($model->save()) {
                 return $this->redirect([yii::$app->getModule('order')->successUrl, 'id' => $model->id, 'payment' => $model->payment_type_id]);
-            }
-            else {
+            } else {
                 yii::$app->session->setFlash('orderError', yii::t('order', 'Error (check required fields)'));
                 return $this->redirect(yii::$app->request->referrer);
             }
-        }
-		else {
+        } else {
             yii::$app->session->setFlash('orderError', yii::t('order', 'Error (check required fields)'));
             return $this->redirect(yii::$app->request->referrer);
         }
