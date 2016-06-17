@@ -24,10 +24,10 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['status'], 'required'],
-            [['status', 'date', 'payment', 'comment'], 'string'],
+            [['status', 'date', 'payment', 'comment', 'delivery_time'], 'string'],
             [['email'], 'email'],
-            [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment'], 'safe'],
-			[['seller_user_id', 'user_id', 'shipping_type_id', 'payment_type_id'], 'integer'],
+            [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type'], 'safe'],
+			[['seller_user_id', 'user_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
         ];
     }
 
@@ -37,6 +37,10 @@ class Order extends \yii\db\ActiveRecord
             'id' => yii::t('order', 'ID'),
             'client_name' => yii::t('order', 'Client name'),
             'shipping_type_id' => yii::t('order', 'Delivery'),
+            'delivery_time_date' => yii::t('order', 'Delivery date'),
+            'delivery_time_hour' => yii::t('order', 'Delivery hour'),
+            'delivery_time_min' => yii::t('order', 'Delivery minute'),
+            'delivery_type' => yii::t('order', 'Delivery time'),
             'payment_type_id' => yii::t('order', 'Payment type'),
             'comment' => yii::t('order', 'Comment'),
             'phone' => yii::t('order', 'Phone'),
@@ -53,7 +57,7 @@ class Order extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return [
-            'customer' => ['comment', 'client_name', 'shipping_type_id', 'payment_type_id', 'phone', 'email'],
+            'customer' => ['comment', 'client_name', 'shipping_type_id', 'payment_type_id', 'phone', 'email', 'delivery_time_date', 'delivery_time_hour', 'delivery_time_min', 'delivery_type'],
             'admin' => array_keys($this->attributeLabels()),
 			'default' => array_keys($this->attributeLabels()),
         ];
@@ -197,6 +201,7 @@ class Order extends \yii\db\ActiveRecord
         foreach ($this->hasMany(Element::className(), ['order_id' => 'id'])->all() as $elem) {
             $elem->delete();
         }
+        
         foreach ($this->hasMany(FieldValue::className(), ['order_id' => 'id'])->all() as $val) {
             $val->delete();
         }

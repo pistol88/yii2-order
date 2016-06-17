@@ -84,4 +84,9 @@ return [
     'Turnover' => 'Оборот',
     'Buyers' => 'Покупателей',
     'Orders count' => 'Число заказов',
+    'Delivery time' => 'Время доставки',
+    'Delivery type' => 'Тип доставки',
+    'Delivery date' => 'Дата доставки',
+    'Delivery hour' => 'Час доставки',
+    'Delivery minute' => 'Минута доставки',
 ];

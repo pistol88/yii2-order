@@ -2,7 +2,6 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-$widgets = [];
 ?>
 <?php if(Yii::$app->session->hasFlash('orderError')) { ?>
     <script>
@@ -24,10 +23,7 @@ $widgets = [];
                     <div class="col-lg-12 col-xs-12">
                         <?php
                         if($widget = $fieldModel->type->widget) {
-                            if(!$widgets[$widget]) {
-                                $widgets[$widget] = new $widget;
-                            }
-                            echo $widgets[$widget]::widget(['form' => $form, 'fieldModel' => $fieldModel]);
+                            echo $widget::widget(['form' => $form, 'fieldModel' => $fieldModel]);
                         }
                         else {
                             echo $form->field($fieldValueModel, 'value['.$fieldModel->id.']')->label($fieldModel->name)->textInput(['required' => ($fieldModel->required == 'yes')]);

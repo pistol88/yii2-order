@@ -32,7 +32,13 @@ use yii\helpers\ArrayHelper;
         $variantModel = new FieldValueVariant();
         
         $searchModel = new FieldValueVariantSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams); 
+        
+        $params = Yii::$app->request->queryParams;
+        if(empty($params['FieldValueVariantSearch'])) {
+            $params = ['FieldValueVariantSearch' => ['field_id' => $model->id]];
+        }
+
+        $dataProvider = $searchModel->search($params); 
         ?>
         <div class="pistol88-variants">
             <h3><?=Yii::t('order', 'Variants');?></h3>

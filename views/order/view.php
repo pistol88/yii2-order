@@ -53,6 +53,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
         ],
     ];
+    
+    if($model->delivery_type == 'totime') {
+        $detailElements['attributes'][] = 'delivery_time_date';
+        $detailElements['attributes'][] = 'delivery_time_hour';
+        $detailElements['attributes'][] = 'delivery_time_min';
+    }
 
     if($fields = $fieldFind->all()) {
         foreach($fields as $fieldModel) {
