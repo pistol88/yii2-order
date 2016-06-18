@@ -205,7 +205,7 @@ class Order extends \yii\db\ActiveRecord
             }
         }
         
-        if($this->isNewRecord) {
+        if(empty($this->elements)) {
             $cartService = yii::$app->cart;
 
             if($elements = $cartService->elements) {

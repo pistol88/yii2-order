@@ -68,7 +68,7 @@ Asset::register($this);
                         ],
                         [
                             'attribute' => 'cost',
-                            'label' => yii::t('order', 'Cost'),
+                            'label' => yii::$app->getModule('order')->currency,
                             'content' => function($model) {
                                 $total = $model->cost;
                                 if($model->promocode) {
@@ -95,6 +95,7 @@ Asset::register($this);
                                 }
                             }
                         ],
+                        /*
                         [
                             'attribute' => 'shipping_type_id',
                             'filter' => Html::activeDropDownList(
@@ -109,6 +110,7 @@ Asset::register($this);
                                 }
                             }
                         ],
+                        */
                         [
                             'attribute' => 'date',
                             'filter' => false,
