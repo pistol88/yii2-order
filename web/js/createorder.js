@@ -12,6 +12,13 @@ pistol88.createorder = {
                 return false;
             }
         });
+        
+        $(document).on('keypress', function(event) {
+            if((event.ctrlKey) && ((event.keyCode == 0xA)||(event.keyCode == 0xD))) {
+                $("#orderForm").submit();
+            }
+        });
+        
         $(document).on('click', ".render-cart", this.updateCart);
     },
     chooseUser: function(id) {
