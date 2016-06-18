@@ -46,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
             'phone',
             'email:email',
+            'promocode',
             'comment',
 			[
 				'attribute' => 'date',
@@ -84,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute' => 'item_id',
                 'content' => function($model) {
                     if($productModel = $model->product) {
-                        return $productModel->getCartName();
+                        return $productModel->getCartId().'. '.$productModel->getCartName();
                     }
                     else {
                         return Yii::t('order', 'Unknow product');
@@ -93,17 +94,9 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
             'description',
 			'count',
-			[
-				'class' => \dosamigos\grid\EditableColumn::className(),
-				'attribute' => 'price',
-				'url' => ['/order/element/editable'],
-                'filter' => false,
-				'editableOptions' => [
-					'mode' => 'inline',
-				]
-			],
+			'price',
             ['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],
         ],
     ]); ?>
-    <h3 align="right"><?=Yii::t('order', 'In total'); ?>: <?=$model->getCount();?>, <?=$model->getTotal();?> <?=Yii::$app->getModule('order')->currency;?> </h3>
+    <h3 align="right"><?=Yii::t('order', 'In total'); ?>: <?=$model->count;?> <?=Yii::t('order', 'on'); ?> <?=$model->cost;?> <?=Yii::$app->getModule('order')->currency;?> </h3>
 </div>

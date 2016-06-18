@@ -12,7 +12,7 @@ class OrderSearch extends Order
     {
         return [
             [['id', 'user_id', 'shipping_type_id', 'payment_type_id', 'seller_user_id'], 'integer'],
-            [['client_name', 'phone', 'email', 'status', 'time', 'date'], 'safe'],
+            [['client_name', 'phone', 'email', 'status', 'time', 'date', 'promocode'], 'safe'],
         ];
     }
 
@@ -23,10 +23,15 @@ class OrderSearch extends Order
 
     public function search($params)
     {
-        $query = Order::find()->orderBy('id DESC');
+        $query = Order::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC
+                ]
+            ],
         ]);
 
         $this->load($params);
@@ -39,6 +44,7 @@ class OrderSearch extends Order
             'id' => $this->id,
             'user_id' => $this->user_id,
             'status' => $this->status,
+            'promocode' => $this->promocode,
             'seller_user_id' => $this->seller_user_id,
         ]);
 
@@ -50,6 +56,11 @@ class OrderSearch extends Order
                 ->andFilterWhere(['like', 'date', $this->date])
                 ->andFilterWhere(['like', 'time', $this->time]);
 
+        if(yii::$app->request->get('promocode')) {
+            $query->andWhere("promocode != ''");
+            $query->andWhere("promocode IS NOT NULL");
+        }
+        
         if($dateStart = yii::$app->request->get('date_start')) {
             $query->andWhere('date > :dateStart', [':dateStart' => $dateStart]);
         }

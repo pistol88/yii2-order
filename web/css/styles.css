@@ -10,6 +10,10 @@
     width: 140px;
 }
 
+.order-index .search {
+    padding: 20px;
+}
+
 .order-informer {
     color: #333;
     font-size: 16px;
@@ -31,4 +35,14 @@
 .order-informer .good-result {
     background-color: green;
     color: white;
+}
+
+.order-list .btn-default {
+    padding: 2px;
+}
+
+.order-list select, .order-list input {
+    font-size: 12px;
+    padding: 2px;
+    height: auto;
 }

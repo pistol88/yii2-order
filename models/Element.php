@@ -74,7 +74,7 @@ class Element extends \yii\db\ActiveRecord
     public static function getStatInMoth()
     {
         $query = new Query();
-        $query->addSelect(['sum(count*price) as total, sum(count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
+        $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
                 ->from ([Element::tableName().' e'])
                 ->leftJoin(Order::tableName().' o','o.id = e.order_id')
                 ->where('DATE_FORMAT(o.date, "%Y-%m") = :date', [':date' => date('Y-m')]);
@@ -87,7 +87,7 @@ class Element extends \yii\db\ActiveRecord
     public static function getStatByDate($date)
     {
         $query = new Query();
-        $query->addSelect(['sum(count*price) as total, sum(count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
+        $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
                 ->from ([Element::tableName().' e'])
                 ->leftJoin(Order::tableName().' o','o.id = e.order_id')
                 ->where('DATE_FORMAT(o.date, "%Y-%m-%d") = :date', [':date' => $date]);
@@ -100,7 +100,7 @@ class Element extends \yii\db\ActiveRecord
     public static function getStatByDatePeriod($dateStart, $dateStop)
     {
         $query = new Query();
-        $query->addSelect(['sum(count*price) as total, sum(count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
+        $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
                 ->from ([Element::tableName().' e'])
                 ->leftJoin(Order::tableName().' o','o.id = e.order_id')
                 ->where('o.date >= :dateStart', [':dateStart' => $dateStart])
@@ -117,9 +117,20 @@ class Element extends \yii\db\ActiveRecord
         $setting->$name = $value;
         $setting->save();
     }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+        
+        $this->order->reCount();
+
+        return true;
+    }
     
     public function beforeDelete()
     {
+        parent::beforeDelete();
+        
         $this->getModel()->plusAmount($this->count);
         
         return true;

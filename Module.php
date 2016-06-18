@@ -28,23 +28,17 @@ class Module extends \yii\base\Module
     
     public $productModel = 'pistol88\shop\models\Product';
     public $productSearchModel = 'pistol88\shop\models\product\ProductSearch';
-    
-    public $productCategoriesList = [];
     public $productCategories = null;
     
     public $sellers = null; //collable, return seller list
     
     private $mail;
-    
+
     public function init()
     {
-        if(is_callable($this->productCategories))
-        {
-            $values = $this->productCategories;
-            $this->productCategoriesList = $values();
-        }
-
         parent::init();
+        
+        return true;
     }
     
     public function getMail()
@@ -61,6 +55,18 @@ class Module extends \yii\base\Module
         return $this->mail;
     }
     
+    public function getProductCategoriesList()
+    {
+        if(is_callable($this->productCategories))
+        {
+            $values = $this->productCategories;
+            
+            return $values();
+        }
+        
+        return [];
+    }
+    
     public function getSellerList()
     {
         if(is_callable($this->sellers)) {
@@ -68,5 +74,7 @@ class Module extends \yii\base\Module
             
             return $values();
         }
+        
+        return [];
     }
 }

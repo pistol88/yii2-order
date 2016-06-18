@@ -24,7 +24,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['status'], 'required'],
-            [['status', 'date', 'payment', 'comment', 'delivery_time'], 'string'],
+            [['status', 'date', 'payment', 'comment', 'delivery_time', 'promocode'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type'], 'safe'],
 			[['seller_user_id', 'user_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
@@ -44,12 +44,15 @@ class Order extends \yii\db\ActiveRecord
             'payment_type_id' => yii::t('order', 'Payment type'),
             'comment' => yii::t('order', 'Comment'),
             'phone' => yii::t('order', 'Phone'),
+            'promocode' => yii::t('order', 'Promocode'),
 			'date' => yii::t('order', 'Date'),
             'email' => yii::t('order', 'Email'),
 			'payment' => yii::t('order', 'Paid'),
             'status' => yii::t('order', 'Status'),
 			'time' => yii::t('order', 'Time'),
 			'user_id' => yii::t('order', 'User ID'),
+            'count' => yii::t('order', 'Count'),
+            'cost' => yii::t('order', 'Cost'),
             'seller_user_id' => yii::t('order', 'Seller'),
         ];
     }
@@ -57,7 +60,7 @@ class Order extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return [
-            'customer' => ['comment', 'client_name', 'shipping_type_id', 'payment_type_id', 'phone', 'email', 'delivery_time_date', 'delivery_time_hour', 'delivery_time_min', 'delivery_type'],
+            'customer' => ['promocode', 'comment', 'client_name', 'shipping_type_id', 'payment_type_id', 'phone', 'email', 'delivery_time_date', 'delivery_time_hour', 'delivery_time_min', 'delivery_type'],
             'admin' => array_keys($this->attributeLabels()),
 			'default' => array_keys($this->attributeLabels()),
         ];
@@ -142,6 +145,19 @@ class Order extends \yii\db\ActiveRecord
         }
     }
     
+    public function reCount()
+    {
+        $this->count = 0;
+        $this->cost = 0;
+        
+        foreach($this->hasMany(Element::className(), ['order_id' => 'id'])->all() as $element) {
+            $this->count += $element->count;
+            $this->cost += $element->count*$element->price;
+        }
+        
+        return $this->save(false);
+    }
+    
     public function beforeSave($insert)
     {
         if(empty($this->seller_user_id)) {
@@ -152,8 +168,24 @@ class Order extends \yii\db\ActiveRecord
             $this->timestamp = time();
         }
         
-        if(empty($this->date)) {
-            $this->date = date('Y-m-d H:i:s');
+        if($this->isNewRecord) {
+            $cartService = yii::$app->cart;
+
+            if(empty($this->cost)) {
+                $this->cost = $cartService->cost;
+            }
+
+            if(empty($this->count)) {
+                $this->count = $cartService->count;
+            }
+
+            if(empty($this->date)) {
+                $this->date = date('Y-m-d H:i:s');
+            }
+
+            if(empty($this->promocode) && yii::$app->has('promocode')) {
+                $this->promocode = yii::$app->promocode->code;
+            }
         }
         
         return true;
@@ -161,6 +193,8 @@ class Order extends \yii\db\ActiveRecord
     
     public function afterSave($insert, $changedAttributes)
     {
+        parent::afterSave($insert, $changedAttributes);
+
         if($fieldValues = yii::$app->request->post('FieldValue')['value']) {
             foreach($fieldValues as $field_id => $fieldValue) {
                 $fieldValueModel = new FieldValue;
@@ -170,34 +204,42 @@ class Order extends \yii\db\ActiveRecord
                 $fieldValueModel->save();
             }
         }
+        
+        if($this->isNewRecord) {
+            $cartService = yii::$app->cart;
 
-        $cartService = yii::$app->cart;
+            if($elements = $cartService->elements) {
+                foreach($elements as $element) {
+                    $count = $element->getCount();
 
-        if($elements = $cartService->elements) {
-            foreach($elements as $element) {
-                $count = $element->getCount();
+                    $element->getModel()->minusAmount($count);
 
-                $element->getModel()->minusAmount($count);
-
-                $orderElementModel = new Element;
-                $orderElementModel->order_id = $this->id;
-                $orderElementModel->model = $element->getModel(false);
-                $orderElementModel->item_id = $element->getItemId();
-                $orderElementModel->count = $count;
-                $orderElementModel->price = $element->getPrice();
-                $orderElementModel->options = json_encode($element->getOptions());
-                $orderElementModel->description = '';
-                $orderElementModel->save();
+                    $orderElementModel = new Element;
+                    $orderElementModel->order_id = $this->id;
+                    $orderElementModel->model = $element->getModel(false);
+                    $orderElementModel->item_id = $element->getItemId();
+                    $orderElementModel->count = $count;
+                    $orderElementModel->price = $element->getPrice();
+                    $orderElementModel->options = json_encode($element->getOptions());
+                    $orderElementModel->description = '';
+                    $orderElementModel->save();
+                }
             }
+
+            if(yii::$app->has('promocode')) {
+                yii::$app->promocode->clear();
+            }
+
+            $cartService->truncate();
         }
-
-        $cartService->truncate();
-
+        
         return true;
     }
     
     public function beforeDelete()
     {
+        parent::beforeDelete();
+        
         foreach ($this->hasMany(Element::className(), ['order_id' => 'id'])->all() as $elem) {
             $elem->delete();
         }
