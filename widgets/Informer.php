@@ -1,5 +1,4 @@
 <?php
-
 namespace pistol88\order\widgets;
 
 use yii\helpers\Html;
@@ -41,5 +40,4 @@ class Informer extends \yii\base\Widget
             'byOldMonth' => $byOldMonth,
         ]);
     }
-
 }

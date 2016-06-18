@@ -121,14 +121,14 @@ Asset::register($this);
                             'filter' => Html::activeDropDownList(
                                 $searchModel,
                                 'status',
-                                Yii::$app->getModule('order')->orderStatuses,
+                                yii::$app->getModule('order')->orderStatuses,
                                 ['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
                             ),
                             'value'	=> function($model) {
                                 return  Yii::$app->getModule('order')->orderStatuses[$model->status];
                             }
                         ],
-                        ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 145px;']],
+                        ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']],
                     ],
                 ]); ?>
             </div>

@@ -26,15 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
+    <?=pistol88\order\widgets\ChangeStatus::widget(['model' => $model]);?>
+    
     <?php
     $detailElements = [
         'model' => $model,
         'attributes' => [
             'id',
-            [
-				'attribute' => 'status',
-				'value'		=> Yii::$app->getModule('order')->orderStatuses[$model->status],
-			],
             'client_name',
 			[
 				'attribute' => 'shipping_type_id',
@@ -65,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
         foreach($fields as $fieldModel) {
             $detailElements['attributes'][] = [
 				'label' => $fieldModel->name,
-				'value'		=> $fieldModel->getValue($model->id),
+				'value'		=> Html::encode($fieldModel->getValue($model->id)),
 			];
         }
     }

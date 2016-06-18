@@ -128,6 +128,21 @@ class OrderController  extends Controller
         }
     }
 
+    public function actionUpdateStatus()
+    {
+        if($id = yii::$app->request->post('id')) {
+            $model = Order::findOne($id);
+            $model->status = yii::$app->request->post('status');
+            if($model->save(false)) {
+                die(json_encode(['result' => 'success']));
+            } else {
+                die(json_encode(['result' => 'fail', 'error' => 'enable to save']));
+            }
+        }
+        
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
