@@ -74,7 +74,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<h2><?=Yii::t('order', 'Order list'); ?></h2>
 
-    <?= GridView::widget([
+    <?= \kartik\grid\GridView::widget([
+        'export' => false,
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [

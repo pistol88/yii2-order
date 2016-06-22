@@ -55,6 +55,7 @@ Asset::register($this);
             </form>
             <div class="order-list">
                 <?=  \kartik\grid\GridView::widget([
+                    'export' => false,
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
