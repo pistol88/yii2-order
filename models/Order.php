@@ -27,7 +27,7 @@ class Order extends \yii\db\ActiveRecord
             [['status', 'date', 'payment', 'comment', 'delivery_time', 'promocode'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type'], 'safe'],
-			[['seller_user_id', 'user_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
+            [['seller_user_id', 'user_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
         ];
     }
 
@@ -45,12 +45,12 @@ class Order extends \yii\db\ActiveRecord
             'comment' => yii::t('order', 'Comment'),
             'phone' => yii::t('order', 'Phone'),
             'promocode' => yii::t('order', 'Promocode'),
-			'date' => yii::t('order', 'Date'),
+            'date' => yii::t('order', 'Date'),
             'email' => yii::t('order', 'Email'),
-			'payment' => yii::t('order', 'Paid'),
+            'payment' => yii::t('order', 'Paid'),
             'status' => yii::t('order', 'Status'),
-			'time' => yii::t('order', 'Time'),
-			'user_id' => yii::t('order', 'User ID'),
+            'time' => yii::t('order', 'Time'),
+            'user_id' => yii::t('order', 'User ID'),
             'count' => yii::t('order', 'Count'),
             'cost' => yii::t('order', 'Cost'),
             'seller_user_id' => yii::t('order', 'Seller'),
@@ -62,7 +62,7 @@ class Order extends \yii\db\ActiveRecord
         return [
             'customer' => ['promocode', 'comment', 'client_name', 'shipping_type_id', 'payment_type_id', 'phone', 'email', 'delivery_time_date', 'delivery_time_hour', 'delivery_time_min', 'delivery_type'],
             'admin' => array_keys($this->attributeLabels()),
-			'default' => array_keys($this->attributeLabels()),
+            'default' => array_keys($this->attributeLabels()),
         ];
     }
 
@@ -248,6 +248,6 @@ class Order extends \yii\db\ActiveRecord
             $val->delete();
         }
 		
-		return true;
+            return true;
     }
 }
