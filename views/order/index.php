@@ -27,32 +27,34 @@ Asset::register($this);
 
     <div class="box">
         <div class="box-body">
-            <form action="" class="row search">
-                <div class="col-md-4">
-                    <input style="width: 180px; float: left;" class="form-control" type="date" name="date_start" value="<?=Html::encode(yii::$app->request->get('date_start'));?>" />
-                    <input style="width: 180px;" class="form-control" type="date" name="date_stop" value="<?=Html::encode(yii::$app->request->get('date_stop'));?>" />
-                </div>
-                
-                <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
-                    <div class="col-md-2">
-                        <select class="form-control" name="OrderSearch[seller_user_id]">
-                            <option value=""><?=yii::t('order', 'Seller');?></option>
-                            <?php foreach($sellers as $seller) { ?>
-                                <option <?php if($seller->id == yii::$app->request->get('OrderSearch')['seller_user_id']) echo ' selected="selected"';?> value="<?=$seller->id;?>"><?=$seller->username;?></option>
-                            <?php } ?>
-                        </select>
+            <?php if(yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) { ?>
+                <form action="" class="row search">
+                    <div class="col-md-4">
+                        <input style="width: 180px; float: left;" class="form-control" type="date" name="date_start" value="<?=Html::encode(yii::$app->request->get('date_start'));?>" />
+                        <input style="width: 180px;" class="form-control" type="date" name="date_stop" value="<?=Html::encode(yii::$app->request->get('date_stop'));?>" />
                     </div>
-                <?php } ?>
-                
-                <div class="col-md-2">
-                    <input type="checkbox" <?php if(yii::$app->request->get('promocode')) echo ' checked="checked"'; ?> name="promocode" value="1" id="order-promocode" />
-                    <label for="order-promocode"><?=yii::t('order', 'Promocode');?></label>
-                </div>
 
-                <div class="col-md-2">
-                    <input class="form-control" type="submit" value="<?=Yii::t('order', 'Search');?>" class="btn btn-success" />
-                </div>
-            </form>
+                    <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
+                        <div class="col-md-2">
+                            <select class="form-control" name="OrderSearch[seller_user_id]">
+                                <option value=""><?=yii::t('order', 'Seller');?></option>
+                                <?php foreach($sellers as $seller) { ?>
+                                    <option <?php if($seller->id == yii::$app->request->get('OrderSearch')['seller_user_id']) echo ' selected="selected"';?> value="<?=$seller->id;?>"><?=$seller->username;?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    <?php } ?>
+
+                    <div class="col-md-2">
+                        <input type="checkbox" <?php if(yii::$app->request->get('promocode')) echo ' checked="checked"'; ?> name="promocode" value="1" id="order-promocode" />
+                        <label for="order-promocode"><?=yii::t('order', 'Promocode');?></label>
+                    </div>
+
+                    <div class="col-md-2">
+                        <input class="form-control" type="submit" value="<?=Yii::t('order', 'Search');?>" class="btn btn-success" />
+                    </div>
+                </form>
+            <?php } ?>
             <div class="order-list">
                 <?=  \kartik\grid\GridView::widget([
                     'export' => false,

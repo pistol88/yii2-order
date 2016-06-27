@@ -45,7 +45,14 @@ class OrderController  extends Controller
     public function actionIndex()
     {
         $searchModel = new OrderSearch();
-        $dataProvider = $searchModel->search(yii::$app->request->queryParams);
+        
+        $searchParams = yii::$app->request->queryParams;
+        
+        if(!yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) {
+            $searchParams['OrderSearch']['seller_user_id'] = yii::$app->user->id;
+        }
+        
+        $dataProvider = $searchModel->search($searchParams);
 
         $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
         $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
