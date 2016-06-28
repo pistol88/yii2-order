@@ -7,6 +7,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use pistol88\cart\widgets\ElementsList;
 use pistol88\cart\widgets\CartInformer;
+use pistol88\order\models\ShippingType;
 
 class ToolsController  extends Controller
 {
@@ -134,6 +135,16 @@ class ToolsController  extends Controller
         die(json_encode([
             'cart' => ElementsList::widget(['type' => ElementsList::TYPE_FULL, 'showOffer' => false]),
             'total' => CartInformer::widget(['htmlTag' => 'div', 'text' => '{c} на {p}']),
+        ]));
+    }
+    
+    public function actionUpdateShippingType()
+    {
+        $shippingTypeId = (int)yii::$app->request->post('shipping_type_id');
+        yii::$app->session->set('orderShippingType', $shippingTypeId);
+        
+        die(json_encode([
+            'total' => yii::$app->cart->cost,
         ]));
     }
 }

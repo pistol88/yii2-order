@@ -36,9 +36,7 @@ class Module extends \yii\base\Module
 
     public function init()
     {
-        parent::init();
-        
-        return true;
+        return parent::init();
     }
     
     public function getMail()

@@ -2,6 +2,8 @@
 namespace pistol88\order;
 
 use yii\base\BootstrapInterface;
+use pistol88\order\behaviors\ShippingCost;
+use yii;
 
 class Bootstrap implements BootstrapInterface
 {
@@ -11,6 +13,12 @@ class Bootstrap implements BootstrapInterface
             $app->set('orderModel', ['class' => 'pistol88\order\models\Order']);
         }
 
+        if($app->has('cart') && $orderShippingType = yii::$app->session->get('orderShippingType')) {
+            if($orderShippingType > 0) {
+                $app->get('cart')->attachBehavior('ShippingCost', new ShippingCost);
+            }
+        }
+        
         if(empty($app->modules['gridview'])) {
             $app->setModule('gridview', [
                 'class' => '\kartik\grid\Module',

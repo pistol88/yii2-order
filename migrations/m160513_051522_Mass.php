@@ -95,6 +95,7 @@ class m160513_051519_Mass extends Migration
                 'name' => Schema::TYPE_STRING . "(255) NOT NULL",
                 'description' => Schema::TYPE_TEXT . " NOT NULL",
                 'cost' => Schema::TYPE_DECIMAL . "(11,2)",
+                'free_cost_from' => Schema::TYPE_DECIMAL . "(11,2)",
                 'order' => Schema::TYPE_INTEGER . "(11) DEFAULT '0'",
                 ], $tableOptions);
 

@@ -41,9 +41,25 @@ use yii\widgets\ActiveForm;
             <div class="col-lg-12"><?= $form->field($orderModel, 'comment')->textArea() ?></div>
         </div>
 
-        <?= $form->field($orderModel, 'shipping_type_id')->dropDownList($shippingTypes) ?>
-        
-        <?= $form->field($orderModel, 'payment_type_id')->dropDownList($paymentTypes) ?>
+        <div class="row">
+            <?php if($shippingTypes) { ?>
+                <div class="col-md-6 order-widget-shipping-type">
+                    <?= $form->field($orderModel, 'shipping_type_id')->dropDownList($shippingTypes) ?>
+                    <script>
+                        shippintTypeCost = [];
+                        <?php foreach($shippingTypesList as $sht) { ?>
+                            shippintTypeCost[<?=$sht->id;?>] = <?=(int)$sht->cost;?>;
+                        <?php } ?>
+                    </script>
+                </div>
+            <?php } ?>
+
+            <?php if($paymentTypes) { ?>
+                <div class="col-md-6">
+                    <?= $form->field($orderModel, 'payment_type_id')->dropDownList($paymentTypes) ?>
+                </div>
+            <?php } ?>
+        </div>
     
         <div class="row">
             <div class="col-lg-12">

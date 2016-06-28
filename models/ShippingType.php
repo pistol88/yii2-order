@@ -16,7 +16,7 @@ class ShippingType extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['order'], 'integer'],
-            [['cost'], 'double'],
+            [['cost', 'free_cost_from'], 'double'],
             [['description'], 'string'],
         ];
     }
@@ -25,8 +25,9 @@ class ShippingType extends \yii\db\ActiveRecord
     {
         return [
             'name' => yii::t('order', 'Name'),
-            'order' => yii::t('order', 'Order'),
+            'order' => yii::t('order', 'Sort'),
             'cost' => yii::t('order', 'Cost'),
+            'free_cost_from' => yii::t('order', 'Free cost from'),
         ];
     }
 }
