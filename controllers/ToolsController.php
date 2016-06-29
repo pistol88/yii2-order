@@ -94,12 +94,13 @@ class ToolsController  extends Controller
         if(!$userModel) {
             foreach($this->module->userModelCustomFields as $field) {
                 if($userModel = $model::findOne([$field => $userId])) {
-                    if($field == 'promocode') {
-                        $promocode = $userModel->promocode;
-                    }
                     break;
                 }
             }
+        }
+        
+        if($userModel->promocode) {
+            $promocode = $userModel->promocode;
         }
         
         if($userModel) {
