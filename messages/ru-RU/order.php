@@ -94,4 +94,5 @@ return [
     'on' => 'на',
     'Free cost from' => 'Бесплатно от',
     'Choose shipping type' => 'Выберите тип доставки',
+    'Total' => 'Итого',
 ];

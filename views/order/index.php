@@ -55,6 +55,13 @@ Asset::register($this);
                     </div>
                 </form>
             <?php } ?>
+            
+            <div class="summary">
+                <?=yii::t('order', 'Total');?>:
+                <?=number_format($dataProvider->query->sum('cost'), 2, ',', '.');?>
+                <?=yii::$app->getModule('order')->currency;?>
+            </div>
+            
             <div class="order-list">
                 <?=  \kartik\grid\GridView::widget([
                     'export' => false,

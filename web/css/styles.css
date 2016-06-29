@@ -46,3 +46,9 @@
     padding: 2px;
     height: auto;
 }
+
+.summary {
+    padding: 10px;
+    font-size: 20px;
+    text-align: right;
+}
