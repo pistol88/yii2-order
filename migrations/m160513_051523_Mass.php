@@ -60,6 +60,7 @@ class m160513_051519_Mass extends Migration
                 'type_id' => Schema::TYPE_INTEGER . "(11) NOT NULL",
                 'description' => Schema::TYPE_TEXT . "",
                 'required' => "enum('yes','no')" . " NOT NULL DEFAULT 'no'",
+                'order' => Schema::TYPE_INTEGER . "(11) DEFAULT '0'",
                 ], $tableOptions);
 
             $this->createTable('{{%order_field_type}}', [

@@ -17,7 +17,7 @@ class Field extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'type_id'], 'required'],
-            [['id', 'type_id'], 'integer'],
+            [['id', 'type_id', 'order'], 'integer'],
             [['description', 'name', 'required'], 'string'],
         ];
     }
@@ -29,6 +29,7 @@ class Field extends \yii\db\ActiveRecord
             'description' => yii::t('order', 'Description'),
             'name' => yii::t('order', 'Name'),
             'type_id' => yii::t('order', 'Type'),
+            'order' => yii::t('order', 'Sort'),
             'required' => yii::t('order', 'Required'),
         ];
     }

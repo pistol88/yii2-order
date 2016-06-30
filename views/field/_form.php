@@ -8,15 +8,29 @@ use pistol88\order\models\FieldType;
 use yii\helpers\ArrayHelper;
 ?>
 
-<div class="order-form">
+<div class="field-form">
 
     <?php $form = ActiveForm::begin(); ?>
-        <?= $form->field($model, 'name')->textInput() ?>
-
-        <?= $form->field($model, 'type_id')->dropDownList(ArrayHelper::map(FieldType::find()->all(), 'id', 'name')) ?>
+        <div class="row">
+            <div class="col-md-6">
+                <?= $form->field($model, 'name')->textInput() ?>
+            </div>
+            <div class="col-md-6">
+                <?= $form->field($model, 'type_id')->dropDownList(ArrayHelper::map(FieldType::find()->all(), 'id', 'name')) ?>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <?= $form->field($model, 'required')->radioList(['no' => Yii::t('order', 'no'), 'yes' => Yii::t('order', 'yes')]); ?>
+            </div>
+            <div class="col-md-6">
+                <?= $form->field($model, 'order')->textInput(['type' => 'number']) ?>
+            </div>
+        </div>
+        
     
-        <?= $form->field($model, 'required')->radioList(['no' => Yii::t('order', 'no'), 'yes' => Yii::t('order', 'yes')]); ?>
-    
+        
         <?= $form->field($model, 'description')->textArea(['maxlength' => true]) ?>
     
         <div class="form-group">

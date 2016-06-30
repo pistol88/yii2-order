@@ -41,7 +41,7 @@ class OrderForm extends \yii\base\Widget
             $shippingTypes[$sht->id] = $name;
         }
         
-        $fieldFind = Field::find();
+        $fieldFind = Field::find()->orderBy('order DESC');
         
         $fieldValueModel = new FieldValue;
     
