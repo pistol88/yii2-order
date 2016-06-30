@@ -15,6 +15,11 @@ $this->beginPage();
         <meta http-equiv="Content-Type" content="text/html; charset=<?= Yii::$app->charset ?>" />
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head(); ?>
+        <style>
+            body, td, th {
+                font-family: Arial;
+            }
+        </style>
     </head>
     <body>
         <?php $this->beginBody(); ?>

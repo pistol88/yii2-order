@@ -17,6 +17,27 @@ use yii\widgets\ActiveForm;
             <div class="col-lg-3"><?= $form->field($orderModel, 'email')->textInput(['required' => true, 'type' => 'email']) ?></div>
         </div>
 
+
+        <div class="row">
+            <?php if($shippingTypes) { ?>
+                <div class="col-md-6 order-widget-shipping-type">
+                    <?= $form->field($orderModel, 'shipping_type_id')->dropDownList($shippingTypes) ?>
+                    <script>
+                        shippintTypeCost = [];
+                        <?php foreach($shippingTypesList as $sht) { ?>
+                            shippintTypeCost[<?=$sht->id;?>] = <?=(int)$sht->cost;?>;
+                        <?php } ?>
+                    </script>
+                </div>
+            <?php } ?>
+
+            <?php if($paymentTypes) { ?>
+                <div class="col-md-6">
+                    <?= $form->field($orderModel, 'payment_type_id')->dropDownList($paymentTypes) ?>
+                </div>
+            <?php } ?>
+        </div>
+    
         <?php if($fields = $fieldFind->all()) { ?>
             <div class="row">
                 <?php foreach($fields as $fieldModel) { ?>
@@ -41,26 +62,6 @@ use yii\widgets\ActiveForm;
             <div class="col-lg-12"><?= $form->field($orderModel, 'comment')->textArea() ?></div>
         </div>
 
-        <div class="row">
-            <?php if($shippingTypes) { ?>
-                <div class="col-md-6 order-widget-shipping-type">
-                    <?= $form->field($orderModel, 'shipping_type_id')->dropDownList($shippingTypes) ?>
-                    <script>
-                        shippintTypeCost = [];
-                        <?php foreach($shippingTypesList as $sht) { ?>
-                            shippintTypeCost[<?=$sht->id;?>] = <?=(int)$sht->cost;?>;
-                        <?php } ?>
-                    </script>
-                </div>
-            <?php } ?>
-
-            <?php if($paymentTypes) { ?>
-                <div class="col-md-6">
-                    <?= $form->field($orderModel, 'payment_type_id')->dropDownList($paymentTypes) ?>
-                </div>
-            <?php } ?>
-        </div>
-    
         <div class="row">
             <div class="col-lg-12">
                 <?= Html::submitButton(Yii::t('order', 'Create order'), ['class' => 'btn btn-success']) ?>

@@ -98,6 +98,16 @@ class OrderController  extends Controller
         $model = new $orderModel;
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
+            
+            if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
+                $sender = yii::$app->getModule('order')->mail
+                    ->compose('admin_notification', ['model' => $model])
+                    ->setTo($ordersEmail)
+                    ->setFrom(yii::$app->getModule('order')->robotEmail)
+                    ->setSubject(Yii::t('order', 'New order')." #{$model->id} ({$model->client_name})")
+                    ->send();
+            }
+            
             $module = $this->module;
             $orderEvent = new OrderEvent(['model' => $model]);
             $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
@@ -124,6 +134,16 @@ class OrderController  extends Controller
             $model->user_id = yii::$app->user->id;
 
             if($model->save()) {
+                
+                if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
+                    $sender = yii::$app->getModule('order')->mail
+                        ->compose('admin_notification', ['model' => $model])
+                        ->setTo($ordersEmail)
+                        ->setFrom(yii::$app->getModule('order')->robotEmail)
+                        ->setSubject(Yii::t('order', 'New order')." #{$model->id} ({$model->client_name})")
+                        ->send();
+                }
+                
                 return $this->redirect([yii::$app->getModule('order')->successUrl, 'id' => $model->id, 'payment' => $model->payment_type_id]);
             } else {
                 yii::$app->session->setFlash('orderError', yii::t('order', 'Error (check required fields)'));

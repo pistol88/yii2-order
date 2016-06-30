@@ -10,17 +10,28 @@ use yii\widgets\DetailView;
 <p><?=Html::a(yii::t('order', 'View'), Url::to(['/order/order/view', 'id' => $model->id], true));?></p>
 
 <ul>
-    <li><?=$model->client_name;?></li>
-	<li><?=$model->phone;?></li>
-	<li><?=$model->comment;?></li>
+    <?php if($model->client_name) { ?>
+        <li><?=$model->client_name;?></li>
+    <?php } ?>
+
+    <?php if($model->phone) { ?>
+        <li><?=$model->phone;?></li>
+    <?php } ?>
+ 
+    <?php if($model->comment) { ?>
+        <li><?=$model->comment;?></li>
+    <?php } ?>
+
     <li><?=$model->date;?> <?=$model->time;?></li>
+
     <?php if($model->payment) { ?>
         <li><?=$model->payment->name;?></li>
     <?php } ?>
+
     <?php if($model->shipping) { ?>
         <li><?=$model->shipping->name;?></li>
     <?php } ?>
-        
+
     <?php
     if($fields = $model->fields) {
         foreach($fields as $fieldModel) {
@@ -32,23 +43,35 @@ use yii\widgets\DetailView;
 
 <h2><?=Yii::t('order', 'Order list'); ?></h2>
 
-<table width="100%">
-    <?php foreach($model->elements as $element) { ?>
-        <tr>
-            <td>
-                <?=$element->product->getCartName(); ?>
-                <?php if($element->description) { echo "({$element->description})"; } ?>
-            </td>
-            <td>
-                <?=$element->count;?>
-            </td>
-            <td>
-                <?=$element->price;?>
-            </td>
-        </tr>
+<?php if($model->elements) { ?>
+    <table width="100%">
+        <?php foreach($model->elements as $element) { ?>
+            <tr>
+                <td>
+                    <?=$element->product->getCartName(); ?>
+                    <?php if($element->description) { echo "({$element->description})"; } ?>
+                    <?php
+                    if($options = json_decode($element->options)) {
+                        foreach($options as $name => $value) {
+                            $return .= Html::tag('p', Html::encode($name).': '.Html::encode($value));
+                        }
+                    }
+                    ?>
+                </td>
+                <td>
+                    <?=$element->count;?>
+                </td>
+                <td>
+                    <?=$element->price;?><?=Yii::$app->getModule('order')->currency;?>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+<?php } ?>
 
-    <?php } ?>
-</table>
-]); ?>
-    
-<h3><?=Yii::t('order', 'In total'); ?>: <?=$model->count;?>, <?=$model->total;?> <?=Yii::$app->getModule('order')->currency;?> </h3>
+<h3 align="right">
+    <?=Yii::t('order', 'In total'); ?>:
+    <?=$model->count;?>,
+    <?=$model->total;?>
+    <?=Yii::$app->getModule('order')->currency;?>
+</h3>

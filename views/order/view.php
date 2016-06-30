@@ -91,7 +91,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 }
 			],
-            'description',
+			[
+				'attribute' => 'description',
+                'content' => function($model) {
+                    $return = $model->description;
+
+                    if($options = json_decode($model->options)) {
+                        foreach($options as $name => $value) {
+                            $return .= Html::tag('p', Html::encode($name).': '.Html::encode($value));
+                        }
+                    }
+                    
+                    return $return;
+                }
+			],
 			'count',
 			'price',
             ['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],

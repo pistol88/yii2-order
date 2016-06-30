@@ -7,7 +7,7 @@ return [
     'In total' => 'Итого',
     'Count' => 'Количество',
     'Cnt' => 'Кол-во',
-    'Client name' => 'Имя',
+    'Client name' => 'ФИО',
     'Delivery' => 'Доставка',
     'Comment' => 'Комментарий',
     'Phone' => 'Телефон',
