@@ -12,4 +12,6 @@ interface Product
     function getSellModel();
     
     function minusAmount($count);
+    
+    function plusAmount($count);
 }
