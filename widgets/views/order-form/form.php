@@ -39,9 +39,9 @@ use yii\widgets\ActiveForm;
         </div>
     
         <?php if($fields = $fieldFind->all()) { ?>
-            <div class="row">
+            <div class="row order-custom-fields">
                 <?php foreach($fields as $fieldModel) { ?>
-                    <div class="col-lg-12 col-xs-12">
+                    <div class="col-lg-12 col-xs-12 order-custom-field-<?=$fieldModel->id;?>">
                         <?php
                         if($widget = $fieldModel->type->widget) {
                             echo $widget::widget(['form' => $form, 'fieldModel' => $fieldModel]);
