@@ -36,6 +36,12 @@ class Module extends \yii\base\Module
 
     public function init()
     {
+        if(yii::$app->has('cart') && $orderShippingType = yii::$app->session->get('orderShippingType')) {
+            if($orderShippingType > 0) {
+                yii::$app->cart->attachBehavior('ShippingCost', new ShippingCost);
+            }
+        }
+        
         return parent::init();
     }
     
