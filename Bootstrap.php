@@ -2,7 +2,6 @@
 namespace pistol88\order;
 
 use yii\base\BootstrapInterface;
-use pistol88\order\behaviors\ShippingCost;
 use yii;
 
 class Bootstrap implements BootstrapInterface

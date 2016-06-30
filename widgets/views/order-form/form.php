@@ -17,7 +17,6 @@ use yii\widgets\ActiveForm;
             <div class="col-lg-3"><?= $form->field($orderModel, 'email')->textInput(['required' => true, 'type' => 'email']) ?></div>
         </div>
 
-
         <div class="row">
             <?php if($shippingTypes) { ?>
                 <div class="col-md-6 order-widget-shipping-type">

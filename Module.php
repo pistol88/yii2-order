@@ -1,6 +1,7 @@
 <?php
 namespace pistol88\order;
 
+use pistol88\order\behaviors\ShippingCost;
 use yii;
 
 class Module extends \yii\base\Module
