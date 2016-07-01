@@ -7,6 +7,7 @@ use pistol88\order\models\ShippingType;
 use pistol88\order\models\Element;
 use pistol88\order\models\FieldValue;
 use pistol88\order\models\tools\OrderQuery;
+use yii\db\Query;
 
 class Order extends \yii\db\ActiveRecord
 {
@@ -158,6 +159,43 @@ class Order extends \yii\db\ActiveRecord
         return $this->save(false);
     }
     
+    public static function getStatInMoth()
+    {
+        $query = new Query();
+        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
+                ->from ([Order::tableName()])
+                ->where('DATE_FORMAT(date, "%Y-%m") = :date', [':date' => date('Y-m')]);
+
+        $result = $query->one();
+        
+        return array_map('intval', $result);
+    }
+
+    public static function getStatByDate($date)
+    {
+        $query = new Query();
+        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
+                ->from ([Order::tableName()])
+                ->where('DATE_FORMAT(date, "%Y-%m-%d") = :date', [':date' => $date]);
+
+        $result = $query->one();
+        
+        return array_map('intval', $result);
+    }
+    
+    public static function getStatByDatePeriod($dateStart, $dateStop)
+    {
+        $query = new Query();
+        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
+                ->from ([Order::tableName()])
+                ->where('date >= :dateStart', [':dateStart' => $dateStart])
+                ->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
+
+        $result = $query->one();
+        
+        return array_map('intval', $result);
+    }
+    
     public function beforeSave($insert)
     {
         if(empty($this->seller_user_id)) {
@@ -188,13 +226,11 @@ class Order extends \yii\db\ActiveRecord
             }
         }
         
-        return true;
+        return parent::beforeSave($insert);
     }
     
     public function afterSave($insert, $changedAttributes)
     {
-        parent::afterSave($insert, $changedAttributes);
-
         if($fieldValues = yii::$app->request->post('FieldValue')['value']) {
             foreach($fieldValues as $field_id => $fieldValue) {
                 $fieldValueModel = new FieldValue;
@@ -233,13 +269,11 @@ class Order extends \yii\db\ActiveRecord
             $cartService->truncate();
         }
         
-        return true;
+        return parent::afterSave($insert, $changedAttributes);
     }
     
     public function beforeDelete()
     {
-        parent::beforeDelete();
-        
         foreach ($this->hasMany(Element::className(), ['order_id' => 'id'])->all() as $elem) {
             $elem->delete();
         }
@@ -248,6 +282,6 @@ class Order extends \yii\db\ActiveRecord
             $val->delete();
         }
 		
-        return true;
+        return parent::beforeDelete();
     }
 }

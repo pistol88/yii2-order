@@ -25,13 +25,13 @@ class Informer extends \yii\base\Widget
     public function run()
     {
 
-        $today = Element::getStatByDate(date('Y-m-d'));
+        $today = Order::getStatByDate(date('Y-m-d'));
         
-        $inMonth = Element::getStatInMoth();
+        $inMonth = Order::getStatInMoth();
         
-        $byMonth = Element::getStatByDatePeriod(date('Y-m-d H:i:s', time()-(86400*30)), date('Y-m-d H:i:s'));
+        $byMonth = Order::getStatByDatePeriod(date('Y-m-d H:i:s', time()-(86400*30)), date('Y-m-d H:i:s'));
         
-        $byOldMonth = Element::getStatByDatePeriod(date('Y-m-d H:i:s', time()-(86400*60)), date('Y-m-d H:i:s', time()-(86400*30)));
+        $byOldMonth = Order::getStatByDatePeriod(date('Y-m-d H:i:s', time()-(86400*60)), date('Y-m-d H:i:s', time()-(86400*30)));
         
         return $this->render($this->view, [
             'today' => $today,
