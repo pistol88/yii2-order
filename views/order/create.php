@@ -111,20 +111,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
                 
-                <div class=" panel panel-default">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-lg-9">
-                                <h3>Промокод</h3>
+                <?php if(yii::$app->has('promocode')) { ?>
+                    <div class=" panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <h3>Промокод</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group promocode">
+                                <?=\pistol88\promocode\widgets\Enter::widget();?>
                             </div>
                         </div>
                     </div>
-                    <div class="panel-body">
-                        <div class="form-group promocode">
-                            <?=\pistol88\promocode\widgets\Enter::widget();?>
-                        </div>
-                    </div>
-                </div>
+                <?php } ?>
                 
                 <div class=" panel panel-default">
                     <div class="panel-heading">
