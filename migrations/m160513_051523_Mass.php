@@ -49,7 +49,7 @@ class m160513_051519_Mass extends Migration
                 'order_id' => Schema::TYPE_INTEGER . "(11) NOT NULL",
                 'item_id' => Schema::TYPE_INTEGER . "(11) NOT NULL",
                 'count' => Schema::TYPE_INTEGER . "(11) NOT NULL",
-                'price' => Schema::TYPE_DECIMAL . "(11,2) NOT NULL",
+                'price' => Schema::TYPE_DECIMAL . "(11,2)",
                 'description' => Schema::TYPE_TEXT . "",
                 'options' => Schema::TYPE_TEXT . "",
                 ], $tableOptions);
