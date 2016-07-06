@@ -34,6 +34,15 @@ Asset::register($this);
                         <input style="width: 180px;" class="form-control" type="date" name="date_stop" value="<?=Html::encode(yii::$app->request->get('date_stop'));?>" />
                     </div>
 
+                    <div class="col-md-2">
+                        <select class="form-control" name="OrderSearch[status]">
+                            <option value=""><?=yii::t('order', 'Status');?></option>
+                            <?php foreach(yii::$app->getModule('order')->orderStatuses as $status => $statusName) { ?>
+                                <option <?php if($status == yii::$app->request->get('OrderSearch')['status']) echo ' selected="selected"';?> value="<?=$status;?>"><?=$statusName;?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    
                     <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
                         <div class="col-md-2">
                             <select class="form-control" name="OrderSearch[seller_user_id]">
@@ -49,7 +58,7 @@ Asset::register($this);
                         <input type="checkbox" <?php if(yii::$app->request->get('promocode')) echo ' checked="checked"'; ?> name="promocode" value="1" id="order-promocode" />
                         <label for="order-promocode"><?=yii::t('order', 'Promocode');?></label>
                     </div>
-
+                    
                     <div class="col-md-2">
                         <input class="form-control" type="submit" value="<?=Yii::t('order', 'Search');?>" class="btn btn-success" />
                     </div>
