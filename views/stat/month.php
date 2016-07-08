@@ -7,8 +7,6 @@ $daysCount = cal_days_in_month(CAL_GREGORIAN, $m, $y);
 
 $days = range(1, $daysCount);
 
-setlocale(LC_ALL, 'rus_RUS');
-
 $this->title = $month.' - '.yii::t('order', 'Order statistics per month');
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('order', 'Orders'), 'url' => ['/order/order/index']];
@@ -17,7 +15,7 @@ $this->params['breadcrumbs'][] = $month;
 
 ?>
 <div class="order-stat">
-    <h1><?=$month;?></h1>
+    <h1><?=yii::t('order', 'Order statistics');?></h1>
     <div class="row">
         <div class="col-lg-6">
             
