@@ -47,21 +47,21 @@ $this->params['breadcrumbs'][] = $month;
             </tr>
             <?php $prevStat = false; ?>
             <?php foreach($days as $d) { ?>
+                <?php
+                if($d <= 9) {
+                    $fd = "0$d";
+                } else {
+                    $fd = $d;
+                }
+                ?>
                 <tr>
                     <td class="month">
-                        <a href="<?=Url::toRoute(['/order/order/index', 'date_start' => "$y-$m-$d"]);?>">
+                        <a href="<?=Url::toRoute(['/order/order/index', 'date_start' => "$y-$m-$fd"]);?>">
                             <strong><?=$d;?></strong>
-                            <?=yii::t('order', 'dayname_'.date("w", strtotime("$y-$m-$d")));?>
+                            <?=yii::t('order', 'dayname_'.date("w", strtotime("$y-$m-$fd")));?>
                         </a>
                     </td>
                     <?php
-                    
-                    if($d <= 9) {
-                        $fd = "0$d";
-                    } else {
-                        $fd = $d;
-                    }
-
                     $stat = $model::getStatByDate("$y-$m-$fd");
                     
                     if($stat['count_order']) {
