@@ -159,12 +159,16 @@ class Order extends \yii\db\ActiveRecord
         return $this->save(false);
     }
     
-    public static function getStatInMoth()
+    public static function getStatInMoth($month = null)
     {
+        if(!$month) {
+            $month = date('Y-m');
+        }
+        
         $query = new Query();
         $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
                 ->from ([Order::tableName()])
-                ->where('DATE_FORMAT(date, "%Y-%m") = :date', [':date' => date('Y-m')]);
+                ->where('DATE_FORMAT(date, "%Y-%m") = :date', [':date' => $month]);
 
         $result = $query->one();
         

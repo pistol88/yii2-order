@@ -37,6 +37,10 @@
     color: white;
 }
 
+.order-statistics-link a {
+    font-size: 12px;
+}
+
 .order-list .btn-default {
     padding: 2px;
 }

@@ -63,7 +63,11 @@ class OrderSearch extends Order
         }
         
         if($dateStart = yii::$app->request->get('date_start')) {
-            $query->andWhere('date > :dateStart', [':dateStart' => $dateStart]);
+            if(!yii::$app->request->get('date_stop')) {
+                $query->andWhere('DATE_FORMAT(date, "%Y-%m-%d") = :dateStart', [':dateStart' => $dateStart]);
+            } else {
+                $query->andWhere('date > :dateStart', [':dateStart' => $dateStart]);
+            }
         }
         
         if($dateStop = yii::$app->request->get('date_stop')) {

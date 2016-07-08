@@ -24,7 +24,6 @@ class Informer extends \yii\base\Widget
     
     public function run()
     {
-
         $today = Order::getStatByDate(date('Y-m-d'));
         
         $inMonth = Order::getStatInMoth();

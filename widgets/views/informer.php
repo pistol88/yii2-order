@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\Url;
+
 $currency = yii::$app->getModule('order')->currency;
 ?>
 <div class=" order-informer">
@@ -24,7 +26,7 @@ $currency = yii::$app->getModule('order')->currency;
                             if($byOldMonth['total'] < $inMonth['total']) {
                                 $cssClass = 'good-result';
                                 $sum = '+'.($inMonth['total']-$byOldMonth['total']);
-                            } elseif($byOldMonth['total'] < $inMonth['total']) {
+                            } elseif($byOldMonth['total'] > $inMonth['total']) {
                                 $cssClass = 'bad-result';
                                 $sum = '-'.($byOldMonth['total']-$inMonth['total']);
                             }
