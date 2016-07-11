@@ -134,7 +134,7 @@ class ToolsController  extends Controller
     public function actionCartInfo()
     {
         die(json_encode([
-            'cart' => ElementsList::widget(['type' => ElementsList::TYPE_FULL, 'showOffer' => false]),
+            'cart' => ElementsList::widget(['type' => ElementsList::TYPE_FULL, 'showOffer' => false, 'otherFields' => [yii::t('order', 'Amount') => 'amount']]),
             'total' => CartInformer::widget(['htmlTag' => 'div', 'text' => '{c} на {p}']),
         ]));
     }

@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="panel-body">
                         <div class="cart">
-                            <?=ElementsList::widget(['type' => ElementsList::TYPE_FULL, 'showOffer' => false]);?>
+                            <?=ElementsList::widget(['type' => ElementsList::TYPE_FULL, 'showOffer' => false, 'otherFields' => [yii::t('order', 'Amount') => 'amount']]);?>
                         </div>
                         <?=BuyByCode::widget();?>
                     </div>

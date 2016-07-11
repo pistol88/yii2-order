@@ -19,7 +19,7 @@ pistol88.createorder = {
             }
         });
         
-        $(document).on('click', ".render-cart", this.updateCart);
+        //$(document).on('click', ".render-cart", this.updateCart);
     },
     chooseUser: function(id) {
         $(".order-form input[name='Order[user_id]']").val(id).change();
