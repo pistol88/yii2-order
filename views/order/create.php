@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="panel-body">
                         <div class="cart">
-                            <?=ElementsList::widget(['type' => ElementsList::TYPE_FULL, 'showOffer' => false, 'otherFields' => [yii::t('order', 'Amount') => 'amount']]);?>
+                            <?=ElementsList::widget(['type' => ElementsList::TYPE_FULL, 'showOffer' => false, 'otherFields' => yii::$app->getModule('order')->cartCustomFields]);?>
                         </div>
                         <?=BuyByCode::widget();?>
                     </div>

@@ -21,6 +21,7 @@ class Module extends \yii\base\Module
     public $currencyPosition = 'after';
     public $priceFormat = [2, '.', ''];
     public $adminRoles = ['admin', 'superadmin'];
+    public $cartCustomFields = ['Остаток' => 'amount'];
     
     public $userModel = 'common\models\User';
     public $userSearchModel = 'backend\models\search\UserSearch';
