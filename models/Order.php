@@ -167,7 +167,7 @@ class Order extends \yii\db\ActiveRecord
         
         $query = new Query();
         $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
-                ->from ([Order::tableName()])
+                ->from([Order::tableName()])
                 ->where('DATE_FORMAT(date, "%Y-%m") = :date', [':date' => $month]);
 
         $result = $query->one();
@@ -179,7 +179,7 @@ class Order extends \yii\db\ActiveRecord
     {
         $query = new Query();
         $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
-                ->from ([Order::tableName()])
+                ->from([Order::tableName()])
                 ->where('DATE_FORMAT(date, "%Y-%m-%d") = :date', [':date' => $date]);
 
         $result = $query->one();
@@ -189,9 +189,13 @@ class Order extends \yii\db\ActiveRecord
     
     public static function getStatByDatePeriod($dateStart, $dateStop)
     {
+        if($dateStop == '0000-00-00 00:00:00') {
+            $dateStop = date('Y-m-d H:i:s');
+        }
+
         $query = new Query();
         $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
-                ->from ([Order::tableName()])
+                ->from([Order::tableName()])
                 ->where('date >= :dateStart', [':dateStart' => $dateStart])
                 ->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
 

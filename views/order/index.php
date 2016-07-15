@@ -8,6 +8,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 use pistol88\order\assets\Asset;
 Asset::register($this);
+
+if($dateStart = yii::$app->request->get('date_start')) {
+    $dateStart = date('Y-m-d', strtotime($dateStart));
+}
+
+if($dateStop = yii::$app->request->get('date_stop')) {
+    $dateStop = date('Y-m-d', strtotime($dateStop));
+}
 ?>
 
 <div class="informer-widget">
@@ -30,8 +38,8 @@ Asset::register($this);
             <?php if(yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) { ?>
                 <form action="" class="row search">
                     <div class="col-md-4">
-                        <input style="width: 180px; float: left;" class="form-control" type="date" name="date_start" value="<?=Html::encode(yii::$app->request->get('date_start'));?>" />
-                        <input style="width: 180px;" class="form-control" type="date" name="date_stop" value="<?=Html::encode(yii::$app->request->get('date_stop'));?>" />
+                        <input style="width: 180px; float: left;" class="form-control" type="date" name="date_start" value="<?=$dateStart;?>" />
+                        <input style="width: 180px;" class="form-control" type="date" name="date_stop" value="<?=$dateStop;?>" />
                     </div>
 
                     <div class="col-md-2">

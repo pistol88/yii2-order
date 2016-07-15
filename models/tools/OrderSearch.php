@@ -27,7 +27,6 @@ class OrderSearch extends Order
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            
             'sort' => [
                 'defaultOrder' => [
                     'id' => SORT_DESC
@@ -71,6 +70,10 @@ class OrderSearch extends Order
         }
         
         if($dateStop = yii::$app->request->get('date_stop')) {
+            if($dateStop == '0000-00-00 00:00:00') {
+                $dateStop = date('Y-m-d H:i:s');
+            }
+        
             $query->andWhere('date < :dateStop', [':dateStop' => $dateStop]);
         }
         

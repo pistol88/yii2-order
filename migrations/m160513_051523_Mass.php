@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160513_051519_Mass extends Migration
+class m160513_051523_Mass extends Migration
 {
     public function safeUp()
     {

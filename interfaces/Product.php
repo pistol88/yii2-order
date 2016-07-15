@@ -3,6 +3,8 @@ namespace pistol88\order\interfaces;
 
 interface Product
 {
+    function getName();
+    
     function getCode();
 
     function getPrice();
