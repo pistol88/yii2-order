@@ -24,8 +24,8 @@ use yii\widgets\DetailView;
 
     <li><?=$model->date;?> <?=$model->time;?></li>
 
-    <?php if($model->payment) { ?>
-        <li><?=$model->payment->name;?></li>
+    <?php if($model->paymentType) { ?>
+        <li><?=$model->paymentType->name;?></li>
     <?php } ?>
 
     <?php if($model->shipping) { ?>

@@ -5,6 +5,7 @@ use yii;
 use pistol88\order\models\tools\OrderSearch;
 use pistol88\order\models\OrderElement;
 use pistol88\order\models\Order;
+use pistol88\order\models\Payment;
 use pistol88\order\models\Element;
 use pistol88\order\models\tools\ElementSearch;
 use pistol88\order\models\Field;
@@ -134,7 +135,6 @@ class OrderController  extends Controller
             $model->user_id = yii::$app->user->id;
 
             if($model->save()) {
-                
                 if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                     $sender = yii::$app->getModule('order')->mail
                         ->compose('admin_notification', ['model' => $model])
@@ -142,6 +142,26 @@ class OrderController  extends Controller
                         ->setFrom(yii::$app->getModule('order')->robotEmail)
                         ->setSubject(Yii::t('order', 'New order')." #{$model->id} ({$model->client_name})")
                         ->send();
+                }
+                
+                if($paymentType = $model->paymentType) {
+                    $payment = new Payment;
+                    $payment->order_id = $model->id;
+                    $payment->payment_type_id = $paymentType->id;
+                    $payment->date = date('Y-m-d H:i:s');
+                    $payment->amount = $model->getCost();
+                    $payment->description = yii::t('order', 'Order #'.$model->id);
+                    $payment->user_id = yii::$app->user->id;
+                    $payment->ip = yii::$app->getRequest()->getUserIP();
+                    $payment->save();
+
+                    if($widget = $paymentType->widget) {
+                        return $widget::widget([
+                            'autoSend' => true,
+                            'orderModel' => $model,
+                            'description' => yii::t('order', 'Order #'.$model->id),
+                        ]);
+                    }
                 }
                 
                 return $this->redirect([yii::$app->getModule('order')->successUrl, 'id' => $model->id, 'payment' => $model->payment_type_id]);

@@ -67,6 +67,23 @@ class Order extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    public function getCost()
+    {
+        return $this->cost;
+    }
+    
+    function setPaymentStatus($status)
+    {
+        $this->payment = $status;
+        
+        return $this;
+    }
+    
     public function getTotal()
     {
         return floatVal($this->hasMany(Element::className(), ['order_id' => 'id'])->sum('price*count'));
@@ -93,9 +110,14 @@ class Order extends \yii\db\ActiveRecord
         return null;
     }
     
-    public function getPayment()
+    public function getPaymentType()
     {
         return $this->hasOne(PaymentType::className(), ['id' => 'payment_type_id']);
+    }
+    
+    public function getPayment()
+    {
+        return $this->hasOne(Payment::className(), ['order_id' => 'id']);
     }
     
     public function getShipping()
@@ -248,6 +270,7 @@ class Order extends \yii\db\ActiveRecord
     
     public function afterSave($insert, $changedAttributes)
     {
+
         if($fieldValues = yii::$app->request->post('FieldValue')['value']) {
             foreach($fieldValues as $field_id => $fieldValue) {
                 $fieldValueModel = new FieldValue;

@@ -4,16 +4,15 @@ namespace pistol88\order\models\tools;
 use yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use pistol88\order\models\ShippingType;
+use pistol88\order\models\Payment;
 
-class ShippingTypeSearch extends ShippingType
+class PaymentSearch extends Payment
 {
-
     public function rules()
     {
         return [
-            [['name'], 'string'],
-            [['id'], 'integer'],
+            [['order_id', 'amount', 'payment_type_id'], 'integer'],
+            [['ip', 'description'], 'safe'],
         ];
     }
 
@@ -24,10 +23,15 @@ class ShippingTypeSearch extends ShippingType
 
     public function search($params)
     {
-        $query = ShippingType::find()->orderBy('id DESC');
+        $query = Payment::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC
+                ]
+            ],
         ]);
 
         $this->load($params);
@@ -38,9 +42,13 @@ class ShippingTypeSearch extends ShippingType
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'order_id' => $this->order_id,
+            'amount' => $this->amount,
+            'payment_type_id' => $this->payment_type_id,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'ip', $this->ip])
+                ->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
     }

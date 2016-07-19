@@ -15,19 +15,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-2">
             <?= Html::a(Yii::t('order', 'Create payment type'), ['create'], ['class' => 'btn btn-success']) ?>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-10">
             <?= $this->render('/parts/menu.php', ['active' => 'payment-type']); ?>
         </div>
     </div>
 
     <hr />
     
-    <?= GridView::widget([
+    <?= \kartik\grid\GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'export' => false,
         'columns' => [
             ['attribute' => 'id', 'options' => ['style' => 'width: 55px;']],
 			'name',

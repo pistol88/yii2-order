@@ -13,8 +13,17 @@ use yii\helpers\ArrayHelper;
     
         <?= $form->field($model, 'order')->textInput() ?>
     
-        <?= $form->field($model, 'widget')->textInput() ?>
+        <?= $form->field($model, 'widget')->textInput(['placeholder' => 'pistol88\paymaster\widgets\PaymentForm']) ?>
     
+        <p><?=yii::t('order', 'Widget call automacly'); ?>:</p>
+        
+        <pre>widgetPath::widget([
+    'autoSend' => true,
+    'orderModel' => $model,
+    'description' => 1,
+])</pre>
+        <p><?=yii::t('order', 'Example')?>: <a href="https://github.com/pistol88/yii2-paymaster">pistol88/yii2-paymaster</a></p>
+        
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('order', 'Create') : Yii::t('order', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         </div>

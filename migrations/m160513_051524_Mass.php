@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160513_051523_Mass extends Migration
+class m160513_051524_Mass extends Migration
 {
     public function safeUp()
     {
@@ -100,6 +100,17 @@ class m160513_051523_Mass extends Migration
                 'order' => Schema::TYPE_INTEGER . "(11) DEFAULT '0'",
                 ], $tableOptions);
 
+            $this->createTable('{{%order_payment}}', [
+                'id' => Schema::TYPE_PK . "",
+                'order_id' => Schema::TYPE_INTEGER . "(11)",
+                'payment_type_id' => Schema::TYPE_INTEGER . "(11)",
+                'user_id' => Schema::TYPE_INTEGER . "(11)",
+                'description' => Schema::TYPE_STRING . "(255)",
+                'ip' => Schema::TYPE_STRING . "(55)",
+                'amount' => Schema::TYPE_DECIMAL . "(11,2)",
+                'date' => Schema::TYPE_DATETIME . "",
+                ], $tableOptions);
+            
             $this->addForeignKey(
                 'fk_order_payment', '{{%order}}', 'payment_type_id', '{{%order_payment_type}}', 'id', 'CASCADE', 'CASCADE'
             );
@@ -121,77 +132,82 @@ class m160513_051523_Mass extends Migration
             $this->addForeignKey(
                 'fk_variant_field', '{{%order_field_value_variant}}', 'field_id', '{{%order_field}}', 'id', 'CASCADE', 'CASCADE'
             );
+            $this->addForeignKey(
+                'fk_payment_order', '{{%order_payment}}', 'order_id', '{{%order}}', 'id', 'CASCADE', 'CASCADE'
+            );
+            $this->addForeignKey(
+                'fk_payment_payment_type', '{{%order_payment}}', 'payment_type_id', '{{%order_payment_type}}', 'id', 'CASCADE', 'CASCADE'
+            );
             
-            
-        $this->insert('{{%order_field_type}}', [
-            'id' => '1',
-            'name' => 'Input',
-            'widget' => 'pistol88\order\widgets\field_type\Input',
-            'have_variants' => 'no',
-        ]);
-        $this->insert('{{%order_field_type}}', [
-            'id' => '2',
-            'name' => 'Textarea',
-            'widget' => 'pistol88\order\widgets\field_type\Textarea',
-            'have_variants' => 'no',
-        ]);
-        $this->insert('{{%order_field_type}}', [
-            'id' => '3',
-            'name' => 'Select',
-            'widget' => 'pistol88\order\widgets\field_type\Select',
-            'have_variants' => 'yes',
-        ]);
-        $this->insert('{{%order_field_type}}', [
-            'id' => '4',
-            'name' => 'Checkbox',
-            'widget' => 'pistol88\order\widgets\field_type\Checkbox',
-            'have_variants' => 'yes',
-        ]);
+            $this->insert('{{%order_field_type}}', [
+                'id' => '1',
+                'name' => 'Input',
+                'widget' => 'pistol88\order\widgets\field_type\Input',
+                'have_variants' => 'no',
+            ]);
+            $this->insert('{{%order_field_type}}', [
+                'id' => '2',
+                'name' => 'Textarea',
+                'widget' => 'pistol88\order\widgets\field_type\Textarea',
+                'have_variants' => 'no',
+            ]);
+            $this->insert('{{%order_field_type}}', [
+                'id' => '3',
+                'name' => 'Select',
+                'widget' => 'pistol88\order\widgets\field_type\Select',
+                'have_variants' => 'yes',
+            ]);
+            $this->insert('{{%order_field_type}}', [
+                'id' => '4',
+                'name' => 'Checkbox',
+                'widget' => 'pistol88\order\widgets\field_type\Checkbox',
+                'have_variants' => 'yes',
+            ]);
 
-        $this->insert('{{%order_shipping_type}}', [
-            'id' => '1',
-            'name' => 'Самовывоз',
-            'description' => '',
-            'cost' => '0.00',
-            'order' => NULL,
-        ]);
-        $this->insert('{{%order_shipping_type}}', [
-            'id' => '2',
-            'name' => 'Доставка по России',
-            'description' => '',
-            'cost' => '0.00',
-            'order' => NULL,
-        ]);
-        $this->insert('{{%order_shipping_type}}', [
-            'id' => '3',
-            'name' => 'Доставка курьером по городу',
-            'description' => '',
-            'cost' => '0.00',
-            'order' => NULL,
-        ]);
-        
-        
-        $this->insert('{{%order_payment_type}}', [
-            'id' => '1',
-            'name' => 'Наличный расчет',
-            'slug' => '',
-            'widget' => '',
-            'order' => NULL,
-        ]);
-        $this->insert('{{%order_payment_type}}', [
-            'id' => '2',
-            'name' => 'Безналичный расчет',
-            'slug' => '',
-            'widget' => '',
-            'order' => NULL,
-        ]);
-        $this->insert('{{%order_payment_type}}', [
-            'id' => '3',
-            'name' => 'Онлайн',
-            'slug' => '',
-            'widget' => '',
-            'order' => NULL,
-        ]);
+            $this->insert('{{%order_shipping_type}}', [
+                'id' => '1',
+                'name' => 'Самовывоз',
+                'description' => '',
+                'cost' => '0.00',
+                'order' => NULL,
+            ]);
+            $this->insert('{{%order_shipping_type}}', [
+                'id' => '2',
+                'name' => 'Доставка по России',
+                'description' => '',
+                'cost' => '0.00',
+                'order' => NULL,
+            ]);
+            $this->insert('{{%order_shipping_type}}', [
+                'id' => '3',
+                'name' => 'Доставка курьером по городу',
+                'description' => '',
+                'cost' => '0.00',
+                'order' => NULL,
+            ]);
+
+
+            $this->insert('{{%order_payment_type}}', [
+                'id' => '1',
+                'name' => 'Наличный расчет',
+                'slug' => '',
+                'widget' => '',
+                'order' => NULL,
+            ]);
+            $this->insert('{{%order_payment_type}}', [
+                'id' => '2',
+                'name' => 'Безналичный расчет',
+                'slug' => '',
+                'widget' => '',
+                'order' => NULL,
+            ]);
+            $this->insert('{{%order_payment_type}}', [
+                'id' => '3',
+                'name' => 'Онлайн',
+                'slug' => '',
+                'widget' => '',
+                'order' => NULL,
+            ]);
    
         } catch (Exception $e) {
             echo 'Catch Exception ' . $e->getMessage();

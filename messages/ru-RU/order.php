@@ -71,7 +71,7 @@ return [
     'To order' => 'В заказ',
     'Close' => 'Закрыть',
     'Code' => 'Артикул',
-    'Amount' => 'Остаток',
+    'Amount' => 'Сумма',
     'Price' => 'Цена',
     'Not found' => 'Не найдено',
     'Search' => 'Поиск',
@@ -94,6 +94,7 @@ return [
     'on' => 'на',
     'Free cost from' => 'Бесплатно от',
     'Choose shipping type' => 'Выберите тип доставки',
+    'Choose payment type' => 'Выберите тип оплаты',
     'Total' => 'Итого',
     'Difference' => 'Разница',
     'Month' => 'Месяц',
@@ -121,5 +122,8 @@ return [
     'dayname_4' => 'четверг',
     'dayname_5' => 'пятница',
     'dayname_6' => 'суббота',
-    
+    'Payments' => 'Платежи',
+    'Widget call automacly' => 'Вызов виджета в момент оформления заказа',
+    'Order #' => 'Заказ №',
+    'Example' => 'Пример',
 ];

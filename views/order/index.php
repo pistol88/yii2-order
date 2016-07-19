@@ -114,10 +114,10 @@ $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}
 </div>
 <div class="order-index">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-2">
             <?= Html::a(yii::t('order', 'Create order'), ['create'], ['class' => 'btn btn-success']) ?>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-10">
             <?= $this->render('/parts/menu.php'); ?>
         </div>
     </div>

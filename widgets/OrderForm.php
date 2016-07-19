@@ -9,7 +9,6 @@ use pistol88\order\models\PaymentType;
 use pistol88\order\models\ShippingType;
 use pistol88\order\models\Field;
 use pistol88\order\models\FieldValue;
-use yii\helpers\ArrayHelper;
 use yii;
 
 class OrderForm extends \yii\base\Widget
@@ -28,9 +27,9 @@ class OrderForm extends \yii\base\Widget
     public function run()
     {
         $shippingTypesList = ShippingType::find()->orderBy('order DESC')->all();
-        
-        $paymentTypes = ArrayHelper::map(PaymentType::find()->orderBy('order DESC')->all(), 'id', 'name');
+
         $shippingTypes = ['' => yii::t('order', 'Choose shipping type')];
+        
         foreach($shippingTypesList as $sht) {
             if($sht->cost > 0) {
                 $currency = yii::$app->getModule('order')->currency;
@@ -39,6 +38,13 @@ class OrderForm extends \yii\base\Widget
                 $name = $sht->name;
             }
             $shippingTypes[$sht->id] = $name;
+        }
+        
+        $paymentTypes = ['' => yii::t('order', 'Choose payment type')];
+        $paymentTypesList = PaymentType::find()->orderBy('order DESC')->all();
+        
+        foreach($paymentTypesList as $pt) {
+            $paymentTypes[$pt->id] = $pt->name;
         }
         
         $fieldFind = Field::find()->orderBy('order DESC');
