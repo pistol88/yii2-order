@@ -56,11 +56,13 @@ php yii migrate --migrationPath=vendor/pistol88/yii2-order/migrations
 * orderStatuses - статусы (по умолчанию: 'new' => 'Новый', 'approve' => 'Подтвержден', 'cancel' => 'Отменен', 'process' => 'В обработке', 'done' => 'Выполнен')
 * defaultStatus - статус нового заказа (по умолчанию 'new')
 * successUrl - урл, куда будет перенаправлен покупатель в случае успешной покупки (по умолчанию /order/info/thanks/)
+* ordersEmail - почта администратора, туда уходят письма с заказами
 * robotEmail - e-mail робота (по умолчанию no-reply@localhost)
 * robotName - имя почтового робота (по умолчанию Robot)
+* orderColumns - массмв полей для вывода. Кастомные поля добавляются как массив, содержащий ID и наименование поля: ['field' => 2, 'label' => 'Автомобиль']
 * dateFormat - формат даты (по умолчанию d.m.Y H:i:s)
 * cartService - имя компонента, в которой реализована корзина (по умолчанию cart). Интерфейс смотреть в pistol88/yii2-cart.
-* ordersEmail - почта администратора, туда уходят письма с заказами
+
 * currency - валюта, по умолчанию рубли
 * currencyPosition - позиция значка валюты относительно цены (before или after)
 * priceFormat - формат цены (по умолчанию [2, '.', ''])

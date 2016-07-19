@@ -59,10 +59,7 @@ class Field extends \yii\db\ActiveRecord
         foreach ($this->hasMany(FieldValue::className(), ['field_id' => 'id'])->all() as $val) {
             $val->delete();
         }
-        foreach ($this->hasMany(FieldType::className(), ['field_id' => 'id'])->all() as $val) {
-            $val->delete();
-        }
-        
+
         return true;
     }
 }

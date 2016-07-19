@@ -84,6 +84,15 @@ class Order extends \yii\db\ActiveRecord
         }
     }
 
+    public function getField($fieldId = null)
+    {
+        if($field = FieldValue::find()->where(['order_id' => $this->id, 'field_id' => $fieldId])->one()) {
+            return $field->value;
+        }
+        
+        return null;
+    }
+    
     public function getPayment()
     {
         return $this->hasOne(PaymentType::className(), ['id' => 'payment_type_id']);
