@@ -81,4 +81,5 @@ php yii migrate --migrationPath=vendor/pistol88/yii2-order/migrations
 Чтобы добавить способ оплаты, перейдите в ?r=/order/payment-type/index, добавьте новый способ, где в поле "Виджет" укажите класс виджета, который будет отдавать форму оплаты. Виджеты оплаты устанавливаются отдельно.
 
 * Paymaster.ru: [pistol88/yii2-paymaster](https://github.com/pistol88/yii2-paymaster)
+* Liqpay: [pistol88/yii2-liqpay](https://github.com/pistol88/yii2-liqpay)
 * Сбербанк: [pistol88/yii2-sberbank-payment](https://github.com/pistol88/yii2-sberbank-payment)
