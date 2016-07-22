@@ -26,7 +26,7 @@ class OrderController  extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-				'only' => ['create', 'update', 'index', 'delete'],
+				'only' => ['create', 'update', 'index', 'delete', 'view'],
                 'rules' => [
                     [
                         'allow' => true,

@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 ?>
 <h1><?=Yii::t('order', 'New order'); ?> #<?=$model->id;?></h1>
 
-<p><?=Html::a(yii::t('order', 'View'), Url::to(['/order/order/view', 'id' => $model->id], true));?></p>
+<!--p><?=Html::a(yii::t('order', 'View'), Url::to(['/order/order/view', 'id' => $model->id], true));?></p-->
 
 <ul>
     <?php if($model->client_name) { ?>
