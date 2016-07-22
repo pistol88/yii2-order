@@ -15,7 +15,12 @@ class Select extends \yii\base\Widget
         $fieldValueModel = new FieldValue;
         
         $variantsList = ['' => '-'];
-        $variantsList = array_merge($variantsList, ArrayHelper::map($variants, 'value', 'value'));
+
+        $variants = ArrayHelper::map($variants, 'value', 'value');
+        
+        foreach($variants as $var) {
+            $variantsList[$var] = $var;
+        }
         
         return $this->form->field($fieldValueModel, 'value['.$this->fieldModel->id.']')->label($this->fieldModel->name)
                 ->dropDownList($variantsList, ['required' => ($this->fieldModel->required == 'yes')]);
