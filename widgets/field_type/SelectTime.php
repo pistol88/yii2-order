@@ -9,6 +9,7 @@ class SelectTime extends \yii\base\Widget
     public $fieldValueModel = null;
     public $fieldModel = null;
     public $form = null;
+    public $defaultValue = '';
     
     public function run()
     {
@@ -22,6 +23,7 @@ class SelectTime extends \yii\base\Widget
         }
         
         $fieldValueModel = new FieldValue;
+        $fieldValueModel->value = $this->defaultValue;
         
         return $this->form->field($fieldValueModel, 'value['.$this->fieldModel->id.']')->label($this->fieldModel->name)
                 ->dropDownList(ArrayHelper::map($variants, 'value', 'value'), ['required' => ($this->fieldModel->required == 'yes')]);

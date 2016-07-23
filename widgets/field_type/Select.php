@@ -4,16 +4,18 @@ namespace pistol88\order\widgets\field_type;
 use yii\helpers\ArrayHelper;
 use pistol88\order\models\FieldValue;
 
-class Select extends \yii\base\Widget
-{
+class Select extends \yii\base\Widget {
+    
     public $fieldModel = null;
     public $form = null;
+    public $defaultValue = '';
     
     public function run()
     {
         $variants = $this->fieldModel->getVariants()->all();
         $fieldValueModel = new FieldValue;
-        
+        $fieldValueModel->value = $this->defaultValue;
+
         $variantsList = ['' => '-'];
 
         $variants = ArrayHelper::map($variants, 'value', 'value');
