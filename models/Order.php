@@ -18,7 +18,9 @@ class Order extends \yii\db\ActiveRecord
 
     public static function find()
     {
-        return new OrderQuery(get_called_class());
+        $query = new OrderQuery(get_called_class());
+        
+        return $query->with('elementsRelation');
     }
 
     public function rules()
@@ -140,10 +142,15 @@ class Order extends \yii\db\ActiveRecord
         return Field::find()->all();
     }
     
+    public function getElementsRelation()
+    {
+        return $this->hasMany(Element::className(), ['order_id' => 'id']);
+    }
+    
     public function getElements($withModel = true)
     {
         $returnModels = [];
-        $elements = $this->hasMany(Element::className(), ['order_id' => 'id'])->all();
+        $elements = $this->getElementsRelation()->all();
         foreach ($elements as $element) {
             if ($withModel && class_exists($element->model)) {
                 $model = '\\'.$element->model;
@@ -288,8 +295,6 @@ class Order extends \yii\db\ActiveRecord
                 foreach($elements as $element) {
                     $count = $element->getCount();
 
-                    $element->getModel()->minusAmount($count);
-
                     $orderElementModel = new Element;
                     $orderElementModel->order_id = $this->id;
                     $orderElementModel->model = $element->getModel(false);
@@ -299,6 +304,8 @@ class Order extends \yii\db\ActiveRecord
                     $orderElementModel->options = json_encode($element->getOptions());
                     $orderElementModel->description = '';
                     $orderElementModel->save();
+                    
+                    $element->getModel()->minusAmount($count);
                 }
             }
 
