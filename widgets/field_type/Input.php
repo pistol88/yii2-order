@@ -8,10 +8,13 @@ class Input extends \yii\base\Widget
     public $fieldValueModel = null;
     public $fieldModel = null;
     public $form = null;
+    public $defaultValue = '';
     
     public function run()
     {
         $fieldValueModel = new FieldValue;
-        return $this->form->field($fieldValueModel, 'value['.$this->fieldModel->id.']')->label($this->fieldModel->name)->textInput(['required' => ($this->fieldModel->required == 'yes')]);
+        $fieldValueModel->value = $this->defaultValue;
+        
+        return $this->form->field($fieldValueModel, 'value['.$this->fieldModel->id.']')->label($this->fieldModel->name)->textInput(['value' => $this->defaultValue, 'required' => ($this->fieldModel->required == 'yes')]);
     }
 }
