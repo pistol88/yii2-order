@@ -55,17 +55,21 @@ class Element extends \yii\db\ActiveRecord
         if(!$withCartElementModel) {
             return $this->model;
         }
-        
-        $model = '\\'.$this->model;
-        if(is_string($this->model) && class_exists($this->model)) {
-            $productModel = new $model();
-            if ($productModel = $productModel::findOne($this->item_id)) {
-                $model = $productModel;
+
+        if(is_string($this->model)) {
+            if(class_exists($this->model)) {
+                $model = '\\'.$this->model;
+                $productModel = new $model();
+                if ($productModel = $productModel::findOne($this->item_id)) {
+                    $model = $productModel;
+                } else {
+                    throw new \yii\base\Exception('Element model not found');
+                }
             } else {
-                throw new \yii\base\Exception('Element model not found');
+                //throw new \yii\base\Exception('Unknow element model');
             }
         } else {
-            throw new \yii\base\Exception('Unknow element model');
+            $model = $this->model;
         }
         
         return $model;

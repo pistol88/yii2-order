@@ -152,7 +152,7 @@ class Order extends \yii\db\ActiveRecord
         $returnModels = [];
         $elements = $this->getElementsRelation()->all();
         foreach ($elements as $element) {
-            if ($withModel && class_exists($element->model)) {
+            if (is_string($element->model) && $withModel && class_exists($element->model)) {
                 $model = '\\'.$element->model;
                 $productModel = new $model();
                 if ($productModel = $productModel::findOne($element->item_id)) {

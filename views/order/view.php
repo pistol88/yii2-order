@@ -29,23 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?=pistol88\order\widgets\ChangeStatus::widget(['model' => $model]);?>
     
     <?php
-    $detailElements = [
+    $detailOrder = [
         'model' => $model,
         'attributes' => [
             'id',
-            'client_name',
-			[
-				'attribute' => 'shipping_type_id',
-				'value'		=> @$shippingTypes[$model->shipping_type_id],
-			],
-			[
-				'attribute' => 'payment_type_id',
-				'value'		=> @$paymentTypes[$model->payment_type_id],
-			],
-            'phone',
-            'email:email',
-            'promocode',
-            'comment',
 			[
 				'attribute' => 'date',
 				'value'		=> date(yii::$app->getModule('order')->dateFormat, $model->timestamp),
@@ -53,24 +40,57 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ];
     
+    if($model->client_name) {
+        $detailOrder['attributes'][] = 'client_name';
+    }
+    
+    if($model->phone) {
+        $detailOrder['attributes'][] = 'phone';
+    }
+
+    if($model->email) {
+        $detailOrder['attributes'][] = 'email:email';
+    }
+    
+    if($model->promocode) {
+        $detailOrder['attributes'][] = 'promocode';
+    }
+
+    if($model->comment) {
+        $detailOrder['attributes'][] = 'comment';
+    }
+    
+    if($model->payment_type_id && isset($paymentTypes[$model->payment_type_id])) {
+        $detailOrder['attributes'][] = [
+            'attribute' => 'payment_type_id',
+            'value'		=> @$paymentTypes[$model->payment_type_id],
+        ];
+    }
+    
+    if($model->shipping_type_id && isset($shippingTypes[$model->shipping_type_id])) {
+			$detailOrder['attributes'][] = [
+				'attribute' => 'shipping_type_id',
+				'value'		=> $shippingTypes[$model->shipping_type_id],
+			];
+    }
+
     if($model->delivery_type == 'totime') {
-        $detailElements['attributes'][] = 'delivery_time_date';
-        $detailElements['attributes'][] = 'delivery_time_hour';
-        $detailElements['attributes'][] = 'delivery_time_min';
+        $detailOrder['attributes'][] = 'delivery_time_date';
+        $detailOrder['attributes'][] = 'delivery_time_hour';
+        $detailOrder['attributes'][] = 'delivery_time_min';
     }
 
     if($fields = $fieldFind->all()) {
         foreach($fields as $fieldModel) {
-            $detailElements['attributes'][] = [
+            $detailOrder['attributes'][] = [
 				'label' => $fieldModel->name,
 				'value'		=> Html::encode($fieldModel->getValue($model->id)),
 			];
         }
     }
 
-    echo DetailView::widget($detailElements);
+    echo DetailView::widget($detailOrder);
     ?>
-
 
 	<h2><?=Yii::t('order', 'Order list'); ?></h2>
 
