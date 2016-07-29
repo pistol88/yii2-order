@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 $this->title = yii::t('order', 'Order').' №'.$model->id;
 ?>
 <div class="order-print-view">
-
+    <h3 align="center"><?=yii::$app->name;?></h3>
     <?php
     $detailOrder = [
         'model' => $model,
@@ -65,6 +65,15 @@ $this->title = yii::t('order', 'Order').' №'.$model->id;
 				'label' => $fieldModel->name,
 				'value'		=> Html::encode($fieldModel->getValue($model->id)),
 			];
+        }
+    }
+    
+    if($model->seller) {
+        if($profile = $model->seller->userProfile) {
+            $detailOrder['attributes'][] = [
+                'label' => yii::t('order', 'Seller'),
+                'value'		=> Html::encode($profile->getFullName()),
+            ];
         }
     }
 

@@ -117,6 +117,26 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasOne(PaymentType::className(), ['id' => 'payment_type_id']);
     }
     
+    public function getUser()
+    {
+        $userModel = yii::$app->getModule('order')->userModel;
+        if($userModel && class_exists($userModel)) {
+            return $this->hasOne($userModel::className(), ['id' => 'seller_user_id']);
+        }
+        
+        return null;
+    }
+    
+    public function getSeller()
+    {
+        $userModel = yii::$app->getModule('order')->userModel;
+        if($userModel && class_exists($userModel)) {
+            return $this->hasOne($userModel::className(), ['id' => 'seller_user_id']);
+        }
+        
+        return null;
+    }
+    
     public function getPayment()
     {
         return $this->hasOne(Payment::className(), ['order_id' => 'id']);

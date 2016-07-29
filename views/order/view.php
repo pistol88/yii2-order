@@ -88,6 +88,13 @@ $this->params['breadcrumbs'][] = $this->title;
 			];
         }
     }
+    
+    if($model->seller) {
+        $detailOrder['attributes'][] = [
+            'label' => yii::t('order', 'Seller'),
+            'value'		=> Html::encode($model->seller->getUserProfile()->getFullName()),
+        ];
+    }
 
     echo DetailView::widget($detailOrder);
     ?>
