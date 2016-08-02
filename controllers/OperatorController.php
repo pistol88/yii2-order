@@ -53,6 +53,8 @@ class OperatorController  extends Controller
     
     public function actionView($id)
     {
+        $this->layout = '@vendor/pistol88/yii2-order/views/layouts/mini';
+        
         $model = $this->findModel($id);
         
         if($model->status == $this->module->defaultStatus) {
@@ -63,9 +65,12 @@ class OperatorController  extends Controller
         
         $searchModel = new ElementSearch;
         $params = yii::$app->request->queryParams;
-        if(empty($params['ElementSearch'])) {
-            $params = ['ElementSearch' => ['order_id' => $model->id]];
+
+        if(!is_array($params)) {
+            $params = [];
         }
+        
+        $params['ElementSearch']['order_id'] = $model->id;
 
         $dataProvider = $searchModel->search($params);
 
@@ -74,7 +79,7 @@ class OperatorController  extends Controller
 
         $fieldFind = Field::find();
 
-        return $this->renderAjax('view', [
+        return $this->render('view', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'shippingTypes' => $shippingTypes,

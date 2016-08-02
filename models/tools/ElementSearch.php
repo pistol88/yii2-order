@@ -11,7 +11,7 @@ class ElementSearch extends Element
     public function rules()
     {
         return [
-            [['id', 'order_id'], 'integer'],
+            [['id', 'order_id', 'item_id'], 'integer'],
             [['description'], 'safe'],
         ];
     }
@@ -27,6 +27,7 @@ class ElementSearch extends Element
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => 'id ASC', 'attributes' => ['price', 'count']],
             'pagination' => false,
         ]);
 

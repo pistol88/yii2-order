@@ -154,6 +154,16 @@ $columns[] = [
             padding: 4px;
             background-color: #C9B9BB;
         }
+        
+        #operatorkaModal .modal-body {
+            height: 100vh;
+        }
+        
+        #operatorkaModal .modal-body iframe {
+            border: 0px;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 
     <script>
@@ -163,10 +173,8 @@ $columns[] = [
             console.log(1);
         }, 5000);
         
-        $(document).on('click', '.operatorka tr', function() {
-            console.log($(this).find('.view-url').data('href'));
-            $('#operatorkaModal .modal-body').html('....');
-            $('#operatorkaModal .modal-body').load($(this).find('.view-url').data('href'));
+        $(document).on('click', '.operatorka td', function() {
+            $('#operatorkaModal .modal-body').html('<iframe src="'+$(this).parent('tr').find('.view-url').data('href')+'"></iframe>');
             $('#operatorkaModal').modal().show();
         });
     }

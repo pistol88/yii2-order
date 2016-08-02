@@ -1,8 +1,8 @@
 <?php
-
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
+use yii\widgets\Pjax;
 
 $this->title = Yii::t('order', 'Order').' #'.$model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('order', 'Orders'), 'url' => ['index']];
@@ -85,6 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<h2><?=Yii::t('order', 'Order list'); ?></h2>
 
+    <?php Pjax::begin(); ?>
     <?= \kartik\grid\GridView::widget([
         'export' => false,
         'dataProvider' => $dataProvider,
@@ -122,4 +123,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
     <h3 align="right"><?=Yii::t('order', 'In total'); ?>: <?=$model->count;?> <?=Yii::t('order', 'on'); ?> <?=$model->cost;?> <?=Yii::$app->getModule('order')->currency;?> </h3>
+    <?php Pjax::end(); ?>
 </div>
