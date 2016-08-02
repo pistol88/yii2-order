@@ -126,4 +126,5 @@ return [
     'Widget call automacly' => 'Вызов виджета в момент оформления заказа',
     'Order #' => 'Заказ №',
     'Example' => 'Пример',
+    'Operator area' => 'Операторка',
 ];

@@ -1,9 +1,11 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use pistol88\order\widgets\Informer;
+use \yii\widgets\Pjax;
 
-$this->title = yii::t('order', 'Orders');
+$this->title = yii::t('order', 'Operator area');
 $this->params['breadcrumbs'][] = $this->title;
 
 use pistol88\order\assets\Asset;
@@ -31,7 +33,7 @@ $columns[] = [
             'attribute' => 'cost',
             'label' => yii::$app->getModule('order')->currency,
             'content' => function($model) {
-                $total = $model->cost;
+                $total = Html::tag('span', $model->cost, ['class' => 'view-url', 'data-href' => Url::toRoute(['/order/operator/view', 'id' => $model->id])]);
                 if($model->promocode) {
                     $total .= Html::tag('div', $model->promocode, ['style' => 'color: orange; font-size: 80%;', yii::t('order', 'Promocode')]);
                 }
@@ -84,17 +86,19 @@ foreach(Yii::$app->getModule('order')->orderColumns as $column) {
     
     $columns[] = $column;
 }
-            
+
 $columns[] = [
             'attribute' => 'date',
             'filter' => false,
+            'format' => 'html',
             'value' => function($model) {
-                return date(yii::$app->getModule('order')->dateFormat, $model->timestamp);
+                return '<span title="'.date('d.m.Y H:i:s').'">'.date('H:i:s', $model->timestamp).'</span>';
             }
         ];
         
 $columns[] = [
             'attribute' => 'status',
+            'format' => 'html',
             'filter' => Html::activeDropDownList(
                 $searchModel,
                 'status',
@@ -102,82 +106,101 @@ $columns[] = [
                 ['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
             ),
             'value'	=> function($model) {
-                return  Yii::$app->getModule('order')->orderStatuses[$model->status];
+                return  Html::tag('span', Yii::$app->getModule('order')->orderStatuses[$model->status], ['class' => 'status_'.$model->status]);
             }
         ];
         
-$columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']];
 ?>
 
-<div class="informer-widget">
-    <?=Informer::widget();?>
-</div>
 <div class="order-index">
     <div class="row">
         <div class="col-lg-2">
             <?= Html::a(yii::t('order', 'Create order'), ['create'], ['class' => 'btn btn-success']) ?>
         </div>
         <div class="col-lg-10">
-            <?= $this->render('/parts/menu.php', ['area' => 'Orders area']); ?>
+            <?= $this->render('/parts/menu.php', ['active' => 'operator']); ?>
         </div>
     </div>
 
     <hr />
 
+    <style>
+        .operatorka tr {
+            font-size: 13px;
+            min-height: 60px;
+            cursor: pointer;
+        }
+        
+        .operatorka tr:hover td {
+            box-shadow: 0 0 6px rgba(195, 198, 236, 0.5);
+        }
+        
+        .operatorka .status_new {
+            padding: 4px;
+            background-color: #CFE3DE;
+        }
+        
+        .operatorka .status_process {
+            padding: 4px;
+            background-color: #CCCCCC;
+        }
+        
+        .operatorka .status_done {
+            padding: 4px;
+            background-color: #6D948A;
+        }
+        
+        .operatorka .cancel {
+            padding: 4px;
+            background-color: #C9B9BB;
+        }
+    </style>
+
+    <script>
+    window.onload = function() {
+        setInterval(function() {
+            $('.operator-update').click();
+            console.log(1);
+        }, 5000);
+        
+        $(document).on('click', '.operatorka tr', function() {
+            console.log($(this).find('.view-url').data('href'));
+            $('#operatorkaModal .modal-body').html('....');
+            $('#operatorkaModal .modal-body').load($(this).find('.view-url').data('href'));
+            $('#operatorkaModal').modal().show();
+        });
+    }
+    </script>
+
     <div class="box">
         <div class="box-body">
-            <?php if(yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) { ?>
-                <form action="" class="row search">
-                    <div class="col-md-4">
-                        <input style="width: 180px; float: left;" class="form-control" type="date" name="date_start" value="<?=$dateStart;?>" />
-                        <input style="width: 180px;" class="form-control" type="date" name="date_stop" value="<?=$dateStop;?>" />
-                    </div>
-
-                    <div class="col-md-2">
-                        <select class="form-control" name="OrderSearch[status]">
-                            <option value=""><?=yii::t('order', 'Status');?></option>
-                            <?php foreach(yii::$app->getModule('order')->orderStatuses as $status => $statusName) { ?>
-                                <option <?php if($status == yii::$app->request->get('OrderSearch')['status']) echo ' selected="selected"';?> value="<?=$status;?>"><?=$statusName;?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    
-                    <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
-                        <div class="col-md-2">
-                            <select class="form-control" name="OrderSearch[seller_user_id]">
-                                <option value=""><?=yii::t('order', 'Seller');?></option>
-                                <?php foreach($sellers as $seller) { ?>
-                                    <option <?php if($seller->id == yii::$app->request->get('OrderSearch')['seller_user_id']) echo ' selected="selected"';?> value="<?=$seller->id;?>"><?=$seller->username;?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    <?php } ?>
-
-                    <div class="col-md-2">
-                        <input type="checkbox" <?php if(yii::$app->request->get('promocode')) echo ' checked="checked"'; ?> name="promocode" value="1" id="order-promocode" />
-                        <label for="order-promocode"><?=yii::t('order', 'Promocode');?></label>
-                    </div>
-                    
-                    <div class="col-md-2">
-                        <input class="form-control" type="submit" value="<?=Yii::t('order', 'Search');?>" class="btn btn-success" />
-                    </div>
-                </form>
-            <?php } ?>
-            
-            <div class="summary">
-                <?=yii::t('order', 'Total');?>:
-                <?=number_format($dataProvider->query->sum('cost'), 2, ',', '.');?>
-                <?=yii::$app->getModule('order')->currency;?>
-            </div>
-            
-            <div class="order-list">
+            <div class="order-list operatorka">
+                <?php Pjax::begin(); ?>
+                <a href="<?=Url::toRoute(['/order/operator/index']);?>" class="operator-update"> <i class="glyphicon glyphicon-refresh"></i> Обновить</a>
                 <?=  \kartik\grid\GridView::widget([
                     'export' => false,
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => $columns,
                 ]); ?>
+                <?php Pjax::end(); ?>
             </div>
         </div>
     </div>
+</div>
+
+
+<!-- Default bootstrap modal example -->
+<div class="modal fade" id="operatorkaModal" tabindex="-1" role="dialog" aria-labelledby="operatorkaModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"><?=yii::t('order', 'Order'); ?></h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+    </div>
+  </div>
 </div>

@@ -23,6 +23,9 @@ class Module extends \yii\base\Module
     public $priceFormat = [2, '.', ''];
     public $adminRoles = ['admin', 'superadmin'];
     public $cartCustomFields = ['Остаток' => 'amount'];
+
+    public $operatorRoles = ['manager', 'admin', 'superadmin'];
+    public $operatorOpenStatus = 'process';
     
     public $userModel = '\common\models\User';
     public $userSearchModel = 'backend\models\search\UserSearch';

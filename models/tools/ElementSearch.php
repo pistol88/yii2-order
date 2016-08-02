@@ -11,8 +11,8 @@ class ElementSearch extends Element
     public function rules()
     {
         return [
-            [['id', 'order_id', 'count'], 'integer'],
-            [['price', 'description'], 'safe'],
+            [['id', 'order_id'], 'integer'],
+            [['description'], 'safe'],
         ];
     }
 
@@ -39,10 +39,8 @@ class ElementSearch extends Element
         $query->andFilterWhere([
             'id' => $this->id,
             'order_id' => $this->order_id,
-            'count' => $this->count,
         ]);
 
-        $query->andFilterWhere(['like', 'price', $this->price]);
         return $dataProvider;
     }
 }

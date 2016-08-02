@@ -2,6 +2,8 @@
 use yii\helpers\Html;
 
 $menu = [
+    'orders' => ['url' => '/order/order/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Orders')],
+    'operator' => ['url' => '/order/operator/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Operator area')],
     'field' => ['url' => '/order/field/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Fields')],
     'shipping-type' => ['url' => '/order/shipping-type/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Shipping types')],
     'payment-type' => ['url' => '/order/payment-type/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Payment types')],

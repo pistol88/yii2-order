@@ -3,10 +3,8 @@ namespace pistol88\order\controllers;
 
 use yii;
 use pistol88\order\models\tools\OrderSearch;
-use pistol88\order\models\OrderElement;
 use pistol88\order\models\Order;
 use pistol88\order\models\Payment;
-use pistol88\order\models\Element;
 use pistol88\order\models\tools\ElementSearch;
 use pistol88\order\models\Field;
 use pistol88\order\models\FieldValue;

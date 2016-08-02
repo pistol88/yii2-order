@@ -9,23 +9,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('order', 'Orders'), 'url' =>
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-view">
-    <?php if(Yii::$app->session->hasFlash('reSendDone')) { ?>
-        <script>
-        alert('<?= Yii::$app->session->getFlash('reSendDone') ?>');
-        </script>
-    <?php } ?>
-
-    <p>
-        <?= Html::a(Yii::t('order', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('order', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('order', 'Realy?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
+    
     <?=pistol88\order\widgets\ChangeStatus::widget(['model' => $model]);?>
     
     <?php
@@ -92,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
     if($model->seller && $model->seller->userProfile) {
         $detailOrder['attributes'][] = [
             'label' => yii::t('order', 'Seller'),
-            'value'		=> Html::encode($model->seller->getUserProfile()->getFullName()),
+            'value'		=> Html::encode($model->seller->userProfile->getFullName()),
         ];
     }
 
@@ -120,7 +104,6 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			[
 				'attribute' => 'description',
-                'filter' => false,
                 'content' => function($model) {
                     $return = $model->description;
 
@@ -135,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			'count',
 			'price',
-            ['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],
+            //['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],
         ],
     ]); ?>
     <h3 align="right"><?=Yii::t('order', 'In total'); ?>: <?=$model->count;?> <?=Yii::t('order', 'on'); ?> <?=$model->cost;?> <?=Yii::$app->getModule('order')->currency;?> </h3>
