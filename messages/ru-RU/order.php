@@ -127,4 +127,5 @@ return [
     'Order #' => 'Заказ №',
     'Example' => 'Пример',
     'Operator area' => 'Операторка',
+    'Print' => 'Печать',
 ];

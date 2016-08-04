@@ -11,7 +11,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="order-view">
     
     <?=pistol88\order\widgets\ChangeStatus::widget(['model' => $model]);?>
-    
+    <p align="right"><a href="#" onclick="window.print(); return false;"><?=Yii::t('order', 'Print');?></a></p>
+        
     <?php
     $detailOrder = [
         'model' => $model,
@@ -82,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     echo DetailView::widget($detailOrder);
     ?>
-
+    
 	<h2><?=Yii::t('order', 'Order list'); ?></h2>
 
     <?php Pjax::begin(); ?>

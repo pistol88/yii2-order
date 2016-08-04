@@ -27,7 +27,7 @@ class ElementSearch extends Element
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => 'id ASC', 'attributes' => ['price', 'count']],
+            'sort' => ['defaultOrder' => 'id ASC', 'attributes' => ['id']],
             'pagination' => false,
         ]);
 
