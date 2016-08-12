@@ -24,6 +24,8 @@ class Module extends \yii\base\Module
     public $adminRoles = ['admin', 'superadmin'];
     public $cartCustomFields = ['Остаток' => 'amount'];
 
+    public $adminMenu = ['orders', 'field', 'payment-type', 'payment'];
+    
     public $operatorRoles = ['manager', 'admin', 'superadmin'];
     public $operatorOpenStatus = 'process';
     

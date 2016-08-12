@@ -1,17 +1,20 @@
+<div class="order-menu">
+    <div class="menu-container">
+        <ul class="nav-pills nav">
 <?php
 use yii\helpers\Html;
 
 $menu = [
-    'orders' => ['url' => '/order/order/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Orders')],
-    'operator' => ['url' => '/order/operator/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Operator area')],
-    'field' => ['url' => '/order/field/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Fields')],
-    'shipping-type' => ['url' => '/order/shipping-type/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Shipping types')],
-    'payment-type' => ['url' => '/order/payment-type/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Payment types')],
-    'payment' => ['url' => '/order/payment/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Payments')],
+    'payment' => ['url' => '/order/payment/index', 'name' => ' '.Yii::t('order', 'Payments')],
+    'payment-type' => ['url' => '/order/payment-type/index', 'name' => ' '.Yii::t('order', 'Payment types')],
+    'shipping-type' => ['url' => '/order/shipping-type/index', 'name' => ' '.Yii::t('order', 'Shipping types')],
+    'field' => ['url' => '/order/field/index', 'name' => ' '.Yii::t('order', 'Fields')],
+    'operator' => ['url' => '/order/operator/index', 'name' => ' '.Yii::t('order', 'Operator area')],
+    'orders' => ['url' => '/order/order/index', 'name' => ' '.Yii::t('order', 'Orders')],
 ];
 
 if(yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) {
-    $menu['statistics'] = ['url' => '/order/stat/index', 'name' => '<i class="glyphicon glyphicon-list"></i> '.Yii::t('order', 'Order statistics')];
+    $menu['statistics'] = ['url' => '/order/stat/index', 'name' => ' '.Yii::t('order', 'Order statistics')];
 }
 
 if(!isset($active)) {
@@ -19,10 +22,16 @@ if(!isset($active)) {
 }
 
 foreach($menu as $key => $params) {
-    if($active == $key) {
-        $class = 'btn btn-success';
-    } else {
-        $class = 'btn btn-default';
-    }
-    echo Html::a($params['name'], [$params['url']], ['class' => $class]);
+    if(in_array($key, yii::$app->getModule('order')->adminMenu)) {
+        if($active == $key) {
+            $class = 'active';
+        } else {
+            $class = '';
+        }
+        echo Html::tag('li', Html::a($params['name'], [$params['url']], ['class' => $class]), ['class' => 'nav-link ']);
+    }    
 }
+?>
+        </ul>
+    </div>
+</div>

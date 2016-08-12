@@ -1,9 +1,11 @@
 <?php
-
 use yii\helpers\Html;
 use yii\grid\GridView;
 use pistol88\order\models\OrderFieldType;
 use yii\helpers\ArrayHelper;
+
+use pistol88\order\assets\Asset;
+Asset::register($this);
 
 $this->title = Yii::t('order', 'Payment types');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('order', 'Orders'), 'url' => ['/order/order/index']];
@@ -11,7 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="field-index">
-
+    <?= $this->render('/parts/menu.php', ['active' => 'payment-type']); ?>
+    
     <h1><?= Html::encode($this->title) ?></h1>
 
     <div class="row">
@@ -19,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a(Yii::t('order', 'Create payment type'), ['create'], ['class' => 'btn btn-success']) ?>
         </div>
         <div class="col-lg-10">
-            <?= $this->render('/parts/menu.php', ['active' => 'payment-type']); ?>
+            
         </div>
     </div>
 

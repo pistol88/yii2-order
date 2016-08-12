@@ -1,15 +1,18 @@
 <?php
-
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
+
+use pistol88\order\assets\Asset;
+Asset::register($this);
 
 $this->title = Yii::t('order', 'Fields');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('order', 'Orders'), 'url' => ['/order/order/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="field-index">
-
+    <?= $this->render('/parts/menu.php', ['active' => 'field']); ?>
+    
     <h1><?= Html::encode($this->title) ?></h1>
 
     <div class="row">
@@ -17,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a(Yii::t('order', 'Create field'), ['create'], ['class' => 'btn btn-success']) ?>
         </div>
         <div class="col-lg-10">
-            <?= $this->render('/parts/menu.php', ['active' => 'field']); ?>
+            
         </div>
     </div>
 

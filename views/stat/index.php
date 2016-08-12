@@ -1,6 +1,9 @@
 <?php
 use yii\helpers\Url;
 
+use pistol88\order\assets\Asset;
+Asset::register($this);
+
 $currency = yii::$app->getModule('order')->currency;
 
 $firstOrderDate = $model::find()->min('date');
@@ -19,13 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="order-stat">
+    <?= $this->render('/parts/menu.php', ['active' => 'statistics']); ?>
+    
     <h1><?=$this->title;?></h1>
     <div class="row">
         <div class="col-lg-2">
             
         </div>
         <div class="col-lg-10">
-            <?= $this->render('/parts/menu.php', ['active' => 'statistics']); ?>
+            
         </div>
     </div>
     
@@ -101,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <style>
 .order-stat {
-    font-size: 16px;
+
 }
 
 .order-stat .bad-result {

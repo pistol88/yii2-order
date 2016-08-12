@@ -1,12 +1,16 @@
 <?php
 use yii\helpers\Html;
 
+use pistol88\order\assets\Asset;
+Asset::register($this);
+
 $this->title = yii::t('order', 'Payments');
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="payment-index">
-
+    <?= $this->render('/parts/menu.php', ['active' => 'payment']); ?>
+    
     <h1><?= Html::encode($this->title) ?></h1>
 
     <div class="row">
@@ -14,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             
         </div>
         <div class="col-lg-10">
-            <?= $this->render('/parts/menu.php', ['active' => 'payment']); ?>
+            
         </div>
     </div>
     

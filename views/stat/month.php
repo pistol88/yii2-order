@@ -116,7 +116,7 @@ $this->params['breadcrumbs'][] = $month;
 
 <style>
 .order-stat {
-    font-size: 16px;
+
 }
 
 .order-stat .bad-result {

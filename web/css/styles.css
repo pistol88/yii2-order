@@ -56,3 +56,14 @@
     font-size: 20px;
     text-align: right;
 }
+
+.menu-container {
+    margin-bottom: 10px;
+}
+.menu-container li {
+    float: right;
+}
+
+.nav-link .active {
+    color: red;
+}

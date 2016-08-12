@@ -20,105 +20,112 @@ if($dateStop = yii::$app->request->get('date_stop')) {
 $columns = [];
 
 $columns[] = ['attribute' => 'id', 'filter' => false, 'options' => ['style' => 'width: 49px;']];
-$columns[] = [
-            'attribute' => 'count',
-            'label' => yii::t('order', 'Cnt'),
-            'content' => function($model) {
-                return $model->count;
-            }
-        ];
-$columns[] = [
-            'attribute' => 'cost',
-            'label' => yii::$app->getModule('order')->currency,
-            'content' => function($model) {
-                $total = $model->cost;
-                if($model->promocode) {
-                    $total .= Html::tag('div', $model->promocode, ['style' => 'color: orange; font-size: 80%;', yii::t('order', 'Promocode')]);
-                }
 
-                return $total;
-            },
-        ];
+$columns[] = [
+    'attribute' => 'count',
+    'label' => yii::t('order', 'Cnt'),
+    'content' => function($model) {
+        return $model->count;
+    }
+];
+
+$columns[] = [
+    'attribute' => 'cost',
+    'label' => yii::$app->getModule('order')->currency,
+    'content' => function($model) {
+        $total = $model->cost;
+        if($model->promocode) {
+            $total .= Html::tag('div', $model->promocode, ['style' => 'color: orange; font-size: 80%;', yii::t('order', 'Promocode')]);
+        }
+
+        return $total;
+    },
+];
 
             
 foreach(Yii::$app->getModule('order')->orderColumns as $column) {
     if($column == 'payment_type_id') {
         $column = [
-                'attribute' => 'payment_type_id',
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'payment_type_id',
-                    $paymentTypes,
-                    ['class' => 'form-control', 'prompt' => Yii::t('order', 'Payment type')]
-                ),
-                'value' => function($model) use ($paymentTypes) {
-                    if(isset($paymentTypes[$model->payment_type_id])) {
-                        return $paymentTypes[$model->payment_type_id];
-                    }
+            'attribute' => 'payment_type_id',
+            'filter' => Html::activeDropDownList(
+                $searchModel,
+                'payment_type_id',
+                $paymentTypes,
+                ['class' => 'form-control', 'prompt' => Yii::t('order', 'Payment type')]
+            ),
+            'value' => function($model) use ($paymentTypes) {
+                if(isset($paymentTypes[$model->payment_type_id])) {
+                    return $paymentTypes[$model->payment_type_id];
                 }
-            ];
+            }
+        ];
     } elseif($column == 'shipping_type_id') {
         $column = [
-                'attribute' => 'shipping_type_id',
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'shipping_type_id',
-                    $shippingTypes,
-                    ['class' => 'form-control', 'prompt' => Yii::t('order', 'Shipping type')]
-                ),
-                'value' => function($model) use ($shippingTypes) {
-                    if(isset($shippingTypes[$model->shipping_type_id])) {
-                        return $shippingTypes[$model->shipping_type_id];
-                    }
+            'attribute' => 'shipping_type_id',
+            'filter' => Html::activeDropDownList(
+                $searchModel,
+                'shipping_type_id',
+                $shippingTypes,
+                ['class' => 'form-control', 'prompt' => Yii::t('order', 'Shipping type')]
+            ),
+            'value' => function($model) use ($shippingTypes) {
+                if(isset($shippingTypes[$model->shipping_type_id])) {
+                    return $shippingTypes[$model->shipping_type_id];
                 }
-            ];
+            }
+        ];
     } elseif(is_array($column) && isset($column['field'])) {
         $column = [
-                'attribute' => 'field',
-                'label' => $column['label'],
-                'value' => function($model) use ($column) {
-                    return $model->getField($column['field']);
-                }
-            ];
+            'attribute' => 'field',
+            'label' => $column['label'],
+            'value' => function($model) use ($column) {
+                return $model->getField($column['field']);
+            }
+        ];
     }
     
     $columns[] = $column;
 }
             
 $columns[] = [
-            'attribute' => 'date',
-            'filter' => false,
-            'value' => function($model) {
-                return date(yii::$app->getModule('order')->dateFormat, $model->timestamp);
-            }
-        ];
+        'attribute' => 'date',
+        'filter' => false,
+        'value' => function($model) {
+            return date(yii::$app->getModule('order')->dateFormat, $model->timestamp);
+        }
+    ];
         
 $columns[] = [
-            'attribute' => 'status',
-            'filter' => Html::activeDropDownList(
-                $searchModel,
-                'status',
-                yii::$app->getModule('order')->orderStatuses,
-                ['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
-            ),
-            'value'	=> function($model) {
-                return  Yii::$app->getModule('order')->orderStatuses[$model->status];
-            }
-        ];
+        'attribute' => 'status',
+        'filter' => Html::activeDropDownList(
+            $searchModel,
+            'status',
+            yii::$app->getModule('order')->orderStatuses,
+            ['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
+        ),
+        'value'	=> function($model) {
+            return  Yii::$app->getModule('order')->orderStatuses[$model->status];
+        }
+    ];
         
 $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']];
 ?>
 
-<div class="informer-widget">
-    <?=Informer::widget();?>
-</div>
+
+
+
 <div class="order-index">
+    <?= $this->render('/parts/menu.php', ['active' => 'orders']); ?>
+    <div class="informer-widget">
+        <?=Informer::widget();?>
+    </div>
+    
     <div class="row">
         <div class="col-lg-2">
             <?= Html::a(yii::t('order', 'Create order'), ['create'], ['class' => 'btn btn-success']) ?>
         </div>
         <div class="col-lg-10">
-            <?= $this->render('/parts/menu.php', ['area' => 'Orders area']); ?>
+            
         </div>
     </div>
 
