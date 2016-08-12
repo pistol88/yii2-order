@@ -8,6 +8,7 @@ use pistol88\order\models\ShippingType;
 use pistol88\cart\widgets\ElementsList;
 use pistol88\cart\widgets\CartInformer;
 use pistol88\order\widgets\BuyByCode;
+use pistol88\order\widgets\ChooseClient;
 use pistol88\order\models\FieldValue;
 
 $paymentTypes = ArrayHelper::map(PaymentType::find()->orderBy('order DESC')->all(), 'id', 'name');
@@ -72,19 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class=" panel panel-default">
                <div class="panel-heading"><h3>Клиент</h3></div>
                <div class="panel-body">
-                   <div class="row">
-                       <div class="col-lg-6">
-                           <label class="control-label" for="order-user_id"><?=Yii::t('order', 'Buyer');?></label>
-                           <?= Html::input('text', 'Order[user_id]', '', ['id' => 'order-user_id', 'class' => 'form-control', 'data-info-service' => Url::toRoute(['tools/user-info'])]) ?>
-
-                           <p><?=Html::a('<i class="glyphicon glyphicon-search"></i> Найти покупателя', '#usersModal', ['id' => 'choose-user-id', 'data-toggle' => "modal", 'data-target' => "#usersModal"]);?></a></p>
-                           <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
-                       </div>
-                       <div class="col-lg-6">
-                           <?= $form->field($model, 'client_name')->textInput(['maxlength' => true]) ?>
-                           <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-                       </div>
-                   </div>
+                   <?=ChooseClient::widget(['form' => $form, 'model' => $model]);?>
                </div>
 
            </div>
@@ -146,20 +135,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-</div>
-
-<div class="modal fade" id="usersModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title"><?=yii::t('order', 'Users');?></h4>
-      </div>
-      <div class="modal-body">
-        <iframe src="<?=Url::toRoute(['tools/find-users-window']);?>" id="users-list-window"></iframe>
-      </div>
-    </div>
-  </div>
 </div>
 
 <div class="modal fade" id="productsModal" tabindex="-1" role="dialog">

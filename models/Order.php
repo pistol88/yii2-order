@@ -247,7 +247,7 @@ class Order extends \yii\db\ActiveRecord
     
     public static function getStatByDatePeriod($dateStart, $dateStop)
     {
-        if($dateStop == '0000-00-00 00:00:00') {
+        if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
             $dateStop = date('Y-m-d H:i:s');
         }
 

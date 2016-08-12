@@ -5,10 +5,10 @@ if (typeof pistol88 == "undefined" || !pistol88) {
 pistol88.createorder = {
     init: function() {
         $('.buy-by-code-input').focus();
-        $(document).on('change', ".order-form input[name='Order[user_id]']", this.findUser);
-        $(document).on('keypress', ".order-form input[name='Order[user_id]']", function(e) {
+        $(document).on('change', "#orderForm input[name='Order[user_id]']", this.findUser);
+        $(document).on('keypress', "#orderForm input[name='Order[user_id]']", function(e) {
             if(e.which == 13) {
-                $(".order-form input[name='Order[user_id]']").change();
+                $("#orderForm input[name='Order[user_id]']").change();
                 return false;
             }
         });
@@ -22,15 +22,15 @@ pistol88.createorder = {
         //$(document).on('click', ".render-cart", this.updateCart);
     },
     chooseUser: function(id) {
-        $(".order-form input[name='Order[user_id]']").val(id).change();
+        $("#orderForm input[name='Order[user_id]']").val(id).change();
         $('#usersModal').modal('hide');
     },
     updateCartUrl: '',
     updateCart: function() {
         jQuery.post(pistol88.createorder.updateCartUrl, {},
             function(json) {
-                $('.order-form .cart').html(json.cart);
-                $('.order-form .total').html(json.total);
+                $('#orderForm .cart').html(json.cart);
+                $('#orderForm .total').html(json.total);
             }, "json");
 
         return true;
@@ -45,12 +45,17 @@ pistol88.createorder = {
                 function(json) {
                     $(input).css('opacity', '1');
                     if(json.status == 'success') {
-                        $(".order-form input[name='Order[user_id]']").val(json.id);
-                        $(".order-form input[name='Order[email]']").val(json.email);
-                        $(".order-form input[name='Order[phone]']").val(json.phone);
-                        $(".order-form input[name='Order[client_name]']").val(json.client_name);
+                        $("#orderForm input[name='Order[user_id]']").val(json.id);
+                        $("#orderForm input[name='Order[email]']").val(json.email);
+                        $("#orderForm input[name='Order[phone]']").val(json.phone);
+                        $("#orderForm input[name='Order[client_name]']").val(json.client_name);
+
                         if(json.promocode) {
                             $(".promo-code-enter input").val(json.promocode).change();
+                        } else {
+                            if($(".promo-code-enter input[type=text]").val() != '') {
+                                $(".promo-code-enter .promo-code-clear-btn").click();
+                            }
                         }
                     }
                     else {

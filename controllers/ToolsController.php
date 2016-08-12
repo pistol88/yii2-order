@@ -104,13 +104,7 @@ class ToolsController  extends Controller
         }
         
         if($userModel) {
-            if(isset($userModel->userProfile)) {
-                $profile = $userModel->userProfile;
-                $fullName = $profile->getFullName();
-            }
-            else {
-                $fullName = null;
-            }
+            $fullName = $userModel->name;
 
             $json = [
                 'id' => $userModel->id,

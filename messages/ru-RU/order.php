@@ -128,4 +128,5 @@ return [
     'Example' => 'Пример',
     'Operator area' => 'Операторка',
     'Print' => 'Печать',
+    'Clients' => 'Клиенты',
 ];
