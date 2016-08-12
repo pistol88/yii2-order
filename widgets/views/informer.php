@@ -5,14 +5,16 @@ $currency = yii::$app->getModule('order')->currency;
 ?>
 <div class=" order-informer">
     <div class="container">
-        <div class="row">
-            <table class="table table-hover table-responsive">
+        <table class="table table-hover table-responsive">
+            <thead>
                 <tr>
                     <th>&nbsp;</th>
                     <th><?=yii::t('order', 'Today');?></th>
                     <th><?=yii::t('order', 'In month');?></th>
                     <th><?=yii::t('order', 'By month');?></th>
                 </tr>
+            </thead>
+            <tbody>
                 <tr>
                     <td><?=yii::t('order', 'Turnover');?></td>
                     <td><?=round($today['total']);?><?=$currency; ?></td>
@@ -49,6 +51,7 @@ $currency = yii::$app->getModule('order')->currency;
                     <td><?php if($inMonth['count_order']) { ?><?=round($inMonth['total']/$inMonth['count_order'], 2);?><?=$currency; ?><?php } ?></td>
                     <td><?php if($byMonth['count_order']) { ?><?=round($byMonth['total']/$byMonth['count_order'], 2);?><?=$currency; ?><?php } ?></td>
                 </tr>
-            </table>
+            </tbody>
+        </table>
     </div>
 </div>

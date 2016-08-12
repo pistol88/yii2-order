@@ -112,13 +112,12 @@ $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}
 ?>
 
 
-
+<div class="informer-widget">
+    <?=Informer::widget();?>
+</div>
 
 <div class="order-index">
     <?= $this->render('/parts/menu.php', ['active' => 'orders']); ?>
-    <div class="informer-widget">
-        <?=Informer::widget();?>
-    </div>
     
     <div class="row">
         <div class="col-lg-2">
@@ -128,9 +127,6 @@ $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}
             
         </div>
     </div>
-
-    <hr />
-
     <div class="box">
         <div class="box-body">
             <?php if(yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) { ?>
