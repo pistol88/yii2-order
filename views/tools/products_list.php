@@ -42,6 +42,7 @@ $this->registerJs("$(document).on('renderCart', function() {
 				'value' => 'price',
                 'content' => function($product) {
                     $price = $product->price;
+
                     $count = ChangeCount::widget(['model' => $product->sellModel]);
                     $btn = BuyButton::widget([
                         'model' => $product->sellModel,
@@ -50,7 +51,7 @@ $this->registerJs("$(document).on('renderCart', function() {
                         'cssClass' => 'btn btn-success to-order'
                     ]);
                     
-                    return $price.$count.$btn;
+                    return $price->price.$count.$btn;
                 }
 			],
         ],

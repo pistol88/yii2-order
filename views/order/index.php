@@ -131,14 +131,29 @@ $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}
         <div class="box-body">
             <?php if(yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) { ?>
                 <form action="" class="row search">
+                    <?php
+                    foreach(Yii::$app->getModule('order')->orderColumns as $column) {
+                        if(is_array($column) && isset($column['field'])) {
+                            ?>
+                            <div class="col-md-2">
+                                <label for="custom-field-<?=$column['field'];?>"><?=$column['label'];?></label>
+                                <input class="form-control" type="text" name="order-custom-field[<?=$column['field'];?>]" value="<?=Html::encode(yii::$app->request->get('order-custom-field')[$column['field']]);?>" id="custom-field-<?=$column['field'];?>" />
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
                     <div class="col-md-4">
+                        <label><?=yii::t('order', 'Date');?></label>
+                        <div style="clear: both;"></div>
                         <input style="width: 180px; float: left;" class="form-control" type="date" name="date_start" value="<?=$dateStart;?>" />
                         <input style="width: 180px;" class="form-control" type="date" name="date_stop" value="<?=$dateStop;?>" />
                     </div>
 
                     <div class="col-md-2">
+                        <label><?=yii::t('order', 'Status');?></label>
                         <select class="form-control" name="OrderSearch[status]">
-                            <option value=""><?=yii::t('order', 'Status');?></option>
+                            <option value="">Все</option>
                             <?php foreach(yii::$app->getModule('order')->orderStatuses as $status => $statusName) { ?>
                                 <option <?php if($status == yii::$app->request->get('OrderSearch')['status']) echo ' selected="selected"';?> value="<?=$status;?>"><?=$statusName;?></option>
                             <?php } ?>
@@ -155,13 +170,9 @@ $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}
                             </select>
                         </div>
                     <?php } ?>
-
                     <div class="col-md-2">
                         <input type="checkbox" <?php if(yii::$app->request->get('promocode')) echo ' checked="checked"'; ?> name="promocode" value="1" id="order-promocode" />
                         <label for="order-promocode"><?=yii::t('order', 'Promocode');?></label>
-                    </div>
-                    
-                    <div class="col-md-2">
                         <input class="form-control" type="submit" value="<?=Yii::t('order', 'Search');?>" class="btn btn-success" />
                     </div>
                 </form>

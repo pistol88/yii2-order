@@ -5,6 +5,7 @@ use yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use pistol88\order\models\Order;
+use pistol88\order\models\FieldValue;
 
 class OrderSearch extends Order
 {
@@ -59,6 +60,18 @@ class OrderSearch extends Order
         if(yii::$app->request->get('promocode')) {
             $query->andWhere("promocode != ''");
             $query->andWhere("promocode IS NOT NULL");
+        }
+
+        if($customField = yii::$app->request->get('order-custom-field')) {
+            $orderIds = [0];
+            foreach($customField as $id => $str) {
+                if($values = FieldValue::find()->select('order_id')->where(['field_id' => $id])->andWhere(['LIKE', 'value', $str])->all()) {
+                    foreach($values as $value) {
+                        $orderIds[] = $value->order_id;
+                    }
+                }
+            }
+            $query->andWhere(['id' => $orderIds]);            
         }
         
         if($dateStart = yii::$app->request->get('date_start')) {

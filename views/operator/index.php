@@ -118,7 +118,7 @@ $columns[] = [
     
     <div class="row">
         <div class="col-lg-2">
-            <?= Html::a(yii::t('order', 'Create order'), ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a(yii::t('order', 'Create order'), ['/order/order/create'], ['class' => 'btn btn-success']) ?>
         </div>
         <div class="col-lg-10">
             
