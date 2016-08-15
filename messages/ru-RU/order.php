@@ -129,4 +129,5 @@ return [
     'Operator area' => 'Операторка',
     'Print' => 'Печать',
     'Clients' => 'Клиенты',
+    'Statistics' => 'Статистика',
 ];
