@@ -130,6 +130,7 @@ class ToolsController  extends Controller
         die(json_encode([
             'cart' => ElementsList::widget(['type' => ElementsList::TYPE_FULL, 'showOffer' => false, 'otherFields' => $this->module->cartCustomFields]),
             'total' => CartInformer::widget(['htmlTag' => 'div', 'text' => '{c} на {p}']),
+            'count' => yii::$app->cart->count,
         ]));
     }
     

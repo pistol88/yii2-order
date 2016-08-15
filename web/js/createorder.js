@@ -29,8 +29,9 @@ pistol88.createorder = {
     updateCart: function() {
         jQuery.post(pistol88.createorder.updateCartUrl, {},
             function(json) {
-                $('#orderForm .cart').html(json.cart);
-                $('#orderForm .total').html(json.total);
+                $('.pistol88-cart-block').replaceWith(json.cart);
+                $('.total').html(json.total);
+                $('.pistol88-cart-count').html(json.count);
             }, "json");
 
         return true;

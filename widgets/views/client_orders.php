@@ -74,7 +74,9 @@ if($dateStop = yii::$app->request->get('date_stop')) {
             ],
             ['attribute' => 'count', 'filter' => false],
             'date',
-            ['class' => 'yii\grid\ActionColumn', 'template' => '{view}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 50px;']]
+            ['content' => function($model) {
+                    return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', ['/order/order/view', 'id' => $model->id], ['class' => 'btn btn-default']);
+            }, 'options' => ['style' => 'width: 50px;']]
         ],
     ]); ?>
     <?php Pjax::end(); ?>
