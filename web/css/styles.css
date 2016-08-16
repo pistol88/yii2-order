@@ -51,12 +51,6 @@
     height: auto;
 }
 
-.summary {
-    padding: 10px;
-    font-size: 20px;
-    text-align: right;
-}
-
 .menu-container {
     margin-bottom: 10px;
 }
@@ -66,4 +60,9 @@
 
 .nav-link .active {
     color: red;
+}
+
+.export {
+    text-align: right;
+    padding-right: 110px;
 }

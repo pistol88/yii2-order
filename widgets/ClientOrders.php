@@ -8,7 +8,7 @@ use yii;
 
 class ClientOrders extends \yii\base\Widget
 {
-    public $client_id = null;
+    public $client = null;
     
     public function init()
     {
@@ -21,14 +21,15 @@ class ClientOrders extends \yii\base\Widget
         
         $params = Yii::$app->request->queryParams;
         
-        if($this->client_id && empty($params['OrderSearch'])) {
-            $params['OrderSearch']['user_id'] = $this->client_id;
+        if($this->client->id && empty($params['OrderSearch'])) {
+            $params['OrderSearch']['user_id'] = $this->client->id;
         }
         
         $dataProvider = $searchModel->search($params);
 
         return $this->render('client_orders', [
-            'clientId' => (int)$this->client_id,
+            'client' => $this->client,
+            'clientId' => (int)$this->client->id,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

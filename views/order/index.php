@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use pistol88\order\widgets\Informer;
+use kartik\export\ExportMenu;
 
 $this->title = yii::t('order', 'Orders');
 $this->params['breadcrumbs'][] = $this->title;
@@ -191,10 +192,21 @@ $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}
                 </div>
             </div>
             
-            <div class="summary">
-                <?=yii::t('order', 'Total');?>:
-                <?=number_format($dataProvider->query->sum('cost'), 2, ',', '.');?>
-                <?=yii::$app->getModule('order')->currency;?>
+            <div class="summary row">
+                <div class="col-md-6">
+                    <?=yii::t('order', 'Total');?>:
+                    <?=number_format($dataProvider->query->sum('cost'), 2, ',', '.');?>
+                    <?=yii::$app->getModule('order')->currency;?>
+                </div>
+                <div class="col-md-6 export">
+                    <?php
+                    $gridColumns = $columns;
+                    echo ExportMenu::widget([
+                        'dataProvider' => $dataProvider,
+                        'columns' => $gridColumns
+                    ]);
+                    ?>
+                </div>
             </div>
             
             <div class="order-list">
