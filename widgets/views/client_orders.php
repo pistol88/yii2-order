@@ -21,8 +21,7 @@ $columns = [
             foreach($model->elements as $element) {
                 if($productModel = $element->product) {
                     return $productModel->getCartId().'. '.$productModel->getCartName();
-                }
-                else {
+                } else {
                     return Yii::t('order', 'Unknow product');
                 }
             }
@@ -126,6 +125,5 @@ function CallPrint(strid) {
     WinPrint.focus();
     WinPrint.print();
     WinPrint.close();
-    prtContent.innerHTML=strOldOne;
 }
 </script>
