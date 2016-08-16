@@ -43,6 +43,18 @@ $columns = [
     ],
     ['attribute' => 'count', 'filter' => false],
     'date',
+    [
+        'attribute' => 'status',
+        'filter' => Html::activeDropDownList(
+            $searchModel,
+            'status',
+            yii::$app->getModule('order')->orderStatuses,
+            ['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
+        ),
+        'value'	=> function($model) {
+            return  Yii::$app->getModule('order')->orderStatuses[$model->status];
+        }
+    ],
     ['content' => function($model) {
             return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', ['/order/order/view', 'id' => $model->id], ['class' => 'btn btn-default']);
     }, 'options' => ['style' => 'width: 50px;']]
