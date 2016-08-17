@@ -171,6 +171,10 @@ class OrderController  extends Controller
                         ->send();
                 }
                 
+                $module = $this->module;
+                $orderEvent = new OrderEvent(['model' => $model]);
+                $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
+                
                 if($paymentType = $model->paymentType) {
                     $payment = new Payment;
                     $payment->order_id = $model->id;
