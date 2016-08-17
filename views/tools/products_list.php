@@ -51,7 +51,7 @@ $this->registerJs("$(document).on('renderCart', function() {
                         'cssClass' => 'btn btn-success to-order'
                     ]);
                     
-                    return $price->price.$count.$btn;
+                    return $product->sellModel->getCartPrice().$count.$btn;
                 }
 			],
         ],
