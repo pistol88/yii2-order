@@ -11,8 +11,7 @@ class ElementSearch extends Element
     public function rules()
     {
         return [
-            [['id', 'order_id', 'item_id'], 'integer'],
-            [['description'], 'safe'],
+            [['id', 'order_id'], 'integer'],
         ];
     }
 

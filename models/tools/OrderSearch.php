@@ -75,6 +75,7 @@ class OrderSearch extends Order
         }
         
         if($dateStart = yii::$app->request->get('date_start')) {
+            $dateStart = date('Y-m-d', strtotime($dateStart));
             if(!yii::$app->request->get('date_stop')) {
                 $query->andWhere('DATE_FORMAT(date, "%Y-%m-%d") = :dateStart', [':dateStart' => $dateStart]);
             } else {
@@ -83,8 +84,9 @@ class OrderSearch extends Order
         }
         
         if($dateStop = yii::$app->request->get('date_stop')) {
+            $dateStop = date('Y-m-d', strtotime($dateStop));
             if($dateStop == '0000-00-00 00:00:00') {
-                $dateStop = date('Y-m-d H:i:s');
+                $dateStop = date('Y-m-d');
             }
         
             $query->andWhere('date < :dateStop', [':dateStop' => $dateStop]);

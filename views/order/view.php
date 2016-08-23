@@ -108,6 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 			[
 				'attribute' => 'item_id',
+                'filter' => false,
                 'content' => function($model) {
                     if($productModel = $model->product) {
                         return $productModel->getCartId().'. '.$productModel->getCartName();

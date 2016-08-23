@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use pistol88\order\widgets\Informer;
 use kartik\export\ExportMenu;
+use nex\datepicker\DatePicker;
 
 $this->title = yii::t('order', 'Orders');
 $this->params['breadcrumbs'][] = $this->title;
@@ -20,7 +21,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
 
 $columns = [];
 
-$columns[] = ['attribute' => 'id', 'filter' => false, 'options' => ['style' => 'width: 49px;']];
+$columns[] = ['attribute' => 'id', 'options' => ['style' => 'width: 49px;']];
 
 $columns[] = [
     'attribute' => 'count',
@@ -157,9 +158,48 @@ $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}
                             ?>
                             <div class="col-md-4">
                                 <label><?=yii::t('order', 'Date');?></label>
-                                <div style="clear: both;"></div>
-                                <input style="width: 180px; float: left;" class="form-control" type="date" name="date_start" value="<?=$dateStart;?>" />
-                                <input style="width: 180px;" class="form-control" type="date" name="date_stop" value="<?=$dateStop;?>" />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <?= DatePicker::widget([
+                                            'name' => 'date_start',
+                                            'addon' => false,
+                                            'value' => $dateStart,
+                                            'size' => 'sm',
+                                            'language' => 'ru',
+                                            'placeholder' => yii::t('order', 'Date from'),
+                                            'clientOptions' => [
+                                                'format' => 'L',
+                                                'minDate' => '2015-01-01',
+                                                'maxDate' => date('Y-m-d'),
+                                            ],
+                                            'dropdownItems' => [
+                                                ['label' => 'Yesterday', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
+                                                ['label' => 'Tomorrow', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
+                                                ['label' => 'Some value', 'url' => '#', 'value' => 'Special value'],
+                                            ],
+                                        ]);?>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <?= DatePicker::widget([
+                                            'name' => 'date_stop',
+                                            'addon' => false,
+                                            'value' => $dateStop,
+                                            'size' => 'sm',
+                                            'placeholder' => yii::t('order', 'Date to'),
+                                            'language' => 'ru',
+                                            'clientOptions' => [
+                                                'format' => 'L',
+                                                'minDate' => '2015-01-01',
+                                                'maxDate' => date('Y-m-d'),
+                                            ],
+                                            'dropdownItems' => [
+                                                ['label' => yii::t('order', 'Yesterday'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
+                                                ['label' => yii::t('order', 'Tomorrow'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
+                                                ['label' => yii::t('order', 'Some value'), 'url' => '#', 'value' => 'Special value'],
+                                            ],
+                                        ]);?>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-md-2">

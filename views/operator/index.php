@@ -21,7 +21,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
 
 $columns = [];
 
-$columns[] = ['attribute' => 'id', 'filter' => false, 'options' => ['style' => 'width: 49px;']];
+$columns[] = ['attribute' => 'id', 'options' => ['style' => 'width: 49px;']];
 $columns[] = [
     'attribute' => 'count',
     'label' => yii::t('order', 'Cnt'),
@@ -93,7 +93,7 @@ $columns[] = [
     'filter' => false,
     'format' => 'html',
     'value' => function($model) {
-        return '<span title="'.date('d.m.Y H:i:s').'">'.date('H:i:s', $model->timestamp).'</span>';
+        return '<span title="'.date('d.m.Y H:i:s', $model->timestamp).'">'.date('H:i:s', $model->timestamp).'</span>';
     }
 ];
         
@@ -176,7 +176,7 @@ $columns[] = [
             console.log(1);
         }, 5000);
         
-        $(document).on('click', '.operatorka td', function() {
+        $(document).on('click', '.operatorka tbody td', function() {
             $('#operatorkaModal .modal-body').html('<iframe src="'+$(this).parent('tr').find('.view-url').data('href')+'"></iframe>');
             $('#operatorkaModal').modal().show();
         });

@@ -23,7 +23,8 @@
         "2amigos/yii2-grid-view-library": "*",
         "kartik-v/yii2-grid": "*",
         "kartik-v/yii2-export": "@dev",
-        "kartik-v/yii2-mpdf": "dev-master"
+        "kartik-v/yii2-mpdf": "dev-master",
+        "nex/yii2-datepicker": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",
