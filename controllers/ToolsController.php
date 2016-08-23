@@ -143,4 +143,48 @@ class ToolsController  extends Controller
             'total' => yii::$app->cart->cost,
         ]));
     }
+    
+    public function actionOneClick()
+    {
+        $orderModel = yii::$app->orderModel;
+
+        $model = new $orderModel;
+
+        $elementModel = yii::$app->request->post('model');
+        $elementModel = new $elementModel;
+        
+        $elementId = yii::$app->request->post('id');
+        
+        if($elementModel = $elementModel::findOne($elementId)) {
+            yii::$app->cart->put($elementModel, 1, []);
+
+            if ($model->load(yii::$app->request->post()) && $model->save()) {
+
+                if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
+                    $sender = yii::$app->getModule('order')->mail
+                        ->compose('admin_notification', ['model' => $model])
+                        ->setTo($ordersEmail)
+                        ->setFrom(yii::$app->getModule('order')->robotEmail)
+                        ->setSubject(Yii::t('order', 'New order')." #{$model->id} ({$model->client_name})")
+                        ->send();
+                }
+
+                $module = $this->module;
+                $orderEvent = new OrderEvent(['model' => $model]);
+                $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
+
+                $module = $this->module;
+                $orderEvent = new OrderEvent(['model' => $model]);
+                $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
+
+                $json = ['result' => 'success'];
+            } else {
+                //yii::$app->cart->truncate();
+                $json = ['result' => 'fail'];
+                $json['error'] = current($model->getFirstErrors());
+            }
+            
+            die(json_encode($json));
+        }
+    }
 }

@@ -130,4 +130,6 @@ return [
     'Print' => 'Печать',
     'Clients' => 'Клиенты',
     'Statistics' => 'Статистика',
+    'Delivery to time' => 'Доставить ко времени',
+    'Fast order' => 'Быстрый заказ',
 ];

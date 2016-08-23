@@ -5,6 +5,14 @@ use yii\widgets\DetailView;
 
 $this->title = yii::t('order', 'Order').' №'.$model->id;
 ?>
+
+<style>
+body, td, th {
+    padding: 1px;
+    margin: 1px;
+    font-family: 'Lucida Console';
+}
+</style>
 <div class="order-print-view">
     <h3 align="center"><?=yii::$app->name;?></h3>
     <?php

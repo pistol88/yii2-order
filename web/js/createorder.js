@@ -4,7 +4,6 @@ if (typeof pistol88 == "undefined" || !pistol88) {
 
 pistol88.createorder = {
     init: function() {
-        $('.buy-by-code-input').focus();
         $(document).on('change', "#orderForm input[name='Order[user_id]']", this.findUser);
         $(document).on('keypress', "#orderForm input[name='Order[user_id]']", function(e) {
             if(e.which == 13) {

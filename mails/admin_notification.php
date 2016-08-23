@@ -32,6 +32,11 @@ use yii\widgets\DetailView;
         <li><?=$model->shipping->name;?></li>
     <?php } ?>
 
+    <?php if($model->delivery_type == 'totime') { ?>
+        <?=Yii::t('order', 'Delivery to time'); ?>
+        <?=$model->delivery_time_date;?> <?=$model->delivery_time_hour;?>:<?=$model->delivery_time_min;?>
+    <?php } ?>
+        
     <?php
     if($fields = $model->fields) {
         foreach($fields as $fieldModel) {

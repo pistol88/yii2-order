@@ -24,7 +24,7 @@ class OrderController  extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-				'only' => ['create', 'update', 'index', 'delete', 'view'],
+				'only' => ['create', 'update', 'index', 'delete', 'view', 'print', 'editable'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -39,6 +39,15 @@ class OrderController  extends Controller
                 ],
             ],
         ];
+    }
+    
+    public function beforeAction($action)
+    {            
+        if ($action->id == 'print' | $action->id == 'create') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     public function actionIndex()
@@ -92,7 +101,9 @@ class OrderController  extends Controller
     
     public function actionPrint($id)
     {
-        $this->layout = 'mini';
+        $this->layout = 'print';
+        
+        $this->enableCsrfValidation = false;     
         
         $model = $this->findModel($id);
         $searchModel = new ElementSearch;
@@ -125,6 +136,8 @@ class OrderController  extends Controller
 
         $model = new $orderModel;
 
+        $this->getView()->registerJs("jQuery('.buy-by-code-input').focus();");
+        
         if ($model->load(yii::$app->request->post()) && $model->save()) {
             
             if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
@@ -135,6 +148,10 @@ class OrderController  extends Controller
                     ->setSubject(Yii::t('order', 'New order')." #{$model->id} ({$model->client_name})")
                     ->send();
             }
+            
+            $module = $this->module;
+            $orderEvent = new OrderEvent(['model' => $model]);
+            $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
             
             $module = $this->module;
             $orderEvent = new OrderEvent(['model' => $model]);
