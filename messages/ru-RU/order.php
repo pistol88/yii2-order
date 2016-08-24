@@ -137,4 +137,5 @@ return [
     'Statistics' => 'Статистика',
     'Delivery to time' => 'Доставить ко времени',
     'Fast order' => 'Быстрый заказ',
+    'Discount' => 'Скидка',
 ];

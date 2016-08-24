@@ -225,7 +225,7 @@ $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}
                             <div class="col-md-2">
                                 <input type="checkbox" <?php if(yii::$app->request->get('promocode')) echo ' checked="checked"'; ?> name="promocode" value="1" id="order-promocode" />
                                 <label for="order-promocode"><?=yii::t('order', 'Promocode');?></label>
-                                <input class="form-control" type="submit" value="<?=Yii::t('order', 'Search');?>" class="btn btn-success" />
+                                <input class="btn btn-success form-control" type="submit" value="<?=Yii::t('order', 'Search');?>"  />
                             </div>
                         </form>
                     <?php } ?>

@@ -138,5 +138,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],
         ],
     ]); ?>
-    <h3 align="right"><?=Yii::t('order', 'In total'); ?>: <?=$model->count;?> <?=Yii::t('order', 'on'); ?> <?=$model->cost;?> <?=Yii::$app->getModule('order')->currency;?> </h3>
+    <h3 align="right">
+            <?=Yii::t('order', 'In total'); ?>:
+            <?=$model->count;?> <?=Yii::t('order', 'on'); ?>
+            <?=$model->cost;?>
+            <?=Yii::$app->getModule('order')->currency;?>
+            <?php if($model->promocode) { ?>
+                (<?=yii::t('order', 'Discount');?> <?=$model->promocode;?><?php if(yii::$app->has('promocode') && $code = yii::$app->promocode->checkExists($model->promocode)) { echo " {$code->discount}%"; } ?>)
+            <?php } ?>
+    </h3>
 </div>

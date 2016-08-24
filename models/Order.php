@@ -308,6 +308,10 @@ class Order extends \yii\db\ActiveRecord
             }
         }
         
+        if(yii::$app->has('promocode')) {
+            yii::$app->promocode->clear();
+        }
+        
         if(empty($this->elements)) {
             $cartService = yii::$app->cart;
 
@@ -327,10 +331,6 @@ class Order extends \yii\db\ActiveRecord
                     
                     $element->getModel()->minusAmount($count);
                 }
-            }
-
-            if(yii::$app->has('promocode')) {
-                yii::$app->promocode->clear();
             }
 
             $cartService->truncate();
