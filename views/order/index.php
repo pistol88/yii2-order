@@ -106,6 +106,10 @@ $columns[] = [
             ['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
         ),
         'value'	=> function($model) {
+            if(!$model->status) {
+                return null;
+            }
+            
             return  Yii::$app->getModule('order')->orderStatuses[$model->status];
         }
     ];

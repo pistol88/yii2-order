@@ -138,4 +138,5 @@ return [
     'Delivery to time' => 'Доставить ко времени',
     'Fast order' => 'Быстрый заказ',
     'Discount' => 'Скидка',
+    'How call you?' => 'Как к вам обращаться?',
 ];

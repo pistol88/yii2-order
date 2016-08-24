@@ -14,7 +14,8 @@ pistol88.oneclick = {
         jQuery.post($(form).attr('action'), data,
             function(json) {
                 if(json.result == 'success') {
-                    $(form).modal('hide');
+                    $(form).parents('.modal').modal('hide');
+                    $(form).find('input,textarea').val('');
                 }
                 else {
                     console.log(json.errors);

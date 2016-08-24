@@ -11,9 +11,14 @@ class OneClick extends \yii\base\Widget
     
     public $view = 'oneclick/form';
     public $model = null;
+    public $content = null;
     
     public function init()
     {
+        if(is_null($this->content)) {
+            $this->content = yii::t('order', 'Fast order');
+        }
+        
         \pistol88\order\assets\OneClickAsset::register($this->getView());
         
         return parent::init();
@@ -28,6 +33,6 @@ class OneClick extends \yii\base\Widget
             echo $this->render($this->view, ['model' => $this->model, 'orderModel' => $model]);
         });
         
-        return Html::a(yii::t('order', 'Fast order'), '#fastOrder'.$this->model->id, ['title' => yii::t('order', 'Fast order'), 'data-toggle' => 'modal', 'data-target' => '#fastOrder'.$this->model->id, 'class' => 'btn btn-success']);
+        return Html::a($this->content, '#fastOrder'.$this->model->id, ['title' => yii::t('order', 'Fast order'), 'data-toggle' => 'modal', 'data-target' => '#fastOrder'.$this->model->id, 'class' => 'btn btn-success']);
     }
 }

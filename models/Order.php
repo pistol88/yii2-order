@@ -26,7 +26,7 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status'], 'required'],
+            //[['status'], 'required'],
             [['status', 'date', 'payment', 'comment', 'delivery_time', 'promocode'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type'], 'safe'],

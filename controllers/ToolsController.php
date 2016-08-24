@@ -8,6 +8,7 @@ use yii\filters\AccessControl;
 use pistol88\cart\widgets\ElementsList;
 use pistol88\cart\widgets\CartInformer;
 use pistol88\order\models\ShippingType;
+use pistol88\order\events\OrderEvent;
 
 class ToolsController  extends Controller
 {
@@ -16,7 +17,7 @@ class ToolsController  extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-				'only' => ['create', 'update', 'index', 'delete'],
+				'only' => ['user-info'],
                 'rules' => [
                     [
                         'allow' => true,

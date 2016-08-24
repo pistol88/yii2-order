@@ -76,6 +76,10 @@ php yii migrate --migrationPath=vendor/pistol88/yii2-order/migrations
 <?=OrderForm::widget();?>
 ```
 
+Кнопка "заказ в один клик" - pistol88\order\widgets\OneClick:
+
+<?=OneClick::widget(['model' => $model);?>
+
 Онлайн оплата
 ---------------------------------
 Чтобы добавить способ оплаты, перейдите в ?r=/order/payment-type/index, добавьте новый способ, где в поле "Виджет" укажите класс виджета, который будет отдавать форму оплаты. Виджеты оплаты устанавливаются отдельно.
