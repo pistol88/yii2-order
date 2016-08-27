@@ -3,6 +3,7 @@ namespace pistol88\order\controllers;
 
 use yii;
 use yii\web\Controller;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use pistol88\cart\widgets\ElementsList;
@@ -30,7 +31,7 @@ class ToolsController  extends Controller
 
     public function actionFindUsersWindow()
     {
-        $this->layout = 'mini';
+        $this->layout = '@vendor/pistol88/yii2-order/views/layouts/mini';
         
         $searchModel = new $this->module->userSearchModel;
         $model = new $this->module->userModel;
@@ -46,7 +47,7 @@ class ToolsController  extends Controller
     
     public function actionFindProductsWindow()
     {
-        $this->layout = 'mini';
+        $this->layout = '@vendor/pistol88/yii2-order/views/layouts/mini';
         
         $searchModel = new $this->module->productSearchModel;
         $model = new $this->module->productModel;
@@ -178,7 +179,7 @@ class ToolsController  extends Controller
                 $orderEvent = new OrderEvent(['model' => $model]);
                 $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
 
-                $json = ['result' => 'success'];
+                $json = ['id' => $model->id, 'redirect' => Url::toRoute([$this->module->successUrl, 'id' => $model->id, 'payment' => $model->payment_type_id]), 'result' => 'success'];
             } else {
                 //yii::$app->cart->truncate();
                 $json = ['result' => 'fail'];

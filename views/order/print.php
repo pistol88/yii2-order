@@ -77,12 +77,10 @@ body, td, th {
     }
     
     if($model->seller) {
-        if($profile = $model->seller->userProfile) {
-            $detailOrder['attributes'][] = [
-                'label' => yii::t('order', 'Seller'),
-                'value'		=> Html::encode($profile->getFullName()),
-            ];
-        }
+        $detailOrder['attributes'][] = [
+            'label' => yii::t('order', 'Seller'),
+            'value'		=> Html::encode($model->seller->name),
+        ];
     }
 
     echo DetailView::widget($detailOrder);

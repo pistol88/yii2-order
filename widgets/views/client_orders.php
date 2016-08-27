@@ -61,7 +61,7 @@ $columns = [
 ?>
 <div class="worker-payments-widget">
     <?php Pjax::begin(); ?>
-    <div class="panel panel-primary">
+    <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title"><?=yii::t('order', 'Search');?></h3>
         </div>

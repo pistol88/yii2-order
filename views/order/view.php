@@ -87,11 +87,11 @@ $this->params['breadcrumbs'][] = $this->title;
 			];
         }
     }
-    
-    if($model->seller && $model->seller->userProfile) {
+
+    if($model->seller) {
         $detailOrder['attributes'][] = [
             'label' => yii::t('order', 'Seller'),
-            'value'		=> Html::encode($model->seller->userProfile->getFullName()),
+            'value' => Html::encode($model->seller->name),
         ];
     }
 

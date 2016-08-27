@@ -42,6 +42,8 @@ class Module extends \yii\base\Module
     
     public $sellers = null; //collable, return seller list
     
+    public $sellerModel = '\common\models\User';
+    
     private $mail;
 
     public function init()

@@ -8,6 +8,7 @@ pistol88.oneclick = {
     },
     sendOrder: function() {
         var form = $(this);
+        $(form).css('opacity', '0.3');
         var data = $(form).serialize();
         data = data+'&ajax=1';
 
@@ -16,11 +17,14 @@ pistol88.oneclick = {
                 if(json.result == 'success') {
                     $(form).parents('.modal').modal('hide');
                     $(form).find('input,textarea').val('');
+                    document.location = json.redirect;
                 }
                 else {
                     console.log(json.errors);
                     alert(json.errors);
                 }
+                
+                $(form).css('opacity', '1');
 
                 return true;
 

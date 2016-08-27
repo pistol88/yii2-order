@@ -129,7 +129,7 @@ class Order extends \yii\db\ActiveRecord
     
     public function getSeller()
     {
-        $userModel = yii::$app->getModule('order')->userModel;
+        $userModel = yii::$app->getModule('order')->sellerModel;
         if($userModel && class_exists($userModel)) {
             return $this->hasOne($userModel::className(), ['id' => 'seller_user_id']);
         }

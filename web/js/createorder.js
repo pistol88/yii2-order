@@ -22,11 +22,12 @@ pistol88.createorder = {
     },
     chooseUser: function(id) {
         $("#orderForm input[name='Order[user_id]']").val(id).change();
+        $(document).trigger("chooseUserToOrder", id);
         $('#usersModal').modal('hide');
     },
     updateCartUrl: '',
     updateCart: function() {
-        jQuery.post(pistol88.createorder.updateCartUrl, {},
+        $.post(pistol88.createorder.updateCartUrl, {},
             function(json) {
                 $('.pistol88-cart-block').replaceWith(json.cart);
                 $('.total').html(json.total);

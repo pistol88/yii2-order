@@ -78,7 +78,7 @@ php yii migrate --migrationPath=vendor/pistol88/yii2-order/migrations
 
 Кнопка "заказ в один клик" - pistol88\order\widgets\OneClick:
 
-<?=OneClick::widget(['model' => $model);?>
+<?=OneClick::widget(['model' => $model]);?>
 
 Онлайн оплата
 ---------------------------------
