@@ -58,6 +58,8 @@ pistol88.createorder = {
                                 $(".promo-code-enter .promo-code-clear-btn").click();
                             }
                         }
+                        
+                        $(document).trigger("orderFindUser", json);
                     }
                     else {
                         alert(json.message);

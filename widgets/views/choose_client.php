@@ -12,7 +12,6 @@ use yii\helpers\Html;
     </div>
     <div class="col-md-12">
         <?= $form->field($model, 'client_name')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
     </div>
 </div>
 
