@@ -15,6 +15,10 @@ class Bootstrap implements BootstrapInterface
         if(!$app->has('paymentModel')) {
             $app->set('paymentModel', ['class' => 'pistol88\order\models\Payment']);
         }
+
+        if(!$app->has('order')) {
+            $app->set('order', ['class' => 'pistol88\order\Order']);
+        }
         
         if(empty($app->modules['gridview'])) {
             $app->setModule('gridview', [
