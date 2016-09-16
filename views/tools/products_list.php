@@ -40,7 +40,7 @@ $this->registerJs("$(document).on('renderCart', function() {
             [
                 'attribute' => 'name',
                 'content' => function($product) {
-                    $name = $product->name;
+                    $name = Html::tag('div', $product->name, ['style' => 'clear: both;']);
 
                     $count = ChangeCount::widget(['model' => $product->sellModel]);
                     
