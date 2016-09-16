@@ -237,12 +237,28 @@ $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}
             </div>
             
             <div class="summary row">
-                <div class="col-md-6">
-                    <?=yii::t('order', 'Total');?>:
-                    <?=number_format($dataProvider->query->sum('cost'), 2, ',', '.');?>
-                    <?=yii::$app->getModule('order')->currency;?>
+                <div class="col-md-4">
+                    <h3>
+                        <?=yii::t('order', 'Total');?>:
+                        <?=number_format($dataProvider->query->sum('cost'), 2, ',', '.');?>
+                        <?=yii::$app->getModule('order')->currency;?>
+                    </h3>
                 </div>
-                <div class="col-md-6 export">
+                <div class="col-md-4">
+                    <ul>
+                        <?php
+                        foreach($paymentTypes as $pid => $pname) {
+                           $query = clone $dataProvider->query;
+                           $sum = $query
+                                   ->andWhere(['payment_type_id' => $pid])
+                                   ->sum('cost');
+                           
+                           echo '<li>'.$pname.': '.(int)$sum.' '.yii::$app->getModule('order')->currency.'</li>';
+                        }
+                        ?>
+                    </ul>
+                </div>
+                <div class="col-md-4 export">
                     <?php
                     $gridColumns = $columns;
                     echo ExportMenu::widget([
