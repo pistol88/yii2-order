@@ -153,10 +153,6 @@ class OrderController  extends Controller
             $orderEvent = new OrderEvent(['model' => $model]);
             $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
             
-            $module = $this->module;
-            $orderEvent = new OrderEvent(['model' => $model]);
-            $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
-            
             return $this->redirect([$this->module->orderCreateRedirect, 'id' => $model->id]);
         } else {
             //yii::$app->cart->truncate();
