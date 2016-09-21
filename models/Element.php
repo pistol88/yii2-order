@@ -75,69 +75,6 @@ class Element extends \yii\db\ActiveRecord
         return $model;
     }
     
-    public static function getStatInMoth()
-    {
-        $query = new Query();
-        $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
-                ->from ([Element::tableName().' e'])
-                ->leftJoin(Order::tableName().' o','o.id = e.order_id')
-                ->where('DATE_FORMAT(o.date, "%Y-%m") = :date', [':date' => date('Y-m')]);
-
-        $result = $query->one();
-        
-        return array_map('intval', $result);
-    }
-
-    public static function getStatByDate($date)
-    {
-        $query = new Query();
-        $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
-                ->from ([Element::tableName().' e'])
-                ->leftJoin(Order::tableName().' o','o.id = e.order_id')
-                ->where('DATE_FORMAT(o.date, "%Y-%m-%d") = :date', [':date' => $date]);
-
-        $result = $query->one();
-        
-        return array_map('intval', $result);
-    }
-    
-    public static function getStatByModelAndDatePeriod($model, $dateStart, $dateStop)
-    {
-        if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
-            $dateStop = date('Y-m-d H:i:s');
-        }
-        
-        $query = new Query();
-        $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
-                ->from ([Element::tableName().' e'])
-                ->leftJoin(Order::tableName().' o','o.id = e.order_id')
-                ->where('o.date >= :dateStart', [':dateStart' => $dateStart])
-                ->andWhere('o.date <= :dateStop', [':dateStop' => $dateStop])
-                ->andWhere(['e.model' => $model]);
-
-        $result = $query->one();
-        
-        return array_map('intval', $result);
-    }
-    
-    public static function getStatByDatePeriod($dateStart, $dateStop)
-    {
-        if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
-            $dateStop = date('Y-m-d H:i:s');
-        }
-        
-        $query = new Query();
-        $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
-                ->from ([Element::tableName().' e'])
-                ->leftJoin(Order::tableName().' o','o.id = e.order_id')
-                ->where('o.date >= :dateStart', [':dateStart' => $dateStart])
-                ->andWhere('o.date <= :dateStop', [':dateStop' => $dateStop]);
-
-        $result = $query->one();
-        
-        return array_map('intval', $result);
-    }
-    
     public static function editField($id, $name, $value)
     {
         $setting = Element::findOne($id);

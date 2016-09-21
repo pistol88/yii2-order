@@ -115,6 +115,8 @@ $columns[] = [
     ];
         
 $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']];
+
+$order = yii::$app->order;
 ?>
 
 

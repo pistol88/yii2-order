@@ -217,51 +217,6 @@ class Order extends \yii\db\ActiveRecord
         return $this->save(false);
     }
     
-    public static function getStatInMoth($month = null)
-    {
-        if(!$month) {
-            $month = date('Y-m');
-        }
-        
-        $query = new Query();
-        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
-                ->from([Order::tableName()])
-                ->where('DATE_FORMAT(date, "%Y-%m") = :date', [':date' => $month]);
-
-        $result = $query->one();
-        
-        return array_map('intval', $result);
-    }
-
-    public static function getStatByDate($date)
-    {
-        $query = new Query();
-        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
-                ->from([Order::tableName()])
-                ->where('DATE_FORMAT(date, "%Y-%m-%d") = :date', [':date' => $date]);
-
-        $result = $query->one();
-        
-        return array_map('intval', $result);
-    }
-    
-    public static function getStatByDatePeriod($dateStart, $dateStop)
-    {
-        if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
-            $dateStop = date('Y-m-d H:i:s');
-        }
-
-        $query = new Query();
-        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
-                ->from([Order::tableName()])
-                ->where('date >= :dateStart', [':dateStart' => $dateStart])
-                ->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
-
-        $result = $query->one();
-        
-        return array_map('intval', $result);
-    }
-    
     public function beforeSave($insert)
     {
         if(empty($this->seller_user_id)) {

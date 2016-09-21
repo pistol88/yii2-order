@@ -1,13 +1,15 @@
 <?php
 namespace pistol88\order;
 
-use pistol88\order\models\Order as OrderModel;
-
 use yii\base\Component;
+use yii\db\Query;
 use yii;
 
 class Order extends Component
 {
+    public $order = 'pistol88\order\models\Order';
+    public $element = 'pistol88\order\models\Element';
+    
     public function init()
     {
         parent::init();
@@ -15,6 +17,81 @@ class Order extends Component
 
     public function get($id)
     {
-        return OrderModel::findOne($id);
+        $order = $this->order;
+        
+        return $order::findOne($id);
+    }
+    
+    public function getStatInMoth($month = null)
+    {
+        if(!$month) {
+            $month = date('Y-m');
+        }
+        
+        $order = $this->order;
+        
+        $query = new Query();
+        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
+                ->from([$order::tableName()])
+                ->where('DATE_FORMAT(date, "%Y-%m") = :date', [':date' => $month]);
+
+        $result = $query->one();
+        
+        return array_map('intval', $result);
+    }
+
+    public function getStatByDate($date)
+    {
+        $order = $this->order;
+        
+        $query = new Query();
+        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
+                ->from([$order::tableName()])
+                ->where('DATE_FORMAT(date, "%Y-%m-%d") = :date', [':date' => $date]);
+
+        $result = $query->one();
+        
+        return array_map('intval', $result);
+    }
+    
+    public function getStatByDatePeriod($dateStart, $dateStop)
+    {
+        if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
+            $dateStop = date('Y-m-d H:i:s');
+        }
+
+        $order = $this->order;
+        
+        $query = new Query();
+        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
+                ->from([$order::tableName()])
+                ->where('date >= :dateStart', [':dateStart' => $dateStart])
+                ->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
+
+        $result = $query->one();
+        
+        return array_map('intval', $result);
+    }
+
+    public function getStatByModelAndDatePeriod($model, $dateStart, $dateStop)
+    {
+        if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
+            $dateStop = date('Y-m-d H:i:s');
+        }
+        
+        $order = $this->order;
+        $element = $this->element;
+        
+        $query = new Query();
+        $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
+                ->from ([$element::tableName().' e'])
+                ->leftJoin($order::tableName().' o','o.id = e.order_id')
+                ->where('o.date >= :dateStart', [':dateStart' => $dateStart])
+                ->andWhere('o.date <= :dateStop', [':dateStop' => $dateStop])
+                ->andWhere(['e.model' => $model]);
+
+        $result = $query->one();
+        
+        return array_map('intval', $result);
     }
 }

@@ -68,6 +68,17 @@ php yii migrate --migrationPath=vendor/pistol88/yii2-order/migrations
 * priceFormat - формат цены (по умолчанию [2, '.', ''])
 * adminRoles - список ролей, которые имеют доступ в CRUD заказа (по умолчанию ['admin', 'superadmin'])
 
+Сервисы
+---------------------------------
+
+Модуль автоматически инжектит в yii2 (в Service locator) компонент order (сервис), который доступен глобально через yii::$app->order и предоставляет следующие сервисы:
+
+* get($id) - получить заказ по ID
+* getStatInMoth($month) - получить статистику заказов за месяц
+* getStatByDate($date) - получить статичтику заказов за день
+* getStatByDatePeriod($dateStart, $dateStop) - получить статистику заказов за период
+* getStatByModelAndDatePeriod($model, $dateStart, $dateStop) - получить статистику заказов определенной модели за период
+
 Виджеты
 ---------------------------------
 За вывод формы заказа отвечает виджет pistol88\order\widgets\OrderForm
@@ -78,7 +89,29 @@ php yii migrate --migrationPath=vendor/pistol88/yii2-order/migrations
 
 Кнопка "заказ в один клик" - pistol88\order\widgets\OneClick:
 
+```php
 <?=OneClick::widget(['model' => $model]);?>
+```
+
+Триггеры
+---------------------------------
+
+В Module:
+
+ * create - создание заказа
+ * delete - удаление заказа
+ * delete_element - удаление элемента заказа
+
+Пример использования через конфиг:
+
+```php
+    'order' => [
+        'class' => 'pistol88\order\Module',
+        'on create' => function($event) {
+            send_sms(...); //Отправляем СМС оповещение
+        },
+    ],
+```
 
 Онлайн оплата
 ---------------------------------
