@@ -10,7 +10,6 @@ use yii\helpers\ArrayHelper;
 
 class Informer extends \yii\base\Widget
 {
-    
     public $view = 'informer';
     public $elements = [];
     

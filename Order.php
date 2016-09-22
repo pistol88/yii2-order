@@ -22,7 +22,7 @@ class Order extends Component
         return $order::findOne($id);
     }
     
-    public function getStatInMoth($month = null)
+    public function getStatInMoth($month = null, $where = null, $where = null)
     {
         if(!$month) {
             $month = date('Y-m');
@@ -31,30 +31,38 @@ class Order extends Component
         $order = $this->order;
         
         $query = new Query();
-        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
+        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_orders'])
                 ->from([$order::tableName()])
                 ->where('DATE_FORMAT(date, "%Y-%m") = :date', [':date' => $month]);
 
+        if($where) {
+            $query->andWhere($where);
+        }
+        
         $result = $query->one();
         
         return array_map('intval', $result);
     }
 
-    public function getStatByDate($date)
+    public function getStatByDate($date, $where = null, $where = null)
     {
         $order = $this->order;
         
         $query = new Query();
-        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
+        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_orders'])
                 ->from([$order::tableName()])
                 ->where('DATE_FORMAT(date, "%Y-%m-%d") = :date', [':date' => $date]);
 
+        if($where) {
+            $query->andWhere($where);
+        }
+        
         $result = $query->one();
         
         return array_map('intval', $result);
     }
     
-    public function getStatByDatePeriod($dateStart, $dateStop)
+    public function getStatByDatePeriod($dateStart, $dateStop, $where = null)
     {
         if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
             $dateStop = date('Y-m-d H:i:s');
@@ -68,12 +76,16 @@ class Order extends Component
                 ->where('date >= :dateStart', [':dateStart' => $dateStart])
                 ->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
 
+        if($where) {
+            $query->andWhere($where);
+        }
+        
         $result = $query->one();
         
         return array_map('intval', $result);
     }
 
-    public function getStatByModelAndDatePeriod($model, $dateStart, $dateStop)
+    public function getStatByModelAndDatePeriod($model, $dateStart, $dateStop, $where = null)
     {
         if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
             $dateStop = date('Y-m-d H:i:s');
@@ -90,7 +102,13 @@ class Order extends Component
                 ->andWhere('o.date <= :dateStop', [':dateStop' => $dateStop])
                 ->andWhere(['e.model' => $model]);
 
+        if($where) {
+            $query->andWhere($where);
+        }
+        
         $result = $query->one();
+        
+        
         
         return array_map('intval', $result);
     }
