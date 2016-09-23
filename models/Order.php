@@ -263,10 +263,6 @@ class Order extends \yii\db\ActiveRecord
             }
         }
         
-        if(yii::$app->has('promocode')) {
-            yii::$app->promocode->clear();
-        }
-        
         if(empty($this->elements)) {
             $cartService = yii::$app->cart;
 
@@ -279,7 +275,7 @@ class Order extends \yii\db\ActiveRecord
                     $orderElementModel->model = $element->getModel(false);
                     $orderElementModel->item_id = $element->getItemId();
                     $orderElementModel->count = $count;
-                    $orderElementModel->price = $element->getPrice();
+                    $orderElementModel->price = $element->getCost();
                     $orderElementModel->options = json_encode($element->getOptions());
                     $orderElementModel->description = '';
                     $orderElementModel->save();
@@ -288,6 +284,10 @@ class Order extends \yii\db\ActiveRecord
                 }
             }
 
+            if(yii::$app->has('promocode')) {
+                yii::$app->promocode->clear();
+            }
+            
             $cartService->truncate();
         }
         
