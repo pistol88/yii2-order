@@ -12,6 +12,7 @@ use pistol88\order\models\PaymentType;
 use pistol88\order\models\ShippingType;
 use yii\web\Controller;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -159,6 +160,53 @@ class OrderController  extends Controller
             return $this->render('create', [
                 'model' => $model,
             ]);
+        }
+    }
+
+    public function actionGetOrderFormLight($useAjax = false)
+    {
+        return $this->renderAjax('formLight', [
+            'useAjax' => $useAjax,
+        ]);
+    }
+
+    public function actionCreateAjax()
+    {
+        $orderModel = yii::$app->orderModel;
+
+        $model = new $orderModel;
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if ($model->load(yii::$app->request->post()) && $model->save()) {
+
+            if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
+                $sender = yii::$app->getModule('order')->mail
+                    ->compose('admin_notification', ['model' => $model])
+                    ->setTo($ordersEmail)
+                    ->setFrom(yii::$app->getModule('order')->robotEmail)
+                    ->setSubject(Yii::t('order', 'New order')." #{$model->id} ({$model->client_name})")
+                    ->send();
+            }
+
+            $module = $this->module;
+            $orderEvent = new OrderEvent(['model' => $model]);
+            $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
+
+            $nextStepAction = false;
+            if (\yii::$app->getModule('order')->paymentFormAction) {
+                $nextStepAction = Url::to([\yii::$app->getModule('order')->paymentFormAction , 'id' => $model->id, 'useAjax' => 1]);
+            }
+
+            return [
+                'status' => 'success',
+                'nextStep' => $nextStepAction
+            ];
+
+        } else {
+            return [
+                'status' => 'error'
+            ];
         }
     }
 
