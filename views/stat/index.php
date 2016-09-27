@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <a href="<?=Url::toRoute(['/order/stat/month', 'y' => $year, 'm' => $m]);?>"><?=yii::t('order', "month_$m");?></a>
                         </td>
                         <?php
-                        $stat = $model::getStatInMoth("$year-$m");
+                        $stat = yii::$app->order->getStatInMoth("$year-$m");
                         if($stat['count_order']) {
                         ?>
                             <td>

@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $month;
                         </a>
                     </td>
                     <?php
-                    $stat = $model::getStatByDate("$y-$m-$fd");
+                    $stat = yii::$app->order->getStatByDate("$y-$m-$fd");
                     
                     if($stat['count_order']) {
                     ?>
