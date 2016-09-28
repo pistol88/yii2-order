@@ -13,9 +13,12 @@ pistol88.orders_list = {
 				var id = $(this).data('key');
 				var tr = $(this);
 				
+				$(tr).find('td').css('opacity', '0.3');
+				
 				$.post(pistol88.orders_list.elementsUrl, {ajax: true, orderId: id},
 					function(json) {
 						$(tr).after('<tr class="order-detail"><td colspan="100">'+json.elementsHtml+'</td></tr>');
+						$(tr).find('td').css('opacity', '1');
 					}, "json");
 			}
 		});
