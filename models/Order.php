@@ -56,6 +56,7 @@ class Order extends \yii\db\ActiveRecord
             'user_id' => yii::t('order', 'User ID'),
             'count' => yii::t('order', 'Count'),
             'cost' => yii::t('order', 'Cost'),
+			'base_cost' => yii::t('order', 'Base cost'),
             'seller_user_id' => yii::t('order', 'Seller'),
         ];
     }
@@ -232,6 +233,7 @@ class Order extends \yii\db\ActiveRecord
 
             if(empty($this->cost)) {
                 $this->cost = $cartService->cost;
+				$this->base_cost = $cartService->getCost(false);
             }
 
             if(empty($this->count)) {
@@ -275,6 +277,7 @@ class Order extends \yii\db\ActiveRecord
                     $orderElementModel->model = $element->getModel(false);
                     $orderElementModel->item_id = $element->getItemId();
                     $orderElementModel->count = $count;
+					$orderElementModel->base_price = $element->getCost(false);
                     $orderElementModel->price = $element->getCost();
                     $orderElementModel->options = json_encode($element->getOptions());
                     $orderElementModel->description = '';

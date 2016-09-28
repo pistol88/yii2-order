@@ -134,7 +134,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
 			],
 			'count',
-			'price',
+			'base_price',
+			['attribute' => 'price', 'label' => yii::t('order', 'Price').' %'],
             ['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],
         ],
     ]); ?>

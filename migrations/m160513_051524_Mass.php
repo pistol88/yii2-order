@@ -25,6 +25,7 @@ class m160513_051524_Mass extends Migration
                 'promocode' => Schema::TYPE_STRING . "(100)",
                 'count' => Schema::TYPE_INTEGER . "(11)",
                 'cost' => Schema::TYPE_DECIMAL . "(11,2)",
+				'base_cost' => Schema::TYPE_DECIMAL . "(11,2)",
                 'payment_type_id' => Schema::TYPE_INTEGER . "(11)",
                 'shipping_type_id' => Schema::TYPE_INTEGER . "(11)",
                 'delivery_time_date' => Schema::TYPE_DATE,
@@ -50,6 +51,7 @@ class m160513_051524_Mass extends Migration
                 'item_id' => Schema::TYPE_INTEGER . "(11) NOT NULL",
                 'count' => Schema::TYPE_INTEGER . "(11) NOT NULL",
                 'price' => Schema::TYPE_DECIMAL . "(11,2)",
+				'base_price' => Schema::TYPE_DECIMAL . "(11,2)",
                 'description' => Schema::TYPE_TEXT . "",
                 'options' => Schema::TYPE_TEXT . "",
                 ], $tableOptions);

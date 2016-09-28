@@ -4,12 +4,15 @@ use yii\grid\GridView;
 use pistol88\order\widgets\Informer;
 use kartik\export\ExportMenu;
 use nex\datepicker\DatePicker;
+use pistol88\order\assets\Asset;
+use pistol88\order\assets\OrdersListAsset;
 
 $this->title = yii::t('order', 'Orders');
 $this->params['breadcrumbs'][] = $this->title;
 
-use pistol88\order\assets\Asset;
+
 Asset::register($this);
+OrdersListAsset::register($this);
 
 if($dateStart = yii::$app->request->get('date_start')) {
     $dateStart = date('Y-m-d', strtotime($dateStart));
@@ -32,18 +35,22 @@ $columns[] = [
 ];
 
 $columns[] = [
+	'attribute' => 'base_cost',
+	'label' => yii::$app->getModule('order')->currency,
+];
+
+$columns[] = [
     'attribute' => 'cost',
-    'label' => yii::$app->getModule('order')->currency,
+    'label' => '%',
     'content' => function($model) {
         $total = $model->cost;
         if($model->promocode) {
             $total .= Html::tag('div', $model->promocode, ['style' => 'color: orange; font-size: 80%;', yii::t('order', 'Promocode')]);
         }
 
-        return $total;
+        return $total.$detail;
     },
 ];
-
             
 foreach(Yii::$app->getModule('order')->orderColumns as $column) {
     if($column == 'payment_type_id') {
@@ -90,29 +97,29 @@ foreach(Yii::$app->getModule('order')->orderColumns as $column) {
 }
             
 $columns[] = [
-        'attribute' => 'date',
-        'filter' => false,
-        'value' => function($model) {
-            return date(yii::$app->getModule('order')->dateFormat, $model->timestamp);
-        }
-    ];
+	'attribute' => 'date',
+	'filter' => false,
+	'value' => function($model) {
+		return date(yii::$app->getModule('order')->dateFormat, $model->timestamp);
+	}
+];
         
 $columns[] = [
-        'attribute' => 'status',
-        'filter' => Html::activeDropDownList(
-            $searchModel,
-            'status',
-            yii::$app->getModule('order')->orderStatuses,
-            ['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
-        ),
-        'value'	=> function($model) {
-            if(!$model->status) {
-                return null;
-            }
-            
-            return  Yii::$app->getModule('order')->orderStatuses[$model->status];
-        }
-    ];
+	'attribute' => 'status',
+	'filter' => Html::activeDropDownList(
+		$searchModel,
+		'status',
+		yii::$app->getModule('order')->orderStatuses,
+		['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
+	),
+	'value'	=> function($model) {
+		if(!$model->status) {
+			return null;
+		}
+		
+		return  Yii::$app->getModule('order')->orderStatuses[$model->status];
+	}
+];
         
 $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']];
 

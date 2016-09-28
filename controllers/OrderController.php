@@ -66,6 +66,8 @@ class OrderController  extends Controller
         $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
         $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
 
+		$this->getView()->registerJs('pistol88.orders_list.elementsUrl = "'.Url::toRoute(['/order/tools/ajax-elements-list']).'";');
+		
         return $this->render('index', [
             'searchModel' => $searchModel,
             'shippingTypes' => $shippingTypes,

@@ -27,6 +27,7 @@ class Element extends \yii\db\ActiveRecord
         return [
             'id' => yii::t('order', 'ID'),
             'price' => yii::t('order', 'Price'),
+			'base_price' => yii::t('order', 'Base price'),
             'description' => yii::t('order', 'Description'),
             'options' => yii::t('order', 'Options'),
             'model' => yii::t('order', 'Model name'),

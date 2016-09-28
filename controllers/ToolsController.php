@@ -4,6 +4,7 @@ namespace pistol88\order\controllers;
 use yii;
 use yii\web\Controller;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use pistol88\cart\widgets\ElementsList;
@@ -18,7 +19,7 @@ class ToolsController  extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-				'only' => ['user-info'],
+				'only' => ['user-info', 'ajax-elements-list'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -127,6 +128,23 @@ class ToolsController  extends Controller
         die(json_encode($json));
     }
     
+	public function actionAjaxElementsList()
+	{
+		$model = yii::$app->order->get(yii::$app->request->post('orderId'));
+		
+		$elements = Html::ul($model->elements, ['item' => function($item, $index) {
+			return Html::tag(
+				'li',
+				"{$item->getModel()->getCartName()} - {$item->base_price}x{$item->count}",
+				['class' => 'post']
+			);
+		}]);
+		
+        die(json_encode([
+            'elementsHtml' => $elements,
+        ]));
+	}
+	
     public function actionCartInfo()
     {
         die(json_encode([
