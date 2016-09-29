@@ -196,6 +196,16 @@ class OrderController  extends Controller
             $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
 
             $nextStepAction = false;
+
+            // создаём заказ, очищаем информер корзины
+            if ($model->cost == 0) {
+                return [
+                    'status' => 'success',
+                    'nextStep' => $nextStepAction
+                ];
+            }
+
+            // создаём заказ, отдаём урл на рендер формы оплаты
             if (\yii::$app->getModule('order')->paymentFormAction) {
                 $nextStepAction = Url::to([\yii::$app->getModule('order')->paymentFormAction , 'id' => $model->id, 'useAjax' => 1]);
             }
