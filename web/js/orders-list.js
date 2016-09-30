@@ -5,7 +5,11 @@ if (typeof pistol88 == "undefined" || !pistol88) {
 pistol88.orders_list = {
 	elementsUrl: null,
     init: function() {
-        $('.order-index tr').on('click', function() {
+        $('.order-index tr').on('click', function(e) {
+			//alert($(e.target.tagName).parent().html());
+			if($(e.target.tagName).parent().get(0).tagName == 'A' | e.target.tagName == 'A') {
+				return null;
+			}
 			if($(this).next('tr').hasClass('order-detail')) {
 				$(this).next('tr').remove();
 			}

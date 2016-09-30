@@ -95,7 +95,7 @@ foreach(Yii::$app->getModule('order')->orderColumns as $column) {
     
     $columns[] = $column;
 }
-            
+
 $columns[] = [
 	'attribute' => 'date',
 	'filter' => false,
@@ -120,7 +120,7 @@ $columns[] = [
 		return  Yii::$app->getModule('order')->orderStatuses[$model->status];
 	}
 ];
-        
+
 $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']];
 
 $order = yii::$app->order;

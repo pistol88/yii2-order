@@ -135,7 +135,7 @@ class ToolsController  extends Controller
 		$elements = Html::ul($model->elements, ['item' => function($item, $index) {
 			return Html::tag(
 				'li',
-				"{$item->getModel()->getCartName()} - {$item->base_price}x{$item->count}",
+				"{$item->getModel()->getCartName()} - {$item->base_price} {$this->module->currency}x{$item->count}",
 				['class' => 'post']
 			);
 		}]);
