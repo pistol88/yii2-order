@@ -142,6 +142,6 @@ return [
     'How call you?' => 'Как к вам обращаться?',
 	'Element types' => 'Типы элементов',
 	'With elements' => 'С элементами',
-	'Elements count' => 'Количество элементов',
+	'Elements count' => 'Количество позиций',
 	'Write-off' => 'Списание',
 ];
