@@ -143,4 +143,5 @@ return [
 	'Element types' => 'Типы элементов',
 	'With elements' => 'С элементами',
 	'Elements count' => 'Количество элементов',
+	'Write-off' => 'Списание',
 ];

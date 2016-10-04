@@ -122,11 +122,22 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute' => 'description',
                 'filter' => false,
                 'content' => function($model) {
-                    $return = $model->description;
+                    $elementOptions = json_decode($model->options);
+					$productOptions = $model->getModel()->getCartOptions();
 
-                    if($options = json_decode($model->options)) {
-                        foreach($options as $name => $value) {
-                            $return .= Html::tag('p', Html::encode($name).': '.Html::encode($value));
+					$return = $model->description;
+					
+                    if($elementOptions) { 
+                        foreach($productOptions as $optionId => $optionData) {
+							foreach($elementOptions as $id => $value) {
+								if($optionId == $id) {
+									if(!$variantValue = $optionData['variants'][$value]) {
+										$variantValue = 'deleted';
+									}
+									$return .= Html::tag('p', Html::encode($optionData['name']).': '.Html::encode($variantValue).';');
+								}
+							}
+                            
                         }
                     }
                     
@@ -136,6 +147,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			'count',
 			'base_price',
 			['attribute' => 'price', 'label' => yii::t('order', 'Price').' %'],
+			[
+				'label' => yii::t('order', 'Write-off'),
+				'content' => function($model) {
+					return '';
+				}
+			],
             ['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],
         ],
     ]); ?>
