@@ -277,8 +277,8 @@ class Order extends \yii\db\ActiveRecord
                     $orderElementModel->model = $element->getModel(false);
                     $orderElementModel->item_id = $element->getItemId();
                     $orderElementModel->count = $count;
-					$orderElementModel->base_price = $element->getCost(false);
-                    $orderElementModel->price = $element->getCost();
+					$orderElementModel->base_price = $element->getPrice(false);
+                    $orderElementModel->price = $element->getPrice();
                     $orderElementModel->options = json_encode($element->getOptions());
                     $orderElementModel->description = '';
                     $orderElementModel->save();

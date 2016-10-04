@@ -27,7 +27,7 @@ class Element extends \yii\db\ActiveRecord
         return [
             'id' => yii::t('order', 'ID'),
             'price' => yii::t('order', 'Price'),
-			'base_price' => yii::t('order', 'Base price'),
+            'base_price' => yii::t('order', 'Base price'),
             'description' => yii::t('order', 'Description'),
             'options' => yii::t('order', 'Options'),
             'model' => yii::t('order', 'Model name'),
@@ -45,12 +45,11 @@ class Element extends \yii\db\ActiveRecord
         return $this->hasOne($productModel::className(), ['id' => 'item_id'])->one();
     }
     
-	public function getOrder()
+    public function getOrder()
     {
-		return $this->hasOne(Order::className(), ['id' => 'order_id']);
-	}
+        return $this->hasOne(Order::className(), ['id' => 'order_id']);
+    }
 
-    
     public function getModel($withCartElementModel = true)
     {
         if(!$withCartElementModel) {

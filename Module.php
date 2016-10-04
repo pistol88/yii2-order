@@ -42,6 +42,8 @@ class Module extends \yii\base\Module
     
     public $orderColumns = ['client_name', 'phone', 'email:email', 'payment_type_id', 'shipping_type_id'];
     
+	public $elementModels = [];
+	
     public $sellers = null; //collable, return seller list
     
     public $sellerModel = '\common\models\User';

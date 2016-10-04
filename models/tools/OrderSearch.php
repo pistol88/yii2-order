@@ -26,6 +26,12 @@ class OrderSearch extends Order
     {
         $query = Order::find();
 
+		$query->joinWith('elementsRelation');
+		
+		if($elementTypes = yii::$app->request->get('element_types')) {
+			$query->andFilterWhere(['order_element.model' => $elementTypes]);
+		}
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => [
@@ -63,15 +69,20 @@ class OrderSearch extends Order
         }
 
         if($customField = yii::$app->request->get('order-custom-field')) {
-            $orderIds = [0];
+            $orderIds = [];
             foreach($customField as $id => $str) {
-                if($values = FieldValue::find()->select('order_id')->where(['field_id' => $id])->andWhere(['LIKE', 'value', $str])->all()) {
-                    foreach($values as $value) {
-                        $orderIds[] = $value->order_id;
-                    }
-                }
+				if(!empty($str)) {
+					if($values = FieldValue::find()->select('order_id')->where(['field_id' => $id])->andWhere(['LIKE', 'value', $str])->all()) {
+						foreach($values as $value) {
+							$orderIds[] = $value->order_id;
+						}
+					}
+				}
             }
-            $query->andWhere(['id' => $orderIds]);            
+			
+			if($orderIds) {
+				$query->andWhere(['order.id' => $orderIds]);           
+			}
         }
         
         if($timeStart = yii::$app->request->get('time_start')) {

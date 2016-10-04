@@ -72,6 +72,7 @@ class OrderController  extends Controller
             'searchModel' => $searchModel,
             'shippingTypes' => $shippingTypes,
             'paymentTypes' => $paymentTypes,
+			'module' => $this->module,
             'dataProvider' => $dataProvider,
         ]);
     }

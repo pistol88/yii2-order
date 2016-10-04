@@ -46,6 +46,12 @@ $currency = yii::$app->getModule('order')->currency;
                     <td><?=round($byMonth['count_orders'], 2);?></td>
                 </tr>
                 <tr>
+                    <td><?=yii::t('order', 'Elements count');?></td>
+                    <td><?=round($today['count_elements'], 2);?></td>
+                    <td><?=round($inMonth['count_elements'], 2);?></td>
+                    <td><?=round($byMonth['count_elements'], 2);?></td>
+                </tr>
+                <tr>
                     <td><?=yii::t('order', 'Average check');?></td>
                     <td><?php if($today['count_orders']) { ?><?=round($today['total']/$today['count_orders'], 2);?><?=$currency; ?><?php } ?></td>
                     <td><?php if($inMonth['count_orders']) { ?><?=round($inMonth['total']/$inMonth['count_orders'], 2);?><?=$currency; ?><?php } ?></td>

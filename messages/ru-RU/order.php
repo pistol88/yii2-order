@@ -140,4 +140,7 @@ return [
     'Fast order' => 'Быстрый заказ',
     'Discount' => 'Скидка',
     'How call you?' => 'Как к вам обращаться?',
+	'Element types' => 'Типы элементов',
+	'With elements' => 'С элементами',
+	'Elements count' => 'Количество элементов',
 ];
