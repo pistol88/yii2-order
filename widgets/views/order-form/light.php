@@ -52,6 +52,25 @@ use pistol88\order\widgets\ChooseClient;
                     <div class="col-lg-12 col-xs-12">
                         <?= $form->field($model, 'comment')->textArea(['maxlength' => true]) ?>
                     </div>
+					<?php if($fields = $model->allfields) { ?>
+						<div class="col-lg-12 col-xs-12">
+							<?php foreach($fields as $fieldModel) { ?>
+								<div class="col-lg-12 col-xs-12">
+									<?php
+									if($widget = $fieldModel->type->widget) {
+										echo $widget::widget(['form' => $form, 'fieldModel' => $fieldModel]);
+									}
+									else {
+										echo $form->field(new FieldValue, 'value['.$fieldModel->id.']')->label($fieldModel->name)->textInput(['required' => ($fieldModel->required == 'yes')]);
+									}
+									?>
+									<?php if($fieldModel->description) { ?>
+										<p><small><?=$fieldModel->description;?></small></p>
+									<?php } ?>
+								</div>
+							<?php } ?>
+						</div>
+					<?php } ?>
                 </div>
             </div>
         </div>

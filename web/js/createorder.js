@@ -4,24 +4,30 @@ if (typeof pistol88 == "undefined" || !pistol88) {
 
 pistol88.createorder = {
     init: function() {
-        $(document).on('change', "#orderForm input[name='Order[user_id]']", this.findUser);
-        $(document).on('keypress', "#orderForm input[name='Order[user_id]']", function(e) {
+        $(document).on('change', ".order-create-container form input[name='Order[user_id]']", this.findUser);
+        $(document).on('keypress', ".order-create-container form input[name='Order[user_id]']", function(e) {
             if(e.which == 13) {
-                $("#orderForm input[name='Order[user_id]']").change();
+                $(".order-create-container form input[name='Order[user_id]']").change();
                 return false;
             }
         });
         
         $(document).on('keypress', function(event) {
             if((event.ctrlKey) && ((event.keyCode == 0xA)||(event.keyCode == 0xD))) {
-                $("#orderForm").submit();
+                $(".order-create-container form").submit();
             }
         });
         
+		$(document).on("promocodeEnter", function(e, code) {
+			if($(".order-create-container form input[name='Order[user_id]']").val() == '') {
+				$(".order-create-container form input[name='Order[user_id]']").val(code).change();
+			}
+		});
+		
         //$(document).on('click', ".render-cart", this.updateCart);
     },
     chooseUser: function(id) {
-        $("#orderForm input[name='Order[user_id]']").val(id).change();
+        $(".order-create-container form input[name='Order[user_id]']").val(id).change();
         $(document).trigger("chooseUserToOrder", id);
         $('#usersModal').modal('hide');
     },
@@ -46,10 +52,10 @@ pistol88.createorder = {
                 function(json) {
                     $(input).css('opacity', '1');
                     if(json.status == 'success') {
-                        $("#orderForm input[name='Order[user_id]']").val(json.id);
-                        $("#orderForm input[name='Order[email]']").val(json.email);
-                        $("#orderForm input[name='Order[phone]']").val(json.phone);
-                        $("#orderForm input[name='Order[client_name]']").val(json.client_name);
+                        $(".order-create-container form input[name='Order[user_id]']").val(json.id);
+                        $(".order-create-container form input[name='Order[email]']").val(json.email);
+                        $(".order-create-container form input[name='Order[phone]']").val(json.phone);
+                        $(".order-create-container form input[name='Order[client_name]']").val(json.client_name);
 
                         if(json.promocode) {
                             $(".promo-code-enter input").val(json.promocode).change();
