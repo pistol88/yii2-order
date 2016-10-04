@@ -7,7 +7,7 @@ pistol88.createorder = {
         $(document).on('change', ".order-create-container form input[name='Order[user_id]']", this.findUser);
         $(document).on('keypress', ".order-create-container form input[name='Order[user_id]']", function(e) {
             if(e.which == 13) {
-                $(".order-create-container form input[name='Order[user_id]']").change();
+                pistol88.createorder.chooseUser();
                 return false;
             }
         });
@@ -20,14 +20,19 @@ pistol88.createorder = {
         
 		$(document).on("promocodeEnter", function(e, code) {
 			if($(".order-create-container form input[name='Order[user_id]']").val() == '') {
-				$(".order-create-container form input[name='Order[user_id]']").val(code).change();
+				pistol88.createorder.chooseUser(code);
 			}
 		});
 		
         //$(document).on('click', ".render-cart", this.updateCart);
     },
     chooseUser: function(id) {
-        $(".order-create-container form input[name='Order[user_id]']").val(id).change();
+		if(id) {
+			$(".order-create-container form input[name='Order[user_id]']").val(id);
+		} else {
+			id = $(".order-create-container form input[name='Order[user_id]']").val();
+		}
+        $(".order-create-container form input[name='Order[user_id]']").change();
         $(document).trigger("chooseUserToOrder", id);
         $('#usersModal').modal('hide');
     },
@@ -68,7 +73,7 @@ pistol88.createorder = {
                         $(document).trigger("orderFindUser", json);
                     }
                     else {
-                        alert(json.message);
+                        console.log(json.message);
                     }
                     
                 }, "json");
