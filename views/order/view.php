@@ -112,8 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'content' => function($model) {
                     if($productModel = $model->product) {
                         return $productModel->getCartId().'. '.$productModel->getCartName();
-                    }
-                    else {
+                    } else {
                         return Yii::t('order', 'Unknow product');
                     }
                 }
@@ -157,17 +156,17 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
     <h3 align="right">
-            <?=Yii::t('order', 'In total'); ?>:
-            <?=$model->count;?> <?=Yii::t('order', 'on'); ?>
-            <?php if($model->base_cost > $model->cost) { ?>
-				<s><?=$model->base_cost;?></s>
-			<?php } ?>
-			<?=$model->cost;?>
-            <?=Yii::$app->getModule('order')->currency;?>
-            <?php if($model->promocode) { ?>
-                (<?=yii::t('order', 'Discount');?> <?php if(yii::$app->has('promocode') && $code = yii::$app->promocode->checkExists($model->promocode)) { echo " {$code->discount}%"; } ?>)
-            <?php } else {
-				
-			} ?>
+		<?=Yii::t('order', 'In total'); ?>:
+		<?=$model->count;?> <?=Yii::t('order', 'on'); ?>
+		<?php if($model->base_cost > $model->cost) { ?>
+			<s><?=$model->base_cost;?></s>
+		<?php } ?>
+		<?=$model->cost;?>
+		<?=Yii::$app->getModule('order')->currency;?>
+		<?php if($model->promocode) { ?>
+			(<?=yii::t('order', 'Discount');?> <?php if(yii::$app->has('promocode') && $code = yii::$app->promocode->checkExists($model->promocode)) { echo " {$code->discount}%"; } ?>)
+		<?php } else {
+			
+		} ?>
     </h3>
 </div>
