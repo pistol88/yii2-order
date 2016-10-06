@@ -25,6 +25,7 @@ class Module extends \yii\base\Module
     public $cartCustomFields = ['Остаток' => 'amount'];
 
     public $paymentFormAction = false;
+    public $paymentFreeTypeIds = false;
 
     public $adminMenu = ['orders', 'field', 'payment-type', 'payment'];
     

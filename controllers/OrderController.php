@@ -211,6 +211,10 @@ class OrderController  extends Controller
                 $nextStepAction = Url::to([\yii::$app->getModule('order')->paymentFormAction , 'id' => $model->id, 'useAjax' => 1]);
             }
 
+            if (\yii::$app->getModule('order')->paymentFreeTypeIds && in_array($model->payment_type_id, \yii::$app->getModule('order')->paymentFreeTypeIds)) {
+                $nextStepAction = false;
+            }
+
             return [
                 'status' => 'success',
                 'nextStep' => $nextStepAction
