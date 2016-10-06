@@ -48,7 +48,7 @@ $columns[] = [
             $total .= Html::tag('div', $model->promocode, ['style' => 'color: orange; font-size: 80%;', yii::t('order', 'Promocode')]);
         }
 
-        return $total.$detail;
+        return $total;
     },
 ];
 

@@ -88,7 +88,7 @@ class Order extends Component
         $order = $this->order;
         
         $query = new Query();
-        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_order'])
+        $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_orders'])
                 ->from([$order::tableName()])
                 ->where('date >= :dateStart', [':dateStart' => $dateStart])
                 ->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
