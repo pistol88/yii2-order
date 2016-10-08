@@ -129,4 +129,13 @@ class Order extends Component
         
         return array_map('intval', $result);
     }
+
+    public function setStatus($orderId, $status)
+    {
+        if ($orderId && $status) {
+            $connection = Yii::$app->getDb();
+            $command = $connection->createCommand()->update('order', ['status' => $status], "id = $orderId");
+            return $result = $command->execute();
+        }
+    }
 }
