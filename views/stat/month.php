@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $month;
                     <?php
                     $stat = yii::$app->order->getStatByDate("$y-$m-$fd");
                     
-                    if($stat['count_order']) {
+                    if($stat['count_orders']) {
                     ?>
                         <td>
                             <?=$stat['total'];?>
@@ -92,16 +92,16 @@ $this->params['breadcrumbs'][] = $month;
                             <?php
                             $cssClass = '';
                             if($prevStat && date('Ymd') > "$y$m$fd") {
-                                if($prevStat['count_order'] > $stat['count_order']) {
+                                if($prevStat['count_orders'] > $stat['count_orders']) {
                                     $cssClass = 'bad-result';
-                                } elseif($prevStat['count_order'] < $stat['count_order']) {
+                                } elseif($prevStat['count_orders'] < $stat['count_orders']) {
                                     $cssClass = 'good-result';
                                 }
                             }
                             ?>
-                            <span class="<?=$cssClass;?>"><?=$stat['count_order'];?></span>
+                            <span class="<?=$cssClass;?>"><?=$stat['count_orders'];?></span>
                         </td>
-                        <td><?=round($stat['total']/$stat['count_order'], 2);?></td>
+                        <td><?=round($stat['total']/$stat['count_orders'], 2);?></td>
                     <?php
                     } else {
                         echo '<td colspan="4" align="center">-</td>';
