@@ -92,7 +92,7 @@ foreach(Yii::$app->getModule('order')->orderColumns as $column) {
             }
         ];
     }
-    
+
     $columns[] = $column;
 }
 
@@ -103,7 +103,7 @@ $columns[] = [
 		return date(yii::$app->getModule('order')->dateFormat, $model->timestamp);
 	}
 ];
-        
+
 $columns[] = [
 	'attribute' => 'status',
 	'filter' => Html::activeDropDownList(
@@ -116,7 +116,7 @@ $columns[] = [
 		if(!$model->status) {
 			return null;
 		}
-		
+
 		return  Yii::$app->getModule('order')->orderStatuses[$model->status];
 	}
 ];
@@ -237,7 +237,7 @@ $order = yii::$app->order;
 									</select>
 								</div>
 							<?php } ?>
-							
+
                             <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
                                 <div class="col-md-2">
                                     <select class="form-control" name="OrderSearch[seller_user_id]">
@@ -257,7 +257,7 @@ $order = yii::$app->order;
                     <?php } ?>
                 </div>
             </div>
-            
+
             <div class="summary row">
                 <div class="col-md-4">
 					<?php if($elementModels = $module->elementModels) { ?>
@@ -282,8 +282,9 @@ $order = yii::$app->order;
                            $query = clone $dataProvider->query;
                            $sum = $query
                                    ->andWhere(['payment_type_id' => $pid])
+                                   ->distinct()
                                    ->sum('cost');
-                           
+
                            echo '<li>'.$pname.': '.(int)$sum.' '.yii::$app->getModule('order')->currency.'</li>';
                         }
                         ?>
@@ -299,7 +300,7 @@ $order = yii::$app->order;
                     ?>
                 </div>
             </div>
-            
+
             <div class="order-list">
                 <?=  \kartik\grid\GridView::widget([
                     'export' => false,
