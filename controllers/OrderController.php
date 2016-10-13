@@ -195,7 +195,7 @@ class OrderController  extends Controller
             }
 
             $module = $this->module;
-            $orderEvent = new OrderEvent(['model' => $model]);
+            $orderEvent = new OrderEvent(['model' => $model, 'elements' => $model->elements]);
             $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
 
             $nextStepAction = false;
