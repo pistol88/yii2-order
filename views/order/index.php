@@ -35,8 +35,8 @@ $columns[] = [
 ];
 
 $columns[] = [
-	'attribute' => 'base_cost',
-	'label' => yii::$app->getModule('order')->currency,
+    'attribute' => 'base_cost',
+    'label' => yii::$app->getModule('order')->currency,
 ];
 
 $columns[] = [
@@ -97,28 +97,28 @@ foreach(Yii::$app->getModule('order')->orderColumns as $column) {
 }
 
 $columns[] = [
-	'attribute' => 'date',
-	'filter' => false,
-	'value' => function($model) {
-		return date(yii::$app->getModule('order')->dateFormat, $model->timestamp);
-	}
+    'attribute' => 'date',
+    'filter' => false,
+    'value' => function($model) {
+        return date(yii::$app->getModule('order')->dateFormat, $model->timestamp);
+    }
 ];
-        
+
 $columns[] = [
-	'attribute' => 'status',
-	'filter' => Html::activeDropDownList(
-		$searchModel,
-		'status',
-		yii::$app->getModule('order')->orderStatuses,
-		['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
-	),
-	'value'	=> function($model) {
-		if(!$model->status) {
-			return null;
-		}
-		
-		return  Yii::$app->getModule('order')->orderStatuses[$model->status];
-	}
+    'attribute' => 'status',
+    'filter' => Html::activeDropDownList(
+        $searchModel,
+        'status',
+        yii::$app->getModule('order')->orderStatuses,
+        ['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
+    ),
+    'value'    => function($model) {
+        if(!$model->status) {
+            return null;
+        }
+        
+        return  Yii::$app->getModule('order')->orderStatuses[$model->status];
+    }
 ];
 
 $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']];
@@ -215,29 +215,29 @@ $order = yii::$app->order;
                                 </div>
                             </div>
 
-							<?php if($module->orderStatuses) { ?>
-								<div class="col-md-2">
-									<label><?=yii::t('order', 'Status');?></label>
-									<select class="form-control" name="OrderSearch[status]">
-										<option value="">Все</option>
-										<?php foreach($module->orderStatuses as $status => $statusName) { ?>
-											<option <?php if($status == yii::$app->request->get('OrderSearch')['status']) echo ' selected="selected"';?> value="<?=$status;?>"><?=$statusName;?></option>
-										<?php } ?>
-									</select>
-								</div>
-							<?php } ?>
+                            <?php if($module->orderStatuses) { ?>
+                                <div class="col-md-2">
+                                    <label><?=yii::t('order', 'Status');?></label>
+                                    <select class="form-control" name="OrderSearch[status]">
+                                        <option value="">Все</option>
+                                        <?php foreach($module->orderStatuses as $status => $statusName) { ?>
+                                            <option <?php if($status == yii::$app->request->get('OrderSearch')['status']) echo ' selected="selected"';?> value="<?=$status;?>"><?=$statusName;?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            <?php } ?>
 
-							<?php if($module->elementModels) { ?>
-								<div class="col-md-2">
-									<label><?=yii::t('order', 'With elements');?></label>
-									<select class="form-control" name="element_types[]" multiple>
-										<?php foreach($module->elementModels as $elementModel => $elementName) { ?>
-											<option <?php if(yii::$app->request->get('element_types') && in_array($elementModel, yii::$app->request->get('element_types'))) echo ' selected="selected"';?> value="<?=$elementModel;?>"><?=$elementName;?></option>
-										<?php } ?>
-									</select>
-								</div>
-							<?php } ?>
-							
+                            <?php if($module->elementModels) { ?>
+                                <div class="col-md-2">
+                                    <label><?=yii::t('order', 'With elements');?></label>
+                                    <select class="form-control" name="element_types[]" multiple>
+                                        <?php foreach($module->elementModels as $elementModel => $elementName) { ?>
+                                            <option <?php if(yii::$app->request->get('element_types') && in_array($elementModel, yii::$app->request->get('element_types'))) echo ' selected="selected"';?> value="<?=$elementModel;?>"><?=$elementName;?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            <?php } ?>
+                            
                             <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
                                 <div class="col-md-2">
                                     <select class="form-control" name="OrderSearch[seller_user_id]">
@@ -260,20 +260,20 @@ $order = yii::$app->order;
             
             <div class="summary row">
                 <div class="col-md-4">
-					<?php if($elementModels = $module->elementModels) { ?>
-						<h3><?=yii::t('order', 'Total');?>:</h3>
-						<?php foreach($elementModels as $elementModel => $elementName) { ?>
-							<?php $query = clone $dataProvider->query; ?>
-							<?php if($total = number_format($query->andWhere(['order_element.model' => $elementModel])->sum('order_element.price'))) { ?>
-								<p>«<?=$elementName;?>»: <?=$total; ?> <?=$module->currency;?></p>
-							<?php } ?>
-						<?php } ?>
-					<?php } else { ?>
-						<h3>
-							<?=number_format($dataProvider->query->sum('cost'), 2, ',', '.');?>
-							<?=$module->currency;?>
-						</h3>
-					<?php } ?>
+                    <?php if($elementModels = $module->elementModels) { ?>
+                        <h3><?=yii::t('order', 'Total');?>:</h3>
+                        <?php foreach($elementModels as $elementModel => $elementName) { ?>
+                            <?php $query = clone $dataProvider->query; ?>
+                            <?php if($total = number_format($query->andWhere(['order_element.model' => $elementModel])->sum('order_element.price'))) { ?>
+                                <p>«<?=$elementName;?>»: <?=$total; ?> <?=$module->currency;?></p>
+                            <?php } ?>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <h3>
+                            <?=number_format($dataProvider->query->sum('cost'), 2, ',', '.');?>
+                            <?=$module->currency;?>
+                        </h3>
+                    <?php } ?>
                 </div>
                 <div class="col-md-4">
                     <ul>

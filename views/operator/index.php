@@ -172,11 +172,14 @@ $columns[] = [
     <script>
     window.onload = function() {
         setInterval(function() {
-            $('.operator-update').click();
-            console.log(1);
+            console.log($('.operatorka .pagination .active a').html());
+            if($('.pagination .active a').html() == '1') {
+                $('.operator-update').click();
+            }
+            
         }, 5000);
         
-        $(document).on('click', '.operatorka tbody td', function() {
+        $(document).on('click', '.operatorka td', function() {
             $('#operatorkaModal .modal-body').html('<iframe src="'+$(this).parent('tr').find('.view-url').data('href')+'"></iframe>');
             $('#operatorkaModal').modal().show();
         });

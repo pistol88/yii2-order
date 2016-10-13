@@ -56,7 +56,7 @@ class Order extends \yii\db\ActiveRecord
             'user_id' => yii::t('order', 'User ID'),
             'count' => yii::t('order', 'Count'),
             'cost' => yii::t('order', 'Cost'),
-			'base_cost' => yii::t('order', 'Base cost'),
+            'base_cost' => yii::t('order', 'Base cost'),
             'seller_user_id' => yii::t('order', 'Seller'),
         ];
     }
@@ -233,7 +233,7 @@ class Order extends \yii\db\ActiveRecord
 
             if(empty($this->cost)) {
                 $this->cost = $cartService->cost;
-				$this->base_cost = $cartService->getCost(false);
+                $this->base_cost = $cartService->getCost(false);
             }
 
             if(empty($this->count)) {
@@ -277,7 +277,7 @@ class Order extends \yii\db\ActiveRecord
                     $orderElementModel->model = $element->getModel(false);
                     $orderElementModel->item_id = $element->getItemId();
                     $orderElementModel->count = $count;
-					$orderElementModel->base_price = $element->getPrice(false);
+                    $orderElementModel->base_price = $element->getPrice(false);
                     $orderElementModel->price = $element->getPrice();
                     $orderElementModel->options = json_encode($element->getOptions());
                     $orderElementModel->description = '';
@@ -306,7 +306,7 @@ class Order extends \yii\db\ActiveRecord
         foreach ($this->hasMany(FieldValue::className(), ['order_id' => 'id'])->all() as $val) {
             $val->delete();
         }
-		
+        
         return parent::beforeDelete();
     }
 }

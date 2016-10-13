@@ -57,9 +57,9 @@ class OrderController  extends Controller
         
         $searchParams = yii::$app->request->queryParams;
         
-        if(!yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) {
-            $searchParams['OrderSearch']['seller_user_id'] = yii::$app->user->id;
-        }
+        //if(!yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) {
+        //    $searchParams['OrderSearch']['seller_user_id'] = yii::$app->user->id;
+        //}
         
         $dataProvider = $searchModel->search($searchParams);
 
@@ -92,6 +92,8 @@ class OrderController  extends Controller
         $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
 
         $fieldFind = Field::find();
+        
+        $this->getView()->registerJs('pistol88.order.outcomingAction = "' . Url::toRoute(['/order/tools/outcoming']) . '";');
 
         return $this->render('view', [
             'searchModel' => $searchModel,

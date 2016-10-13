@@ -2,10 +2,13 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
+use pistol88\order\assets\Asset;
 
 $this->title = Yii::t('order', 'Order').' #'.$model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('order', 'Orders'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+Asset::register($this);
 ?>
 <div class="order-view">
     <?php if(Yii::$app->session->hasFlash('reSendDone')) { ?>
@@ -32,10 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-			[
-				'attribute' => 'date',
-				'value'		=> date(yii::$app->getModule('order')->dateFormat, $model->timestamp),
-			],
+            [
+                'attribute' => 'date',
+                'value'        => date(yii::$app->getModule('order')->dateFormat, $model->timestamp),
+            ],
         ],
     ];
     
@@ -62,15 +65,15 @@ $this->params['breadcrumbs'][] = $this->title;
     if($model->payment_type_id && isset($paymentTypes[$model->payment_type_id])) {
         $detailOrder['attributes'][] = [
             'attribute' => 'payment_type_id',
-            'value'		=> @$paymentTypes[$model->payment_type_id],
+            'value'        => @$paymentTypes[$model->payment_type_id],
         ];
     }
     
     if($model->shipping_type_id && isset($shippingTypes[$model->shipping_type_id])) {
-			$detailOrder['attributes'][] = [
-				'attribute' => 'shipping_type_id',
-				'value'		=> $shippingTypes[$model->shipping_type_id],
-			];
+		$detailOrder['attributes'][] = [
+			'attribute' => 'shipping_type_id',
+			'value'        => $shippingTypes[$model->shipping_type_id],
+		];
     }
 
     if($model->delivery_type == 'totime') {
@@ -82,9 +85,9 @@ $this->params['breadcrumbs'][] = $this->title;
     if($fields = $fieldFind->all()) {
         foreach($fields as $fieldModel) {
             $detailOrder['attributes'][] = [
-				'label' => $fieldModel->name,
-				'value'		=> Html::encode($fieldModel->getValue($model->id)),
-			];
+                'label' => $fieldModel->name,
+                'value'        => Html::encode($fieldModel->getValue($model->id)),
+            ];
         }
     }
 
@@ -98,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
     echo DetailView::widget($detailOrder);
     ?>
 
-	<h2><?=Yii::t('order', 'Order list'); ?></h2>
+    <h2><?=Yii::t('order', 'Order list'); ?></h2>
 
     <?= \kartik\grid\GridView::widget([
         'export' => false,
@@ -106,8 +109,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-			[
-				'attribute' => 'item_id',
+            [
+                'attribute' => 'item_id',
                 'filter' => false,
                 'content' => function($model) {
                     if($productModel = $model->product) {
@@ -116,57 +119,96 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Yii::t('order', 'Unknow product');
                     }
                 }
-			],
-			[
-				'attribute' => 'description',
+            ],
+            [
+                'attribute' => 'description',
                 'filter' => false,
                 'content' => function($model) {
                     $elementOptions = json_decode($model->options);
-					$productOptions = $model->getModel()->getCartOptions();
+                    $productOptions = $model->getModel()->getCartOptions();
 
-					$return = $model->description;
-					
+                    $return = $model->description;
+                    
                     if($elementOptions) { 
                         foreach($productOptions as $optionId => $optionData) {
-							foreach($elementOptions as $id => $value) {
-								if($optionId == $id) {
-									if(!$variantValue = $optionData['variants'][$value]) {
-										$variantValue = 'deleted';
-									}
-									$return .= Html::tag('p', Html::encode($optionData['name']).': '.Html::encode($variantValue).';');
-								}
-							}
+                            foreach($elementOptions as $id => $value) {
+                                if($optionId == $id) {
+                                    if(!$variantValue = $optionData['variants'][$value]) {
+                                        $variantValue = 'deleted';
+                                    }
+                                    $return .= Html::tag('p', Html::encode($optionData['name']).': '.Html::encode($variantValue).';');
+                                }
+                            }
                             
                         }
                     }
                     
                     return $return;
                 }
-			],
-			'count',
-			'base_price',
-			['attribute' => 'price', 'label' => yii::t('order', 'Price').' %'],
-			[
-				'label' => yii::t('order', 'Write-off'),
-				'content' => function($model) {
-					return '';
-				}
-			],
-            ['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],
+            ],
+            'count',
+            'base_price',
+            ['attribute' => 'price', 'label' => yii::t('order', 'Price').' %'],
+            [
+                'label' => yii::t('order', 'Write-off'),
+                'content' => function($elementModel) use ($model) {
+                    $return = '';
+                    
+                    $product = $elementModel->getModel();
+                    
+                    if(yii::$app->has('stock')) {
+                        $stockService = yii::$app->stock;
+                        
+                        if($stocks = $stockService->getAvailable()) {
+                            foreach($stocks as $stock) {
+                                $amount = $stock->getAmount($elementModel->item_id);
+                                
+                                $return .= "<strong>{$stock->name}</strong> (<span class=\"amount\">{$amount}</span>) ";
+
+                                $count = $elementModel->count;
+                                
+                                if($count > $amount) {
+                                    $count = $amount;
+                                }
+                                
+                                if($count < 0) {
+                                    $count = 0;
+                                }
+                                
+                                $input = Html::input('text', 'count', $count, ['class' => 'form-control', 'data-order-id' => $model->id, 'data-stock-id' => $stock->id, 'data-product-id' => $product->id]);
+                                $button = Html::tag('span', Html::button('<i class="glyphicon glyphicon-ok"></i>', ['class' => 'btn btn-success promo-code-enter-btn']), ['class' => 'input-group-btn']);
+
+                                $return .= Html::tag('div', $input.$button, ['class' => 'input-group', 'style' => 'width: 100px;']);
+                            }
+                        }
+                    }
+                    
+                    $style = '';
+                    $class = '';
+                    
+                    if($stockService->getOutcomingsByOrder($model->id, $product->id)) {
+                        $style = 'text-decoration: line-through;';
+                        $class = 'write-offed';
+                    }
+                    
+                    return Html::tag('div', $return, ['class' => 'outcomingWidget '.$class, 'style' => $style]);
+                }
+            ],
+            //['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],
         ],
     ]); ?>
     <h3 align="right">
-		<?=Yii::t('order', 'In total'); ?>:
-		<?=$model->count;?> <?=Yii::t('order', 'on'); ?>
-		<?php if($model->base_cost > $model->cost) { ?>
-			<s><?=$model->base_cost;?></s>
-		<?php } ?>
-		<?=$model->cost;?>
-		<?=Yii::$app->getModule('order')->currency;?>
-		<?php if($model->promocode) { ?>
-			(<?=yii::t('order', 'Discount');?> <?php if(yii::$app->has('promocode') && $code = yii::$app->promocode->checkExists($model->promocode)) { echo " {$code->discount}%"; } ?>)
-		<?php } else {
-			
-		} ?>
+        <?=Yii::t('order', 'In total'); ?>:
+        <?=$model->count;?> <?=Yii::t('order', 'on'); ?>
+        <?php if($model->base_cost > $model->cost) { ?>
+            <s><?=$model->base_cost;?></s>
+        <?php } ?>
+        <?=$model->cost;?>
+        <?=Yii::$app->getModule('order')->currency;?>
+        <?php if($model->promocode) { ?>
+            (<?=yii::t('order', 'Discount');?> <?php if(yii::$app->has('promocode') && $code = yii::$app->promocode->checkExists($model->promocode)) { echo " {$code->discount}%"; } ?>)
+        <?php } else {
+            
+        } ?>
     </h3>
 </div>

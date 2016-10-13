@@ -22,23 +22,23 @@ class Order extends Component
         return $order::findOne($id);
     }
     
-	public function getOrdersByDatePeriod($dateStart, $dateStop, $where = null)
-	{
-		$order = $this->order;
-		
+    public function getOrdersByDatePeriod($dateStart, $dateStop, $where = null)
+    {
+        $order = $this->order;
+        
         if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
             $dateStop = date('Y-m-d H:i:s');
         }
-		
-		$query = $order::find()->where('date >= :dateStart', [':dateStart' => $dateStart])->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
-		
+        
+        $query = $order::find()->where('date >= :dateStart', [':dateStart' => $dateStart])->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
+        
         if($where) {
             $query->andWhere($where);
         }
 
-		return $query->all();
-	}
-	
+        return $query->all();
+    }
+    
     public function getStatInMoth($month = null, $where = null)
     {
         if(!$month) {

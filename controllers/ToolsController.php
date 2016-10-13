@@ -19,7 +19,7 @@ class ToolsController  extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-				'only' => ['user-info', 'ajax-elements-list'],
+				'only' => ['user-info', 'ajax-elements-list', 'outcoming', 'find-users-window', 'user-info'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -179,7 +179,6 @@ class ToolsController  extends Controller
             yii::$app->cart->put($elementModel, 1, []);
 
             if ($model->load(yii::$app->request->post()) && $model->save()) {
-
                 if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                     $sender = yii::$app->getModule('order')->mail
                         ->compose('admin_notification', ['model' => $model])
@@ -207,4 +206,25 @@ class ToolsController  extends Controller
             die(json_encode($json));
         }
     }
+	
+	public function actionOutcoming()
+	{
+		$stockId = yii::$app->request->post('stock_id');
+        $productId = yii::$app->request->post('product_id');
+        $count = yii::$app->request->post('count');
+        $orderId = yii::$app->request->post('order_id');
+        
+        $json = ['result' => 'fail'];
+
+        if($stockId && $productId && $count && yii::$app->has('stock')) {
+            $stock = yii::$app->stock;
+            
+            $amount = $stock->outcoming($stockId, $productId, $count, $orderId);
+            
+            $json['amount'] = $amount;
+            $json['result'] = 'success';
+        }
+        
+        die(json_encode($json));
+	}
 }
