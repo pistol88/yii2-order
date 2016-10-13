@@ -45,7 +45,6 @@ php yii migrate --migrationPath=vendor/pistol88/yii2-order/migrations
             'layoutPath' => 'frontend\views\layouts',
             'successUrl' => '/page/thanks', //Страница, куда попадает пользователь после успешного заказа
             'ordersEmail' => 'test@yandex.ru', //Мыло для отправки заказов
-            'cartService' => 'cart', //Название компонента, в котором реализована корзина с методом getElements()
         ],
         //...
     ]

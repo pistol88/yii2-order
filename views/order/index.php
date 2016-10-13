@@ -92,7 +92,7 @@ foreach(Yii::$app->getModule('order')->orderColumns as $column) {
             }
         ];
     }
-    
+
     $columns[] = $column;
 }
 
@@ -155,7 +155,7 @@ $order = yii::$app->order;
                     <h3 class="panel-title"><?=yii::t('order', 'Search');?></h3>
                 </div>
                 <div class="panel-body">
-                    <?php if(yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) { ?>
+                    <?php if(true) { ?>
                         <form action="" class="row search">
                             <?php
                             foreach(Yii::$app->getModule('order')->orderColumns as $column) {
@@ -237,7 +237,7 @@ $order = yii::$app->order;
                                     </select>
                                 </div>
                             <?php } ?>
-                            
+
                             <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
                                 <div class="col-md-2">
                                     <select class="form-control" name="OrderSearch[seller_user_id]">
@@ -257,7 +257,7 @@ $order = yii::$app->order;
                     <?php } ?>
                 </div>
             </div>
-            
+
             <div class="summary row">
                 <div class="col-md-4">
                     <?php if($elementModels = $module->elementModels) { ?>
@@ -282,8 +282,9 @@ $order = yii::$app->order;
                            $query = clone $dataProvider->query;
                            $sum = $query
                                    ->andWhere(['payment_type_id' => $pid])
+                                   ->distinct()
                                    ->sum('cost');
-                           
+
                            echo '<li>'.$pname.': '.(int)$sum.' '.yii::$app->getModule('order')->currency.'</li>';
                         }
                         ?>
@@ -299,7 +300,7 @@ $order = yii::$app->order;
                     ?>
                 </div>
             </div>
-            
+
             <div class="order-list">
                 <?=  \kartik\grid\GridView::widget([
                     'export' => false,
