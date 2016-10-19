@@ -52,10 +52,12 @@
 }
 
 .menu-container {
+    float: right;
+    height: 45px;
     margin-bottom: 10px;
 }
 .menu-container li {
-    float: right;
+    
 }
 
 .nav-link .active {
