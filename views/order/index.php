@@ -264,7 +264,7 @@ $order = yii::$app->order;
                         <h3><?=yii::t('order', 'Total');?>:</h3>
                         <?php foreach($elementModels as $elementModel => $elementName) { ?>
                             <?php $query = clone $dataProvider->query; ?>
-                            <?php if($total = number_format($query->andWhere(['order_element.model' => $elementModel])->sum('order_element.price'))) { ?>
+                            <?php if($total = number_format($query->andWhere(['order_element.model' => $elementModel])->sum('order_element.count * order_element.price'))) { ?>
                                 <p>«<?=$elementName;?>»: <?=$total; ?> <?=$module->currency;?></p>
                             <?php } ?>
                         <?php } ?>
