@@ -173,44 +173,55 @@ $order = yii::$app->order;
                                 <label><?=yii::t('order', 'Date');?></label>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <?= DatePicker::widget([
-                                            'name' => 'date_start',
-                                            'addon' => false,
-                                            'value' => $dateStart,
-                                            'size' => 'sm',
-                                            'language' => 'ru',
-                                            'placeholder' => yii::t('order', 'Date from'),
-                                            'clientOptions' => [
-                                                'format' => 'L',
-                                                'minDate' => '2015-01-01',
-                                                'maxDate' => date('Y-m-d'),
-                                            ],
-                                            'dropdownItems' => [
-                                                ['label' => 'Yesterday', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
-                                                ['label' => 'Tomorrow', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
-                                                ['label' => 'Some value', 'url' => '#', 'value' => 'Special value'],
-                                            ],
-                                        ]);?>
+                                        <?php if($timeStart = yii::$app->request->get('time_start')) { ?>
+                                            <input type="hidden" name="time_start" value="<?=Html::encode($timeStart);?>" />
+                                            <p><?=yii::t('order', 'Date from');?>:<br /> <?=Html::encode($timeStart);?></p>
+                                        <?php } else { ?>
+                                            <?= DatePicker::widget([
+                                                'name' => 'date_start',
+                                                'addon' => false,
+                                                'value' => $dateStart,
+                                                'size' => 'sm',
+                                                'language' => 'ru',
+                                                'placeholder' => yii::t('order', 'Date from'),
+                                                'clientOptions' => [
+                                                    'format' => 'L',
+                                                    'minDate' => '2015-01-01',
+                                                    'maxDate' => date('Y-m-d'),
+                                                ],
+                                                'dropdownItems' => [
+                                                    ['label' => 'Yesterday', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
+                                                    ['label' => 'Tomorrow', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
+                                                    ['label' => 'Some value', 'url' => '#', 'value' => 'Special value'],
+                                                ],
+                                            ]);?>
+                                        <?php } ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <?= DatePicker::widget([
-                                            'name' => 'date_stop',
-                                            'addon' => false,
-                                            'value' => $dateStop,
-                                            'size' => 'sm',
-                                            'placeholder' => yii::t('order', 'Date to'),
-                                            'language' => 'ru',
-                                            'clientOptions' => [
-                                                'format' => 'L',
-                                                'minDate' => '2015-01-01',
-                                                'maxDate' => date('Y-m-d'),
-                                            ],
-                                            'dropdownItems' => [
-                                                ['label' => yii::t('order', 'Yesterday'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
-                                                ['label' => yii::t('order', 'Tomorrow'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
-                                                ['label' => yii::t('order', 'Some value'), 'url' => '#', 'value' => 'Special value'],
-                                            ],
-                                        ]);?>
+                                        <?php if($timeStop = yii::$app->request->get('time_stop')) { ?>
+                                            <input type="hidden" name="time_stop" value="<?=Html::encode($timeStop);?>" />
+                                            <p><?=yii::t('order', 'Date to');?>: <br /><?=Html::encode($timeStop);?></p>
+                                        <?php } else { ?>
+                                    
+                                            <?= DatePicker::widget([
+                                                'name' => 'date_stop',
+                                                'addon' => false,
+                                                'value' => $dateStop,
+                                                'size' => 'sm',
+                                                'placeholder' => yii::t('order', 'Date to'),
+                                                'language' => 'ru',
+                                                'clientOptions' => [
+                                                    'format' => 'L',
+                                                    'minDate' => '2015-01-01',
+                                                    'maxDate' => date('Y-m-d'),
+                                                ],
+                                                'dropdownItems' => [
+                                                    ['label' => yii::t('order', 'Yesterday'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
+                                                    ['label' => yii::t('order', 'Tomorrow'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
+                                                    ['label' => yii::t('order', 'Some value'), 'url' => '#', 'value' => 'Special value'],
+                                                ],
+                                            ]);?>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
