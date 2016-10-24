@@ -144,4 +144,5 @@ return [
 	'With elements' => 'С элементами',
 	'Elements count' => 'Количество позиций',
 	'Write-off' => 'Списание',
+    'Address' => 'Адрес',
 ];
