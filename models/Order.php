@@ -27,9 +27,9 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             //[['status'], 'required'],
-            [['status', 'date', 'payment', 'comment', 'delivery_time', 'promocode'], 'string'],
+            [['status', 'date', 'payment', 'comment', 'delivery_time', 'promocode', 'address'], 'string'],
             [['email'], 'email'],
-            [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type'], 'safe'],
+            [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type', 'address'], 'safe'],
             [['seller_user_id', 'user_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
         ];
     }
@@ -58,13 +58,14 @@ class Order extends \yii\db\ActiveRecord
             'cost' => yii::t('order', 'Cost'),
             'base_cost' => yii::t('order', 'Base cost'),
             'seller_user_id' => yii::t('order', 'Seller'),
+            'address' => yii::t('order', 'Address'),
         ];
     }
 
     public function scenarios()
     {
         return [
-            'customer' => ['promocode', 'comment', 'client_name', 'shipping_type_id', 'payment_type_id', 'phone', 'email', 'delivery_time_date', 'delivery_time_hour', 'delivery_time_min', 'delivery_type'],
+            'customer' => ['promocode', 'comment', 'client_name', 'shipping_type_id', 'payment_type_id', 'phone', 'email', 'delivery_time_date', 'delivery_time_hour', 'delivery_time_min', 'delivery_type', 'address'],
             'admin' => array_keys($this->attributeLabels()),
             'default' => array_keys($this->attributeLabels()),
         ];
