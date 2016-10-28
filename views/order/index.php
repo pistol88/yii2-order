@@ -127,9 +127,13 @@ $order = yii::$app->order;
 ?>
 
 
+<h1><?=yii::t('order', 'Orders');?></h1>
+
 <div class="main-menu row">
     <div class="col-lg-2">
-        <?= Html::a(yii::t('order', 'Create order'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?php if(Yii::$app->getModule('order')->createOrderButton) { ?>
+            <?= Html::a(yii::t('order', 'Create order'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?php } ?>
     </div>
     <div class="col-lg-10">
         <?= $this->render('/parts/menu.php', ['active' => 'orders']); ?>

@@ -114,14 +114,16 @@ $columns[] = [
 ?>
 
 <div class="order-index">
-    <?= $this->render('/parts/menu.php', ['active' => 'operator']); ?>
+    
     
     <div class="row">
         <div class="col-lg-2">
-            <?= Html::a(yii::t('order', 'Create order'), ['/order/order/create'], ['class' => 'btn btn-success']) ?>
+            <?php if(Yii::$app->getModule('order')->createOrderButton) { ?>
+                <?= Html::a(yii::t('order', 'Create order'), ['/order/order/create'], ['class' => 'btn btn-success']) ?>
+            <?php } ?>
         </div>
         <div class="col-lg-10">
-            
+            <?= $this->render('/parts/menu.php', ['active' => 'operator']); ?>
         </div>
     </div>
 

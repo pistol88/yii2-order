@@ -28,6 +28,7 @@ class Module extends \yii\base\Module
     public $paymentFreeTypeIds = false;
 
     public $adminMenu = ['orders', 'field', 'payment-type', 'payment'];
+    public $createOrderButton = true;
     
     public $operatorRoles = ['manager', 'admin', 'superadmin'];
     public $operatorOpenStatus = 'process';

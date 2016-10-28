@@ -12,8 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="field-index">
-    <?= $this->render('/parts/menu.php', ['active' => 'shipping-type']); ?>
-    
+
     <h1><?= Html::encode($this->title) ?></h1>
 
     <div class="row">
@@ -21,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a(Yii::t('order', 'Create shipping type'), ['create'], ['class' => 'btn btn-success']) ?>
         </div>
         <div class="col-lg-10">
-            
+            <?= $this->render('/parts/menu.php', ['active' => 'shipping-type']); ?>
         </div>
     </div>
 
