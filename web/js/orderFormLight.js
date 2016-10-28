@@ -2,6 +2,20 @@ if (typeof halumein == "undefined" || !halumein) {
     var halumein = {};
 }
 
+
+$(document).on('keypress', function(e) {
+    if(e.which == 13) {
+        if(e.target.tagName != 'TEXTAREA' && e.target.tagName != 'textarea' && e.target.tagName != 'INPUT' && e.target.tagName != 'input') {
+            if(parseInt($('.pistol88-cart-count').val()) == 0) {
+                //if(!confirm('Создать пустой заказ?')) {
+                    return false;
+                //}
+            }
+            halumein.orderFormLight.sendData(e);
+        }
+    }
+});
+
 $(document).on('click', '#order-form-light-submit', function(e) {
     halumein.orderFormLight.sendData(e);
 });
