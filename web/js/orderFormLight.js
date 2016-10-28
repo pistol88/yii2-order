@@ -11,7 +11,9 @@ $(document).on('keypress', function(e) {
                     return false;
                 //}
             }
-            halumein.orderFormLight.sendData(e);
+            if ($('.order-create-container form').data('ajax') === true ) {
+                halumein.orderFormLight.sendData(e);
+            }
         }
     }
 });
