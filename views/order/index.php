@@ -33,7 +33,9 @@ $columns[] = [
         return $model->count;
     }
 ];
-
+$columns[] = [
+    'attribute' => 'promocode'
+];
 $columns[] = [
     'attribute' => 'base_cost',
     'label' => yii::$app->getModule('order')->currency,
@@ -143,7 +145,7 @@ $order = yii::$app->order;
 <div class="informer-widget">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title"><?=yii::t('order', 'Statistics');?></h3>
+            <h3 class="panel-title"><?=yii::t('order', 'Statistics');?>: заказы</h3>
         </div>
         <div class="panel-body">
             <?=Informer::widget();?>
