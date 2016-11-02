@@ -18,11 +18,11 @@ class PromocodeInformer extends \yii\base\Widget
 
     public function run()
     {
-        $time_from_01 = mktime(0, 0, 0, date("m")  , 1        ,   date("Y"));
-        $time_last_30 = mktime(0, 0, 0, date("m")-1, date("d"),   date("Y"));
-        $time_last_90 = mktime(0, 0, 0, date("m")-3, date("d"),   date("Y"));
+        $timeFrom01 = mktime(0, 0, 0, date("m")  , 1        ,   date("Y"));
+        $timeLast30 = mktime(0, 0, 0, date("m")-1, date("d"),   date("Y"));
+        $timeLast90 = mktime(0, 0, 0, date("m")-3, date("d"),   date("Y"));
 
-        $orders_count = Order::find()->count();
+        $ordersCount = Order::find()->count();
         $promoValues = [];
         $orders = Order::find();
         $promocodes = [];
@@ -34,38 +34,38 @@ class PromocodeInformer extends \yii\base\Widget
         foreach ($promocodes as $key => $promocode) {
 
             $name = $promocode ? $promocode : "Без промокода";
-            $promocode_orders = $orders->where(["promocode"=>$promocode]);
+            $promocodeOrders = $orders->where(["promocode"=>$promocode]);
 
-            $po_clone = clone $promocode_orders;
+            $poClone = clone $promocodeOrders;
             
-            $all_time = $po_clone->count();
+            $allTime = $poClone->count();
 
-            $t = date('Y-m-d H:i:s',$time_from_01);
-            $po_clone = clone $promocode_orders;
-            $this_month = $po_clone->andWhere("date > '$t'")->count();
+            $t = date('Y-m-d H:i:s',$timeFrom01);
+            $poClone = clone $promocodeOrders;
+            $thisMonth = $poClone->andWhere("date > '$t'")->count();
 
-            $t = date('Y-m-d H:i:s',$time_last_30);
-            $po_clone = clone $promocode_orders;
-            $last_month = $po_clone->andWhere("date > '$t'")->count();
+            $t = date('Y-m-d H:i:s',$timeLast30);
+            $poClone = clone $promocodeOrders;
+            $lastMonth = $poClone->andWhere("date > '$t'")->count();
 
-            $po_clone = clone $promocode_orders;
-            $avg_sum = round($po_clone->sum('cost') / ($all_time ? $all_time : 1),2);
+            $poClone = clone $promocodeOrders;
+            $avgSum = round($poClone->sum('cost') / ($allTime ? $allTime : 1),2);
 
             $t = date('Y-m-d H:i:s',$time_last_90);
-            $orders_clone = clone $orders;
+            $ordersClone = clone $orders;
             $percent = round(
-                $orders_clone->where(["promocode"=>$promocode])->andWhere("date > '$t'")->count()
+                $ordersClone->where(["promocode"=>$promocode])->andWhere("date > '$t'")->count()
                  / 
-                 $orders_count * 100
+                 $ordersCount * 100
             ,2);
 
             $promoValues[] =
             [
                 'name' => $name,
-                'this_month' => $this_month,
-                'last_month' => $last_month,
-                'all_time' => $all_time,
-                'avg_sum' => $avg_sum,
+                'thisMonth' => $thisMonth,
+                'lastMonth' => $lastMonth,
+                'allTime' => $allTime,
+                'avgSum' => $avgSum,
                 'percent' => $percent
             ];
         }

@@ -14,10 +14,10 @@
                 <?php foreach ($promocodes as $key => $promocode):?>
                     <tr>
                         <td><?=$promocode['name']?></td>
-                        <td><?=$promocode['this_month']?></td>
-                        <td><?=$promocode['last_month']?></td>
-                        <td><?=$promocode['all_time']?></td>
-                        <td><?=$promocode['avg_sum']?></td>
+                        <td><?=$promocode['thisMonth']?></td>
+                        <td><?=$promocode['lastMonth']?></td>
+                        <td><?=$promocode['allTime']?></td>
+                        <td><?=$promocode['avgSum']?></td>
                         <td><?=$promocode['percent']?> %</td>
                     </tr>
                 <?php endforeach ?>
