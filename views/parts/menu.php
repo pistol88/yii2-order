@@ -11,6 +11,7 @@ $menu = [
     'field' => ['url' => '/order/field/index', 'name' => ' '.Yii::t('order', 'Fields')],
     'operator' => ['url' => '/order/operator/index', 'name' => ' '.Yii::t('order', 'Operator area')],
     'orders' => ['url' => '/order/order/index', 'name' => ' '.Yii::t('order', 'Orders')],
+    'pr' => ['url' => '/order/promocodes/index','name' => ' Промокоды']
 ];
 
 if(yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) {
@@ -20,9 +21,9 @@ if(yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) {
 if(!isset($active)) {
     $active = false;
 }
-
 foreach($menu as $key => $params) {
-    if(in_array($key, yii::$app->getModule('order')->adminMenu)) {
+    if(in_array($key, yii::$app->getModule('order')->adminMenu))
+    {
         if($active == $key) {
             $class = 'active';
         } else {

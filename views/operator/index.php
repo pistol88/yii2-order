@@ -29,7 +29,9 @@ $columns[] = [
         return $model->count;
     }
 ];
-
+$columns[] = [
+    'attribute' => 'promocode'
+];
 $columns[] = [
     'attribute' => 'cost',
     'label' => yii::$app->getModule('order')->currency,
@@ -126,7 +128,7 @@ $columns[] = [
     </div>
 
     <hr />
-
+    
     <style>
         .operatorka tr {
             font-size: 13px;
@@ -170,15 +172,27 @@ $columns[] = [
     </style>
 
     <script>
+    function playNewOrderSound() {
+        if ( $('span.status_new').length > 0 ) {
+            console.log("new order");
+            $('<audio id="chatAudio"><source src="/backend/web/audio/1/notify.mp3" type="audio/mp3"></audio>').appendTo('body');
+            $('#chatAudio')[0].play();
+            var r = $('#chatAudio').length;   
+        }
+    }
     window.onload = function() {
+        playNewOrderSound();
         setInterval(function() {
-            console.log($('.operatorka .pagination .active a').html());
             if($('.pagination .active a').html() == '1') {
                 $('.operator-update').click();
             }
             
         }, 5000);
-        
+        /*
+        setInterval(function() {
+            playNewOrderSound();
+        }, 20000);
+        */
         $(document).on('click', '.operatorka td', function() {
             $('#operatorkaModal .modal-body').html('<iframe src="'+$(this).parent('tr').find('.view-url').data('href')+'"></iframe>');
             $('#operatorkaModal').modal().show();
