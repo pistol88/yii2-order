@@ -11,6 +11,9 @@ use yii\db\Query;
 
 class Order extends \yii\db\ActiveRecord
 {
+    public $staffer;
+    public $sessionId;
+
     public static function tableName()
     {
         return '{{%order}}';

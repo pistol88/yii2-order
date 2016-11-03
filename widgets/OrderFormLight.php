@@ -18,6 +18,7 @@ class OrderFormLight extends \yii\base\Widget
     public $view = 'order-form/light';
     public $useAjax = false;
     public $nextStep = false;
+    public $staffer = false;
 
     public function init()
     {
@@ -40,7 +41,8 @@ class OrderFormLight extends \yii\base\Widget
             'model' => $orderModel,
             'paymentTypes' => $paymentTypes,
             'useAjax' => $this->useAjax,
-            'nextStep' => $this->nextStep
+            'nextStep' => $this->nextStep,
+            'staffer' => $this->staffer,
         ]);
     }
 

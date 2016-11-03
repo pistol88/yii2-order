@@ -3,6 +3,7 @@ use yii\bootstrap\ActiveForm;
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use pistol88\order\widgets\ChooseClient;
 
  ?>
@@ -33,6 +34,30 @@ use pistol88\order\widgets\ChooseClient;
                 </div>
             </div>
         </div>
+
+        <?php if ($staffer) { ?>
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="staffer-heading">
+                    <h4 class="panel-title">
+                        <a class="heading collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#staffer-collapse" aria-expanded="false" aria-controls="staffer-collapse">
+                            Работник
+                        </a>
+                    </h4>
+                </div>
+                <div id="staffer-collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="staffer-collapse" aria-expanded="false">
+                    <div class="panel-body">
+                        <?php foreach ($staffer as $key => $worker) { ?>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="<?= $worker->id ?>" checked name='Order[staffer][]' ><?= $worker->name ?> (<?= $worker->category->name ?>)
+                                </label>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="headingTwo">
                 <h4 class="panel-title">

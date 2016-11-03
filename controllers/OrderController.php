@@ -181,8 +181,19 @@ class OrderController  extends Controller
 
         $model = new $orderModel;
 
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if ($session = yii::$app->worksess->soon()) {
+            $model->sessionId = $session->id;
+        } else {
+            $model->sessionId = null;
+        }
 
+        $order = yii::$app->request->post('Order');
+        if (isset($order['staffer'])) {
+            $model->staffer = $order['staffer'];
+        }
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        // $model->staffer = yii::$app->request->post();
         if ($model->load(yii::$app->request->post()) && $model->save()) {
 
             if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
