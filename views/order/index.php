@@ -24,11 +24,20 @@ if($dateStop = yii::$app->request->get('date_stop')) {
 
 $columns = [];
 
-$columns[] = ['attribute' => 'id', 'options' => ['style' => 'width: 49px;']];
+$columns[] = [
+    'attribute' => 'id',
+    'options' => ['style' => 'width: 49px;'],
+    'contentOptions' => [
+        'class' => 'show-details'
+    ],
+];
 
 $columns[] = [
     'attribute' => 'count',
     'label' => yii::t('order', 'Cnt'),
+    'contentOptions' => [
+        'class' => 'show-details'
+    ],
     'content' => function($model) {
         return $model->count;
     }
@@ -37,11 +46,17 @@ $columns[] = [
 $columns[] = [
     'attribute' => 'base_cost',
     'label' => yii::$app->getModule('order')->currency,
+    'contentOptions' => [
+        'class' => 'show-details'
+    ],
 ];
 
 $columns[] = [
     'attribute' => 'cost',
     'label' => '%',
+    'contentOptions' => [
+        'class' => 'show-details'
+    ],
     'content' => function($model) {
         $total = $model->cost;
         if($model->promocode) {
@@ -62,6 +77,9 @@ foreach(Yii::$app->getModule('order')->orderColumns as $column) {
                 $paymentTypes,
                 ['class' => 'form-control', 'prompt' => Yii::t('order', 'Payment type')]
             ),
+            'contentOptions' => [
+                'class' => 'show-details'
+            ],
             'value' => function($model) use ($paymentTypes) {
                 if(isset($paymentTypes[$model->payment_type_id])) {
                     return $paymentTypes[$model->payment_type_id];
@@ -77,6 +95,9 @@ foreach(Yii::$app->getModule('order')->orderColumns as $column) {
                 $shippingTypes,
                 ['class' => 'form-control', 'prompt' => Yii::t('order', 'Shipping type')]
             ),
+            'contentOptions' => [
+                'class' => 'show-details'
+            ],
             'value' => function($model) use ($shippingTypes) {
                 if(isset($shippingTypes[$model->shipping_type_id])) {
                     return $shippingTypes[$model->shipping_type_id];
@@ -87,9 +108,21 @@ foreach(Yii::$app->getModule('order')->orderColumns as $column) {
         $column = [
             'attribute' => 'field',
             'label' => $column['label'],
+            'contentOptions' => [
+                'class' => 'show-details'
+            ],
             'value' => function($model) use ($column) {
                 return $model->getField($column['field']);
             }
+        ];
+    }
+
+    if (gettype($column) === 'string') {
+        $column = [
+            'attribute' => $column,
+            'contentOptions' => [
+                'class' => 'show-details'
+            ],
         ];
     }
 
@@ -99,6 +132,9 @@ foreach(Yii::$app->getModule('order')->orderColumns as $column) {
 $columns[] = [
     'attribute' => 'date',
     'filter' => false,
+    'contentOptions' => [
+        'class' => 'show-details'
+    ],
     'value' => function($model) {
         return date(yii::$app->getModule('order')->dateFormat, $model->timestamp);
     }
@@ -112,12 +148,39 @@ $columns[] = [
         yii::$app->getModule('order')->orderStatuses,
         ['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
     ),
-    'value'    => function($model) {
+    'format' => 'raw',
+    'value' => function($model) {
         if(!$model->status) {
             return null;
         }
-        
-        return  Yii::$app->getModule('order')->orderStatuses[$model->status];
+
+        // TODO отрефакторить всё это безобразие
+
+        $modalHtml = '<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#payment-'.$model->id.'">Форма оплаты</button>
+
+        <div id="payment-'.$model->id.'" class="modal fade" role="dialog" data-role="modal-repayment">
+          <div class="modal-dialog" style="width: 430px;">
+
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Оплата заказа № '.$model->id.'</h4>
+              </div>
+              <div class="modal-body">
+                '.
+                \halumein\cashbox\widgets\RepaymentForm::widget(['useAjax' => true, 'order' => $model])
+                .'
+              </div>
+            </div>
+          </div>
+        </div>';
+
+        if (in_array($model->status, ['new', 'halfpayed'])) {
+            return Yii::$app->getModule('order')->orderStatuses[$model->status].'<br>'.$modalHtml;
+        } else {
+            return  Yii::$app->getModule('order')->orderStatuses[$model->status];
+        }
+
     }
 ];
 
@@ -206,7 +269,7 @@ $order = yii::$app->order;
                                             <input type="hidden" name="time_stop" value="<?=Html::encode($timeStop);?>" />
                                             <p><?=yii::t('order', 'Date to');?>: <br /><?=Html::encode($timeStop);?></p>
                                         <?php } else { ?>
-                                    
+
                                             <?= DatePicker::widget([
                                                 'name' => 'date_stop',
                                                 'addon' => false,
