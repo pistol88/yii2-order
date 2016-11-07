@@ -154,11 +154,11 @@ class OrderController  extends Controller
                     ->setSubject(Yii::t('order', 'New order')." #{$model->id} ({$model->client_name})")
                     ->send();
             }
-            
+
             $module = $this->module;
-            $orderEvent = new OrderEvent(['model' => $model]);
+            $orderEvent = new OrderEvent(['model' => $model, 'elements' => $model->elements]);
             $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
-            
+
             return $this->redirect([$this->module->orderCreateRedirect, 'id' => $model->id]);
         } else {
             //yii::$app->cart->truncate();
