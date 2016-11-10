@@ -11,6 +11,12 @@ use yii\widgets\ActiveForm;
 <div class="pistol88_order_form">
     <?php $form = ActiveForm::begin(['action' => Url::toRoute(['/order/order/customer-create'])]); ?>
     
+        <div style="display: none;">
+            <?php if(yii::$app->has('organisation') && $organisation = yii::$app->organisation->get()) { ?>
+                <?= $form->field($orderModel, 'organisation_id')->label(false)->textInput(['value' => $organisation->id]) ?>
+            <?php } ?>
+        </div>
+    
         <div class="row">
             <div class="col-lg-6"><?= $form->field($orderModel, 'client_name')->textInput(['required' => true]) ?></div>
             <div class="col-lg-3"><?= $form->field($orderModel, 'phone')->textInput(['required' => true]) ?></div>

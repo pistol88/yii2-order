@@ -145,4 +145,5 @@ return [
 	'Elements count' => 'Количество позиций',
 	'Write-off' => 'Списание',
     'Address' => 'Адрес',
+    'Organisation' => 'Организация',
 ];
