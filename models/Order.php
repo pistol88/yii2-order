@@ -33,7 +33,7 @@ class Order extends \yii\db\ActiveRecord
             [['status', 'date', 'payment', 'comment', 'delivery_time', 'promocode', 'address'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type', 'address'], 'safe'],
-            [['seller_user_id', 'user_id', 'organisation_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
+            [['seller_user_id', 'user_id', 'organization_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
         ];
     }
 
@@ -62,7 +62,8 @@ class Order extends \yii\db\ActiveRecord
             'base_cost' => yii::t('order', 'Base cost'),
             'seller_user_id' => yii::t('order', 'Seller'),
             'address' => yii::t('order', 'Address'),
-            'organisation_id' => yii::t('order', 'Organisation'),
+            'organization_id' => yii::t('order', 'organization'),
+            'is_assigment' => yii::t('order', 'Assigment'),
         ];
     }
 

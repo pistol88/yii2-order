@@ -71,8 +71,8 @@ use pistol88\order\widgets\ChooseClient;
                     <div class="col-lg-12">
                         <div style="display: none;">
                             <?= $form->field($model, 'status')->label(false)->textInput(['value' => 'new', 'type' => 'hidden', 'maxlength' => true]) ?>
-                            <?php if(yii::$app->has('organisation') && $organisation = yii::$app->organisation->get()) { ?>
-                                <?= $form->field($model, 'organisation_id')->label(false)->textInput(['value' => $organisation->id]) ?>
+                            <?php if(yii::$app->has('organization') && $organization = yii::$app->organization->get()) { ?>
+                                <?= $form->field($model, 'organization_id')->label(false)->textInput(['value' => $organization->id]) ?>
                             <?php } ?>
                         </div>
                         <?= $form->field($model, 'payment_type_id')->dropDownList($paymentTypes) ?>

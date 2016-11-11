@@ -12,8 +12,8 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(['action' => Url::toRoute(['/order/order/customer-create'])]); ?>
     
         <div style="display: none;">
-            <?php if(yii::$app->has('organisation') && $organisation = yii::$app->organisation->get()) { ?>
-                <?= $form->field($orderModel, 'organisation_id')->label(false)->textInput(['value' => $organisation->id]) ?>
+            <?php if(yii::$app->has('organization') && $organization = yii::$app->organization->get()) { ?>
+                <?= $form->field($orderModel, 'organization_id')->label(false)->textInput(['value' => $organization->id]) ?>
             <?php } ?>
         </div>
     

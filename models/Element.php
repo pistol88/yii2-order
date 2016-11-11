@@ -34,6 +34,7 @@ class Element extends \yii\db\ActiveRecord
             'order_id' => yii::t('order', 'Order ID'),
             'item_id' => yii::t('order', 'Product'),
             'count' => yii::t('order', 'Count'),
+            'is_assigment' => yii::t('order', 'Assigment'),
         ];
     }
 
