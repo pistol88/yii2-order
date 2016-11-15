@@ -69,9 +69,7 @@ class Order extends Component
     
     public function get($id)
     {
-        $order = $this->order;
-        
-        return $order::findOne($id);
+        return OrderModel::findOne($id);
     }
     
     public function getOrdersByDatePeriod($dateStart, $dateStop, $where = null)
