@@ -147,4 +147,6 @@ return [
     'Address' => 'Адрес',
     'organization' => 'Организация',
     'Assigment' => 'Наряд',
+    'Type' => 'Тип',
+    'Assigments' => 'Наряды',
 ];

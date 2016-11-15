@@ -13,6 +13,7 @@ use pistol88\order\models\ShippingType;
 use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -51,7 +52,7 @@ class OrderController  extends Controller
         return parent::beforeAction($action);
     }
 
-    public function actionIndex()
+    public function actionIndex($tab = 'orders')
     {
         $searchModel = new OrderSearch();
         
@@ -62,6 +63,12 @@ class OrderController  extends Controller
         //}
         
         $dataProvider = $searchModel->search($searchParams);
+        
+        if($tab == 'assigments') {
+            $dataProvider->query->andWhere(['order.is_assigment' => '1']);
+        } else {
+            $dataProvider->query->andWhere('(order.is_assigment IS NULL OR order.is_assigment = 0)');
+        }
 
         $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
         $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
@@ -69,6 +76,7 @@ class OrderController  extends Controller
 		$this->getView()->registerJs('pistol88.orders_list.elementsUrl = "'.Url::toRoute(['/order/tools/ajax-elements-list']).'";');
 		
         return $this->render('index', [
+            'tab' => Html::encode($tab),
             'searchModel' => $searchModel,
             'shippingTypes' => $shippingTypes,
             'paymentTypes' => $paymentTypes,

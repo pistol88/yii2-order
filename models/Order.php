@@ -30,7 +30,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             //[['status'], 'required'],
-            [['status', 'date', 'payment', 'comment', 'delivery_time', 'promocode', 'address'], 'string'],
+            [['status', 'date', 'payment', 'comment', 'delivery_time', 'promocode', 'address', 'is_assigment'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type', 'address'], 'safe'],
             [['seller_user_id', 'user_id', 'organization_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
@@ -280,6 +280,7 @@ class Order extends \yii\db\ActiveRecord
 
                     $orderElementModel = new Element;
                     $orderElementModel->order_id = $this->id;
+                    $orderElementModel->is_assigment = $this->is_assigment;
                     $orderElementModel->model = $element->getModel(false);
                     $orderElementModel->item_id = $element->getItemId();
                     $orderElementModel->count = $count;

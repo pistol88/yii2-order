@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use pistol88\order\widgets\Informer;
 use kartik\export\ExportMenu;
@@ -154,33 +155,59 @@ $columns[] = [
             return null;
         }
 
-        // TODO отрефакторить всё это безобразие
+        if(class_exists('\halumein\cashbox\widgets\RepaymentForm')) {
+            // TODO отрефакторить всё это безобразие
 
-        $modalHtml = '<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#payment-'.$model->id.'">Форма оплаты</button>
+            $modalHtml = '<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#payment-'.$model->id.'">Форма оплаты</button>
 
-        <div id="payment-'.$model->id.'" class="modal fade" role="dialog" data-role="modal-repayment">
-          <div class="modal-dialog" style="width: 430px;">
+            <div id="payment-'.$model->id.'" class="modal fade" role="dialog" data-role="modal-repayment">
+              <div class="modal-dialog" style="width: 430px;">
 
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Оплата заказа № '.$model->id.'</h4>
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Оплата заказа № '.$model->id.'</h4>
+                  </div>
+                  <div class="modal-body">
+                    '.
+                    \halumein\cashbox\widgets\RepaymentForm::widget(['useAjax' => true, 'order' => $model])
+                    .'
+                  </div>
+                </div>
               </div>
-              <div class="modal-body">
-                '.
-                \halumein\cashbox\widgets\RepaymentForm::widget(['useAjax' => true, 'order' => $model])
-                .'
-              </div>
-            </div>
-          </div>
-        </div>';
-
-        if (in_array($model->status, ['new', 'halfpayed'])) {
-            return Yii::$app->getModule('order')->orderStatuses[$model->status].'<br>'.$modalHtml;
+            </div>';
         } else {
-            return  Yii::$app->getModule('order')->orderStatuses[$model->status];
+            $modalHtml = '';
         }
 
+
+        if (in_array($model->status, ['new', 'halfpayed'])) {
+            $return = Yii::$app->getModule('order')->orderStatuses[$model->status].'<br>'.$modalHtml;
+        } else {
+            $return = Yii::$app->getModule('order')->orderStatuses[$model->status];
+        }
+
+        if($model->is_assigment) {
+            $return .= ' <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#to-order-'.$model->id.'">В заказ</button>
+
+            <div id="to-order-'.$model->id.'" class="modal fade" role="dialog" data-role="modal-repayment">
+              <div class="modal-dialog" style="width: 430px;">
+
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">В заказ № '.$model->id.'</h4>
+                  </div>
+                  <div class="modal-body">
+                    ))))))))))))))))))))))))
+                  </div>
+                </div>
+              </div>
+            </div>';
+        }
+        
+        return $return;
+        
     }
 ];
 
@@ -206,10 +233,12 @@ $order = yii::$app->order;
 <div class="informer-widget">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title"><?=yii::t('order', 'Statistics');?></h3>
+            <h3 class="panel-title"><a href="#" onclick="$('.order-statistics-body').toggle(); return false;"><?=yii::t('order', 'Statistics');?>...</a></h3>
         </div>
-        <div class="panel-body">
-            <?=Informer::widget();?>
+        <div class="order-statistics-body" style="display: none;">
+            <div class="panel-body">
+                <?=Informer::widget();?>
+            </div>
         </div>
     </div>
 </div>
@@ -219,123 +248,135 @@ $order = yii::$app->order;
         <div class="box-body">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><?=yii::t('order', 'Search');?></h3>
+                    <h3 class="panel-title"><a href="#" onclick="$('.order-search-body').toggle(); return false;"><?=yii::t('order', 'Search');?>...</a></h3>
                 </div>
-                <div class="panel-body">
-                    <?php if(true) { ?>
-                        <form action="" class="row search">
-                            <?php
-                            foreach(Yii::$app->getModule('order')->orderColumns as $column) {
-                                if(is_array($column) && isset($column['field'])) {
-                                    ?>
-                                    <div class="col-md-2">
-                                        <label for="custom-field-<?=$column['field'];?>"><?=$column['label'];?></label>
-                                        <input class="form-control" type="text" name="order-custom-field[<?=$column['field'];?>]" value="<?=Html::encode(yii::$app->request->get('order-custom-field')[$column['field']]);?>" id="custom-field-<?=$column['field'];?>" />
-                                    </div>
-                                    <?php
+                <div class="order-search-body" <?php if(!yii::$app->request->get('OrderSearch')) { ?> style="display: none;"<?php } ?>>
+                    <div class="panel-body">
+                        <?php if(true) { ?>
+                            <form action="<?=Url::toRoute(['/order/order/index']);?>" class="row search">
+                                <input type="hidden" name="tab" value="<?=$tab;?>" />
+                                <?php
+                                foreach(Yii::$app->getModule('order')->orderColumns as $column) {
+                                    if(is_array($column) && isset($column['field'])) {
+                                        ?>
+                                        <div class="col-md-2">
+                                            <label for="custom-field-<?=$column['field'];?>"><?=$column['label'];?></label>
+                                            <input class="form-control" type="text" name="order-custom-field[<?=$column['field'];?>]" value="<?=Html::encode(yii::$app->request->get('order-custom-field')[$column['field']]);?>" id="custom-field-<?=$column['field'];?>" />
+                                        </div>
+                                        <?php
+                                    }
                                 }
-                            }
-                            ?>
-                            <div class="col-md-4">
-                                <label><?=yii::t('order', 'Date');?></label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <?php if($timeStart = yii::$app->request->get('time_start')) { ?>
-                                            <input type="hidden" name="time_start" value="<?=Html::encode($timeStart);?>" />
-                                            <p><?=yii::t('order', 'Date from');?>:<br /> <?=Html::encode($timeStart);?></p>
-                                        <?php } else { ?>
-                                            <?= DatePicker::widget([
-                                                'name' => 'date_start',
-                                                'addon' => false,
-                                                'value' => $dateStart,
-                                                'size' => 'sm',
-                                                'language' => 'ru',
-                                                'placeholder' => yii::t('order', 'Date from'),
-                                                'clientOptions' => [
-                                                    'format' => 'L',
-                                                    'minDate' => '2015-01-01',
-                                                    'maxDate' => date('Y-m-d'),
-                                                ],
-                                                'dropdownItems' => [
-                                                    ['label' => 'Yesterday', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
-                                                    ['label' => 'Tomorrow', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
-                                                    ['label' => 'Some value', 'url' => '#', 'value' => 'Special value'],
-                                                ],
-                                            ]);?>
-                                        <?php } ?>
+                                ?>
+                                <div class="col-md-4">
+                                    <label><?=yii::t('order', 'Date');?></label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <?php if($timeStart = yii::$app->request->get('time_start')) { ?>
+                                                <input type="hidden" name="time_start" value="<?=Html::encode($timeStart);?>" />
+                                                <p><?=yii::t('order', 'Date from');?>:<br /> <?=Html::encode($timeStart);?></p>
+                                            <?php } else { ?>
+                                                <?= DatePicker::widget([
+                                                    'name' => 'date_start',
+                                                    'addon' => false,
+                                                    'value' => $dateStart,
+                                                    'size' => 'sm',
+                                                    'language' => 'ru',
+                                                    'placeholder' => yii::t('order', 'Date from'),
+                                                    'clientOptions' => [
+                                                        'format' => 'L',
+                                                        'minDate' => '2015-01-01',
+                                                        'maxDate' => date('Y-m-d'),
+                                                    ],
+                                                    'dropdownItems' => [
+                                                        ['label' => 'Yesterday', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
+                                                        ['label' => 'Tomorrow', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
+                                                        ['label' => 'Some value', 'url' => '#', 'value' => 'Special value'],
+                                                    ],
+                                                ]);?>
+                                            <?php } ?>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <?php if($timeStop = yii::$app->request->get('time_stop')) { ?>
+                                                <input type="hidden" name="time_stop" value="<?=Html::encode($timeStop);?>" />
+                                                <p><?=yii::t('order', 'Date to');?>: <br /><?=Html::encode($timeStop);?></p>
+                                            <?php } else { ?>
+
+                                                <?= DatePicker::widget([
+                                                    'name' => 'date_stop',
+                                                    'addon' => false,
+                                                    'value' => $dateStop,
+                                                    'size' => 'sm',
+                                                    'placeholder' => yii::t('order', 'Date to'),
+                                                    'language' => 'ru',
+                                                    'clientOptions' => [
+                                                        'format' => 'L',
+                                                        'minDate' => '2015-01-01',
+                                                        'maxDate' => date('Y-m-d'),
+                                                    ],
+                                                    'dropdownItems' => [
+                                                        ['label' => yii::t('order', 'Yesterday'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
+                                                        ['label' => yii::t('order', 'Tomorrow'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
+                                                        ['label' => yii::t('order', 'Some value'), 'url' => '#', 'value' => 'Special value'],
+                                                    ],
+                                                ]);?>
+                                            <?php } ?>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <?php if($timeStop = yii::$app->request->get('time_stop')) { ?>
-                                            <input type="hidden" name="time_stop" value="<?=Html::encode($timeStop);?>" />
-                                            <p><?=yii::t('order', 'Date to');?>: <br /><?=Html::encode($timeStop);?></p>
-                                        <?php } else { ?>
+                                </div>
 
-                                            <?= DatePicker::widget([
-                                                'name' => 'date_stop',
-                                                'addon' => false,
-                                                'value' => $dateStop,
-                                                'size' => 'sm',
-                                                'placeholder' => yii::t('order', 'Date to'),
-                                                'language' => 'ru',
-                                                'clientOptions' => [
-                                                    'format' => 'L',
-                                                    'minDate' => '2015-01-01',
-                                                    'maxDate' => date('Y-m-d'),
-                                                ],
-                                                'dropdownItems' => [
-                                                    ['label' => yii::t('order', 'Yesterday'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
-                                                    ['label' => yii::t('order', 'Tomorrow'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
-                                                    ['label' => yii::t('order', 'Some value'), 'url' => '#', 'value' => 'Special value'],
-                                                ],
-                                            ]);?>
-                                        <?php } ?>
+                                <?php if($module->orderStatuses) { ?>
+                                    <div class="col-md-2">
+                                        <label><?=yii::t('order', 'Status');?></label>
+                                        <select class="form-control" name="OrderSearch[status]">
+                                            <option value="">Все</option>
+                                            <?php foreach($module->orderStatuses as $status => $statusName) { ?>
+                                                <option <?php if($status == yii::$app->request->get('OrderSearch')['status']) echo ' selected="selected"';?> value="<?=$status;?>"><?=$statusName;?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
-                                </div>
-                            </div>
+                                <?php } ?>
 
-                            <?php if($module->orderStatuses) { ?>
-                                <div class="col-md-2">
-                                    <label><?=yii::t('order', 'Status');?></label>
-                                    <select class="form-control" name="OrderSearch[status]">
-                                        <option value="">Все</option>
-                                        <?php foreach($module->orderStatuses as $status => $statusName) { ?>
-                                            <option <?php if($status == yii::$app->request->get('OrderSearch')['status']) echo ' selected="selected"';?> value="<?=$status;?>"><?=$statusName;?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            <?php } ?>
+                                <?php if($module->elementModels) { ?>
+                                    <div class="col-md-2">
+                                        <label><?=yii::t('order', 'With elements');?></label>
+                                        <select class="form-control" name="element_types[]" multiple>
+                                            <?php foreach($module->elementModels as $elementModel => $elementName) { ?>
+                                                <option <?php if(yii::$app->request->get('element_types') && in_array($elementModel, yii::$app->request->get('element_types'))) echo ' selected="selected"';?> value="<?=$elementModel;?>"><?=$elementName;?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                <?php } ?>
 
-                            <?php if($module->elementModels) { ?>
+                                <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
+                                    <div class="col-md-2">
+                                        <select class="form-control" name="OrderSearch[seller_user_id]">
+                                            <option value=""><?=yii::t('order', 'Seller');?></option>
+                                            <?php foreach($sellers as $seller) { ?>
+                                                <option <?php if($seller->id == yii::$app->request->get('OrderSearch')['seller_user_id']) echo ' selected="selected"';?> value="<?=$seller->id;?>"><?=$seller->username;?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                <?php } ?>
                                 <div class="col-md-2">
-                                    <label><?=yii::t('order', 'With elements');?></label>
-                                    <select class="form-control" name="element_types[]" multiple>
-                                        <?php foreach($module->elementModels as $elementModel => $elementName) { ?>
-                                            <option <?php if(yii::$app->request->get('element_types') && in_array($elementModel, yii::$app->request->get('element_types'))) echo ' selected="selected"';?> value="<?=$elementModel;?>"><?=$elementName;?></option>
-                                        <?php } ?>
-                                    </select>
+                                    <input type="checkbox" <?php if(yii::$app->request->get('promocode')) echo ' checked="checked"'; ?> name="promocode" value="1" id="order-promocode" />
+                                    <label for="order-promocode"><?=yii::t('order', 'Promocode');?></label>
+                                    <input class="btn btn-success form-control" type="submit" value="<?=Yii::t('order', 'Search');?>"  />
                                 </div>
-                            <?php } ?>
-
-                            <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
-                                <div class="col-md-2">
-                                    <select class="form-control" name="OrderSearch[seller_user_id]">
-                                        <option value=""><?=yii::t('order', 'Seller');?></option>
-                                        <?php foreach($sellers as $seller) { ?>
-                                            <option <?php if($seller->id == yii::$app->request->get('OrderSearch')['seller_user_id']) echo ' selected="selected"';?> value="<?=$seller->id;?>"><?=$seller->username;?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            <?php } ?>
-                            <div class="col-md-2">
-                                <input type="checkbox" <?php if(yii::$app->request->get('promocode')) echo ' checked="checked"'; ?> name="promocode" value="1" id="order-promocode" />
-                                <label for="order-promocode"><?=yii::t('order', 'Promocode');?></label>
-                                <input class="btn btn-success form-control" type="submit" value="<?=Yii::t('order', 'Search');?>"  />
-                            </div>
-                        </form>
-                    <?php } ?>
+                            </form>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
 
+            <div class="tabs row">
+                <div class="col-md-6">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li <?php if($tab == 'orders') { ?>class="active"<?php } ?>><a href="<?=Url::toRoute(['/order/order/index', 'tab' => 'orders']);?>"><?=yii::t('order', 'Orders');?></a></li>
+                        <li <?php if($tab == 'assigments') { ?>class="active"<?php } ?>><a href="<?=Url::toRoute(['/order/order/index', 'tab' => 'assigments']);?>"><?=yii::t('order', 'Assigments');?></a></li>
+                    </ul>
+                </div>
+            </div>
+            
             <div class="summary row">
                 <div class="col-md-4">
                     <?php if($elementModels = $module->elementModels) { ?>
@@ -378,7 +419,7 @@ $order = yii::$app->order;
                     ?>
                 </div>
             </div>
-
+            
             <div class="order-list">
                 <?=  \kartik\grid\GridView::widget([
                     'export' => false,

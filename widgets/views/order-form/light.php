@@ -78,6 +78,9 @@ use pistol88\order\widgets\ChooseClient;
                         <?= $form->field($model, 'payment_type_id')->dropDownList($paymentTypes) ?>
                     </div>
                     <div class="col-lg-12 col-xs-12">
+                        <?= $form->field($model, 'is_assigment')->label(yii::t('order', 'Type'))->dropDownList(['0' => yii::t('order', 'Order'), '1' => yii::t('order', 'Assigment')]) ?>
+                    </div>
+                    <div class="col-lg-12 col-xs-12">
                         <?= $form->field($model, 'comment')->textArea(['maxlength' => true]) ?>
                     </div>
 					<?php if($fields = $model->allfields) { ?>

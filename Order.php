@@ -1,20 +1,72 @@
 <?php
 namespace pistol88\order;
 
+use pistol88\order\models\Order as OrderModel;
 use yii\base\Component;
 use yii\db\Query;
 use yii;
 
 class Order extends Component
 {
-    public $order = 'pistol88\order\models\Order';
-    public $element = 'pistol88\order\models\Element';
+    private $organization_id;
+    private $is_assigment = false;
     
     public function init()
     {
         parent::init();
     }
 
+    private function buildQuery($query)
+    {
+        if($this->organization_id) {
+            $query->andWhere('(organization_id IS NULL OR organization_id = :organization_id)', [':organization_id' => $this->organization_id]);
+        }
+        
+        if($this->is_assigment) {
+            $query->andWhere('is_assigment = 1');
+        } else {
+            $query->andWhere('(is_assigment IS NULL OR is_assigment != 1)');
+        }
+        
+        return $query;
+    }
+    
+    private function orderQuery()
+    {
+        $return = (new Query())->from('order');
+
+        return $this->buildQuery($return);
+    }
+    
+    private function orderFinder()
+    {
+        $return = OrderModel::find();
+        
+        return $this->buildQuery($return);
+    }
+    
+    public function resetConditions()
+    {
+        $this->organization_id = null;
+        $this->is_assigment = false;
+        
+        return $this;
+    }
+    
+    public function setOrganization($organization_id)
+    {
+        $this->organization_id = $organization_id;
+        
+        return $this;
+    }
+    
+    public function assigment()
+    {
+        $this->is_assigment = true;
+        
+        return $this;
+    }
+    
     public function get($id)
     {
         $order = $this->order;
@@ -24,17 +76,19 @@ class Order extends Component
     
     public function getOrdersByDatePeriod($dateStart, $dateStop, $where = null)
     {
-        $order = $this->order;
-        
+
         if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
             $dateStop = date('Y-m-d H:i:s');
         }
         
-        $query = $order::find()->where('date >= :dateStart', [':dateStart' => $dateStart])->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
+        $query = $this->orderFinder()
+            ->andWhere('date >= :dateStart AND date <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop]);
         
         if($where) {
             $query->andWhere($where);
         }
+
+        $this->resetConditions();
 
         return $query->all();
     }
@@ -45,36 +99,37 @@ class Order extends Component
             $month = date('Y-m');
         }
         
-        $order = $this->order;
-        
-        $query = new Query();
+        $query = $this->orderQuery();
         $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_orders'])
-                ->from([$order::tableName()])
-                ->where('DATE_FORMAT(date, "%Y-%m") = :date', [':date' => $month]);
+                ->from(['order'])
+                ->andWhere('DATE_FORMAT(date, "%Y-%m") = :date', [':date' => $month]);
 
         if($where) {
             $query->andWhere($where);
         }
         
         $result = $query->one();
+        
+        $this->resetConditions();
         
         return array_map('intval', $result);
     }
 
     public function getStatByDate($date, $where = null)
     {
-        $order = $this->order;
-        
-        $query = new Query();
+        $query = $this->orderQuery();
+
         $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_orders'])
-                ->from([$order::tableName()])
-                ->where('DATE_FORMAT(date, "%Y-%m-%d") = :date', [':date' => $date]);
+                ->from(['order'])
+                ->andWhere('is_assigment != 1 AND DATE_FORMAT(date, "%Y-%m-%d") = :date', [':date' => $date]);
 
         if($where) {
             $query->andWhere($where);
         }
         
         $result = $query->one();
+        
+        $this->resetConditions();
         
         return array_map('intval', $result);
     }
@@ -85,19 +140,18 @@ class Order extends Component
             $dateStop = date('Y-m-d H:i:s');
         }
 
-        $order = $this->order;
-        
-        $query = new Query();
+        $query = $this->orderQuery();
         $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_orders'])
-                ->from([$order::tableName()])
-                ->where('date >= :dateStart', [':dateStart' => $dateStart])
-                ->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
+                ->from(['order'])
+                ->andWhere('date >= :dateStart AND date <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop]);
 
         if($where) {
             $query->andWhere($where);
         }
         
         $result = $query->one();
+        
+        $this->resetConditions();
         
         return array_map('intval', $result);
     }
@@ -108,15 +162,12 @@ class Order extends Component
             $dateStop = date('Y-m-d H:i:s');
         }
         
-        $order = $this->order;
-        $element = $this->element;
-        
-        $query = new Query();
+        $query = $this->orderQuery();
         $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
-                ->from ([$element::tableName().' e'])
-                ->leftJoin($order::tableName().' o','o.id = e.order_id')
-                ->where('o.date >= :dateStart', [':dateStart' => $dateStart])
-                ->andWhere('o.date <= :dateStop', [':dateStop' => $dateStop])
+                ->from (['order_element e'])
+                ->leftJoin('order'.' o','o.id = e.order_id')
+                ->andWhere('e.is_assigment != 1')
+                ->andWhere('o.date >= :dateStart AND o.date <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop])
                 ->andWhere(['e.model' => $model]);
 
         if($where) {
@@ -124,8 +175,8 @@ class Order extends Component
         }
         
         $result = $query->one();
-        
-        
+
+        $this->resetConditions();
         
         return array_map('intval', $result);
     }
