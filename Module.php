@@ -50,6 +50,8 @@ class Module extends \yii\base\Module
     
     public $sellerModel = '\common\models\User';
     
+    public $workers = [];
+    
     private $mail;
 
     public function init()
@@ -75,6 +77,19 @@ class Module extends \yii\base\Module
         }
         
         return $this->mail;
+    }
+    
+    public function getWorkersList()
+    {
+        if(is_callable($this->workers)) {
+            $values = $this->workers;
+            
+            return $values();
+        } else {
+            return $this->workers;
+        }
+        
+        return [];
     }
     
     public function getProductCategoriesList()

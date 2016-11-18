@@ -49,7 +49,7 @@ use pistol88\order\widgets\ChooseClient;
                         <?php foreach ($staffer as $key => $worker) { ?>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" value="<?= $worker->id ?>" checked name='Order[staffer][]' ><?= $worker->name ?> (<?= $worker->category->name ?>)
+                                    <input type="checkbox" value="<?= $worker->id ?>" checked name='Order[staffer][]' ><?= $worker->name ?> <?php if($worker->category) { ?>(<?= $worker->category->name ?>) <?php } ?>
                                 </label>
                             </div>
                         <?php } ?>

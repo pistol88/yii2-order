@@ -7,6 +7,7 @@ use kartik\export\ExportMenu;
 use nex\datepicker\DatePicker;
 use pistol88\order\assets\Asset;
 use pistol88\order\assets\OrdersListAsset;
+use pistol88\order\widgets\AssigmentToOrder;
 
 $this->title = yii::t('order', 'Orders');
 $this->params['breadcrumbs'][] = $this->title;
@@ -153,7 +154,7 @@ $columns[] = [
         ['class' => 'form-control', 'prompt' => Yii::t('order', 'Status')]
     ),
     'format' => 'raw',
-    'value' => function($model) {
+    'value' => function($model) use ($module) {
         if(!$model->status) {
             return null;
         }
@@ -191,7 +192,7 @@ $columns[] = [
         }
 
         if($model->is_assigment) {
-            $return .= ' <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#to-order-'.$model->id.'">В заказ</button>
+            $return .= ' <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#to-order-'.$model->id.'">'.yii::t('order', 'To order').'</button>
 
             <div id="to-order-'.$model->id.'" class="modal fade" role="dialog" data-role="modal-repayment">
               <div class="modal-dialog" style="width: 430px;">
@@ -202,7 +203,7 @@ $columns[] = [
                     <h4 class="modal-title">В заказ № '.$model->id.'</h4>
                   </div>
                   <div class="modal-body">
-                    ))))))))))))))))))))))))
+                    '.AssigmentToOrder::widget(['model' => $model, 'staffers' => $module->getWorkersList()]).'
                   </div>
                 </div>
               </div>
@@ -398,6 +399,7 @@ $order = yii::$app->order;
                 <div class="col-md-4">
                     <ul>
                         <?php
+                        /*
                         foreach($paymentTypes as $pid => $pname) {
                            $query = clone $dataProvider->query;
                            $sum = $query
@@ -407,6 +409,7 @@ $order = yii::$app->order;
 
                            echo '<li>'.$pname.': '.(int)$sum.' '.yii::$app->getModule('order')->currency.'</li>';
                         }
+                        */
                         ?>
                     </ul>
                 </div>

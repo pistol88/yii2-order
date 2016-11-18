@@ -26,7 +26,7 @@ class OrderController  extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-				'only' => ['create', 'update', 'index', 'delete', 'view', 'print', 'editable'],
+				'only' => ['create', 'update', 'index', 'delete', 'view', 'print', 'editable', 'to-order', 'update-status'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -38,6 +38,7 @@ class OrderController  extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'to-order' => ['post'],
                 ],
             ],
         ];
@@ -347,13 +348,39 @@ class OrderController  extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionEditable() {
+    public function actionEditable()
+    {
         $name = yii::$app->request->post('name');
         $value = yii::$app->request->post('value');
         $pk = unserialize(base64_decode(yii::$app->request->post('pk')));
         OrderElement::editField($pk, $name, $value);
     }
 
+    public function actionToOrder()
+    {
+        if($order = $this->findModel(yii::$app->request->post('id'))) {
+            $order->is_assigment = 0;
+            $order->date = date('Y-m-d H:i:s');
+            $order->timestamp = time();
+            
+            if($staffers = yii::$app->request->post('staffers')) {
+                $order->staffer = $staffers;
+            }
+            
+            $order->save(false);
+
+            $module = $this->module;
+            $orderEvent = new OrderEvent(['model' => $order, 'elements' => $order->elements]);
+            $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
+            
+            $json = ['result' => 'success', 'order_view_location' => Url::toRoute(['/order/order/view', 'id' => $order->id])];
+        } else {
+            $json = ['result' => 'fail'];
+        }
+        
+        return json_encode($json);
+    }
+    
     protected function findModel($id)
     {
         $orderModel = yii::$app->orderModel;
@@ -361,7 +388,7 @@ class OrderController  extends Controller
         if (($model = $orderModel::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('The requested order does not exist.');
         }
     }
 }

@@ -149,4 +149,5 @@ return [
     'Assigment' => 'Наряд',
     'Type' => 'Тип',
     'Assigments' => 'Наряды',
+    'To order' => 'В заказ',
 ];
