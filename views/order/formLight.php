@@ -1,5 +1,5 @@
 <div class="custom-order-form-light-container" style="max-width: 320px;">
-    <?php if (Yii::$app->getModule('service')->splitOrderPerfome) {
+    <?php if (Yii::$app->service->splitOrderPerfome) {
         $staffers = isset(yii::$app->worksess->soon()->users) ? yii::$app->worksess->soon()->users : null;
     } else {
         $staffers = null;
