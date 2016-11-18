@@ -24,9 +24,9 @@ class OrderController  extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
+            'adminAccess' => [
                 'class' => AccessControl::className(),
-				'only' => ['create', 'update', 'index', 'delete', 'view', 'print', 'editable', 'to-order', 'update-status'],
+				'only' => ['create', 'update', 'index', 'view', 'print', 'delete', 'editable', 'to-order', 'update-status'],
                 'rules' => [
                     [
                         'allow' => true,
