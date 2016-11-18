@@ -23,9 +23,9 @@ class Order extends Component
         }
         
         if($this->is_assigment) {
-            $query->andWhere('is_assigment = 1');
+            $query->andWhere('order.is_assigment = 1');
         } else {
-            $query->andWhere('(is_assigment IS NULL OR is_assigment != 1)');
+            $query->andWhere('(order.is_assigment IS NULL OR order.is_assigment != 1)');
         }
         
         return $query;
@@ -163,9 +163,9 @@ class Order extends Component
         $query = $this->orderQuery();
         $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
                 ->from (['order_element e'])
-                ->leftJoin('order'.' o','o.id = e.order_id')
+                ->leftJoin('order', 'order.id = e.order_id')
                 ->andWhere('e.is_assigment != 1')
-                ->andWhere('o.date >= :dateStart AND o.date <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop])
+                ->andWhere('order.date >= :dateStart AND order.date <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop])
                 ->andWhere(['e.model' => $model]);
 
         if($where) {
