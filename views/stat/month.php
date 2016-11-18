@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Url;
+use pistol88\order\assets\Asset;
+Asset::register($this);
 
 $currency = yii::$app->getModule('order')->currency;
 
@@ -17,10 +19,10 @@ $this->params['breadcrumbs'][] = $month;
 <div class="order-stat">
     <h1><?=yii::t('order', 'Order statistics');?></h1>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-2">
             
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-10">
             <?= $this->render('/parts/menu.php', ['active' => 'statistics']); ?>
         </div>
     </div>

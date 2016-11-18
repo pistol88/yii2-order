@@ -119,7 +119,7 @@ class Order extends Component
 
         $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_orders'])
                 ->from(['order'])
-                ->andWhere('is_assigment != 1 AND DATE_FORMAT(date, "%Y-%m-%d") = :date', [':date' => $date]);
+                ->andWhere(' DATE_FORMAT(date, "%Y-%m-%d") = :date', [':date' => $date]);
 
         if($where) {
             $query->andWhere($where);
