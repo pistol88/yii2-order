@@ -150,4 +150,5 @@ return [
     'Type' => 'Тип',
     'Assigments' => 'Наряды',
     'To order' => 'В заказ',
+    'Reset' => 'Сбросить',
 ];

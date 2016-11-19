@@ -261,25 +261,25 @@ $order = yii::$app->order;
                             <form action="<?=Url::toRoute(['/order/order/index']);?>" class="row search">
                                 <input type="hidden" name="tab" value="<?=$tab;?>" />
                                 <?php
-                                foreach(Yii::$app->getModule('order')->orderColumns as $column) {
-                                    if(is_array($column) && isset($column['field'])) {
-                                        ?>
-                                        <div class="col-md-2">
-                                            <label for="custom-field-<?=$column['field'];?>"><?=$column['label'];?></label>
-                                            <input class="form-control" type="text" name="order-custom-field[<?=$column['field'];?>]" value="<?=Html::encode(yii::$app->request->get('order-custom-field')[$column['field']]);?>" id="custom-field-<?=$column['field'];?>" />
-                                        </div>
-                                        <?php
+                                if($module->orderColumns) {
+                                    echo '<div class="col-md-2">';
+                                    foreach($module->orderColumns as $column) {
+                                        if(is_array($column) && isset($column['field'])) {
+                                            ?>
+                                            <div>
+                                                <label for="custom-field-<?=$column['field'];?>"><?=$column['label'];?></label>
+                                                <input class="form-control" type="text" name="order-custom-field[<?=$column['field'];?>]" value="<?=Html::encode(yii::$app->request->get('order-custom-field')[$column['field']]);?>" id="custom-field-<?=$column['field'];?>" />
+                                            </div>
+                                            <?php
+                                        }
                                     }
+                                    echo '</div>';
                                 }
                                 ?>
                                 <div class="col-md-4">
                                     <label><?=yii::t('order', 'Date');?></label>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <?php if($timeStart && !yii::$app->request->get('OrderSearch')) { ?>
-                                                <input type="hidden" name="time_start" value="<?=Html::encode($timeStart);?>" />
-                                                <p><small><?=yii::t('order', 'Date from');?>: <?=Html::encode($timeStart);?></small></p>
-                                            <?php } ?>
                                             <?= DatePicker::widget([
                                                 'name' => 'date_start',
                                                 'addon' => false,
@@ -298,13 +298,12 @@ $order = yii::$app->order;
                                                     ['label' => 'Some value', 'url' => '#', 'value' => 'Special value'],
                                                 ],
                                             ]);?>
+                                            <?php if($timeStart && !yii::$app->request->get('OrderSearch')) { ?>
+                                                <input type="hidden" name="time_start" value="<?=Html::encode($timeStart);?>" />
+                                                <p><small><?=yii::t('order', 'Date from');?>: <?=Html::encode($timeStart);?></small></p>
+                                            <?php } ?>
                                         </div>
                                         <div class="col-md-6">
-                                            <?php if($timeStop && !yii::$app->request->get('OrderSearch')) { ?>
-                                                <input type="hidden" name="time_stop" value="<?=Html::encode($timeStop);?>" />
-                                                <p><small><?=yii::t('order', 'Date to');?>: <br /><?=Html::encode($timeStop);?></small></p>
-                                            <?php } ?>
-
                                             <?= DatePicker::widget([
                                                 'name' => 'date_stop',
                                                 'addon' => false,
@@ -323,6 +322,10 @@ $order = yii::$app->order;
                                                     ['label' => yii::t('order', 'Some value'), 'url' => '#', 'value' => 'Special value'],
                                                 ],
                                             ]);?>
+                                            <?php if($timeStop && !yii::$app->request->get('OrderSearch')) { ?>
+                                                <input type="hidden" name="time_stop" value="<?=Html::encode($timeStop);?>" />
+                                                <p><small><?=yii::t('order', 'Date to');?>: <br /><?=Html::encode($timeStop);?></small></p>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -364,6 +367,7 @@ $order = yii::$app->order;
                                     <input type="checkbox" <?php if(yii::$app->request->get('promocode')) echo ' checked="checked"'; ?> name="promocode" value="1" id="order-promocode" />
                                     <label for="order-promocode"><?=yii::t('order', 'Promocode');?></label>
                                     <input class="btn btn-success form-control" type="submit" value="<?=Yii::t('order', 'Search');?>"  />
+                                    <a href="<?=Url::toRoute(['/order/order/index', 'tab' => $tab]);?>" class="btn btn-default form-control"><i class="glyphicon glyphicon-remove-sign"></i> <?=Yii::t('order', 'Reset');?></a>
                                 </div>
                             </form>
                         <?php } ?>
