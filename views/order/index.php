@@ -30,6 +30,10 @@ $timeStop = yii::$app->request->get('time_stop');
 $columns = [];
 
 $columns[] = [
+    'class' => \yii\grid\SerialColumn::className(),
+];
+
+$columns[] = [
     'attribute' => 'id',
     'options' => ['style' => 'width: 49px;'],
     'contentOptions' => [
@@ -159,7 +163,7 @@ $columns[] = [
             return null;
         }
 
-        if(class_exists('\halumein\cashbox\widgets\RepaymentForm')) {
+        if(class_exists('\halumein\cashbox\widgets\RepaymentForm') && yii::$app->getModule('cashbox')) {) {
             // TODO отрефакторить всё это безобразие
 
             $modalHtml = '<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#payment-'.$model->id.'">Форма оплаты</button>
@@ -404,7 +408,6 @@ $order = yii::$app->order;
                 <div class="col-md-4">
                     <ul>
                         <?php
-                        /*
                         foreach($paymentTypes as $pid => $pname) {
                            $query = clone $dataProvider->query;
                            $sum = $query
@@ -414,7 +417,6 @@ $order = yii::$app->order;
 
                            echo '<li>'.$pname.': '.(int)$sum.' '.yii::$app->getModule('order')->currency.'</li>';
                         }
-                        */
                         ?>
                     </ul>
                 </div>

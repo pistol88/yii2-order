@@ -29,7 +29,7 @@ class OrderSearch extends Order
 		$query->joinWith('elementsRelation');
 		
 		if($elementTypes = yii::$app->request->get('element_types')) {
-			$query->andFilterWhere(['order_element.model' => $elementTypes]);
+			$query->andFilterWhere(['order_element.model' => $elementTypes])->groupBy('order.id');
 		}
 
         $dataProvider = new ActiveDataProvider([

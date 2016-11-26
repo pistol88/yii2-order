@@ -71,6 +71,8 @@ class OrderController  extends Controller
             $dataProvider->query->andWhere('(order.is_assigment IS NULL OR order.is_assigment = 0)');
         }
 
+        $dataProvider->pagination = ["pageSize" => 100];
+        
         $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
         $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
 

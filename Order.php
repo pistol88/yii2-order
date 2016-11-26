@@ -161,7 +161,7 @@ class Order extends Component
         }
         
         $query = $this->orderQuery();
-        $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_order'])
+        $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_orders'])
                 ->from (['order_element e'])
                 ->leftJoin('order', 'order.id = e.order_id')
                 ->andWhere('e.is_assigment != 1')
