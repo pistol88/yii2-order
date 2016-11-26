@@ -43,9 +43,9 @@ class OrderController  extends Controller
             ],
         ];
     }
-    
+
     public function beforeAction($action)
-    {            
+    {
         if ($action->id == 'print' | $action->id == 'create') {
             $this->enableCsrfValidation = false;
         }
@@ -56,15 +56,15 @@ class OrderController  extends Controller
     public function actionIndex($tab = 'orders')
     {
         $searchModel = new OrderSearch();
-        
+
         $searchParams = yii::$app->request->queryParams;
-        
+
         //if(!yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) {
         //    $searchParams['OrderSearch']['seller_user_id'] = yii::$app->user->id;
         //}
-        
+
         $dataProvider = $searchModel->search($searchParams);
-        
+
         if($tab == 'assigments') {
             $dataProvider->query->andWhere(['order.is_assigment' => '1']);
         } else {
@@ -77,7 +77,7 @@ class OrderController  extends Controller
         $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
 
 		$this->getView()->registerJs('pistol88.orders_list.elementsUrl = "'.Url::toRoute(['/order/tools/ajax-elements-list']).'";');
-		
+
         return $this->render('index', [
             'tab' => Html::encode($tab),
             'searchModel' => $searchModel,
@@ -103,7 +103,7 @@ class OrderController  extends Controller
         $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
 
         $fieldFind = Field::find();
-        
+
         $this->getView()->registerJs('pistol88.order.outcomingAction = "' . Url::toRoute(['/order/tools/outcoming']) . '";');
 
         return $this->render('view', [
@@ -115,13 +115,13 @@ class OrderController  extends Controller
             'model' => $model,
         ]);
     }
-    
+
     public function actionPrint($id)
     {
         $this->layout = 'print';
-        
-        $this->enableCsrfValidation = false;     
-        
+
+        $this->enableCsrfValidation = false;
+
         $model = $this->findModel($id);
         $searchModel = new ElementSearch;
         $params = yii::$app->request->queryParams;
@@ -146,7 +146,7 @@ class OrderController  extends Controller
             'model' => $model,
         ]);
     }
-    
+
     public function actionCreate()
     {
         $orderModel = yii::$app->orderModel;
@@ -154,9 +154,9 @@ class OrderController  extends Controller
         $model = new $orderModel;
 
         $this->getView()->registerJs("jQuery('.buy-by-code-input').focus();");
-        
+
         if ($model->load(yii::$app->request->post()) && $model->save()) {
-            
+
             if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                 $sender = yii::$app->getModule('order')->mail
                     ->compose('admin_notification', ['model' => $model])
@@ -192,7 +192,7 @@ class OrderController  extends Controller
 
         $model = new $orderModel;
 
-        if ($session = yii::$app->worksess->soon()) {
+        if ((yii::$app->has('worksess')) && $session = yii::$app->worksess->soon()) {
             $model->sessionId = $session->id;
         } else {
             $model->sessionId = null;
@@ -273,11 +273,11 @@ class OrderController  extends Controller
                         ->setSubject(Yii::t('order', 'New order')." #{$model->id} ({$model->client_name})")
                         ->send();
                 }
-                
+
                 $module = $this->module;
                 $orderEvent = new OrderEvent(['model' => $model]);
                 $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
-                
+
                 if($paymentType = $model->paymentType) {
                     $payment = new Payment;
                     $payment->order_id = $model->id;
@@ -297,7 +297,7 @@ class OrderController  extends Controller
                         ]);
                     }
                 }
-                
+
                 return $this->redirect([yii::$app->getModule('order')->successUrl, 'id' => $model->id, 'payment' => $model->payment_type_id]);
             } else {
                 yii::$app->session->setFlash('orderError', yii::t('order', 'Error (check required fields)'));
@@ -320,10 +320,10 @@ class OrderController  extends Controller
                 die(json_encode(['result' => 'fail', 'error' => 'enable to save']));
             }
         }
-        
+
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-    
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -340,11 +340,11 @@ class OrderController  extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        
+
         $module = $this->module;
         $orderEvent = new OrderEvent(['model' => $model]);
         $this->module->trigger($module::EVENT_ORDER_DELETE, $orderEvent);
-        
+
         $model->delete();
 
         return $this->redirect(['index']);
@@ -364,29 +364,29 @@ class OrderController  extends Controller
             $order->is_assigment = 0;
             $order->date = date('Y-m-d H:i:s');
             $order->timestamp = time();
-            
+
             if($staffers = yii::$app->request->post('staffers')) {
                 $order->staffer = $staffers;
             }
-            
+
             $order->save(false);
 
             $module = $this->module;
             $orderEvent = new OrderEvent(['model' => $order, 'elements' => $order->elements]);
             $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
-            
+
             $json = ['result' => 'success', 'order_view_location' => Url::toRoute(['/order/order/view', 'id' => $order->id])];
         } else {
             $json = ['result' => 'fail'];
         }
-        
+
         return json_encode($json);
     }
-    
+
     protected function findModel($id)
     {
         $orderModel = yii::$app->orderModel;
-        
+
         if (($model = $orderModel::findOne($id)) !== null) {
             return $model;
         } else {
