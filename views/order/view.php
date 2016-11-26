@@ -156,6 +156,9 @@ Asset::register($this);
                     
                     $product = $elementModel->getModel();
                     
+                    $style = '';
+                    $class = '';
+                    
                     if(yii::$app->has('stock')) {
                         $stockService = yii::$app->stock;
                         
@@ -181,14 +184,11 @@ Asset::register($this);
                                 $return .= Html::tag('div', $input.$button, ['class' => 'input-group', 'style' => 'width: 100px;']);
                             }
                         }
-                    }
-                    
-                    $style = '';
-                    $class = '';
-                    
-                    if($stockService->getOutcomingsByOrder($model->id, $product->id)) {
-                        $style = 'text-decoration: line-through;';
-                        $class = 'write-offed';
+                        
+                        if($stockService->getOutcomingsByOrder($model->id, $product->id)) {
+                            $style = 'text-decoration: line-through;';
+                            $class = 'write-offed';
+                        }
                     }
                     
                     return Html::tag('div', $return, ['class' => 'outcomingWidget '.$class, 'style' => $style]);
