@@ -163,7 +163,7 @@ $columns[] = [
             return null;
         }
 
-        if(class_exists('\halumein\cashbox\widgets\RepaymentForm') && yii::$app->getModule('cashbox')) {) {
+        if(class_exists('\halumein\cashbox\widgets\RepaymentForm') && yii::$app->getModule('cashbox')) {
             // TODO отрефакторить всё это безобразие
 
             $modalHtml = '<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#payment-'.$model->id.'">Форма оплаты</button>
