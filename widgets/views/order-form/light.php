@@ -17,6 +17,10 @@ use pistol88\order\widgets\ChooseClient;
             ]
         ]);
     ?>
+        <div class="form-group offer">
+            <?= Html::button(Yii::t('order', 'Create order'), ['class' => 'btn btn-success', 'id' => 'order-form-light-submit']); ?>
+        </div>
+        
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="headingOne">
                 <h4 class="panel-title">

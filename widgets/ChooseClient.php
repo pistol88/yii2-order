@@ -21,6 +21,11 @@ class ChooseClient extends \yii\base\Widget
     
     public function run()
     {
+        $view = $this->getView();
+        $view->on($view::EVENT_END_BODY, function($event) {
+            echo $this->render('choose_client_modal', ['model' => $this->model, 'form' => $this->form]);
+        });
+        
         return $this->render('choose_client', ['model' => $this->model, 'form' => $this->form]);
     }
 }
