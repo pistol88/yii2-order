@@ -116,6 +116,38 @@ class OrderController  extends Controller
         ]);
     }
 
+    public function actionPrintLast()
+    {
+        $this->layout = 'print';
+
+        $this->enableCsrfValidation = false;
+
+        $model = Order::find()->orderBy('id DESC')->limit(1)->one();
+        
+        $searchModel = new ElementSearch;
+        $params = yii::$app->request->queryParams;
+        if(empty($params['ElementSearch'])) {
+            $params = ['ElementSearch' => ['order_id' => $model->id]];
+        }
+
+        $dataProvider = $searchModel->search($params);
+
+        $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
+        $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
+
+        $fieldFind = Field::find();
+
+        return $this->render('print', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'shippingTypes' => $shippingTypes,
+            'fieldFind' => $fieldFind,
+            'paymentTypes' => $paymentTypes,
+            'module' => $this->module,
+            'model' => $model,
+        ]);
+    }
+    
     public function actionPrint($id)
     {
         $this->layout = 'print';
