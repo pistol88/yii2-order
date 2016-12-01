@@ -36,7 +36,7 @@ class OrderSearch extends Order
             'query' => $query,
             'sort' => [
                 'defaultOrder' => [
-                    'id' => SORT_DESC
+                    'date' => SORT_DESC
                 ]
             ],
         ]);

@@ -248,6 +248,8 @@ class Order extends \yii\db\ActiveRecord
 
             if(empty($this->date)) {
                 $this->date = date('Y-m-d H:i:s');
+            } else {
+                $this->timestamp = strtotime($this->date);
             }
 
             if(empty($this->promocode) && yii::$app->has('promocode')) {

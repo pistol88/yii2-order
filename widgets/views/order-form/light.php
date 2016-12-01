@@ -79,11 +79,17 @@ use pistol88\order\widgets\ChooseClient;
                                 <?= $form->field($model, 'organization_id')->label(false)->textInput(['value' => $organization->id]) ?>
                             <?php } ?>
                         </div>
-                        <?= $form->field($model, 'payment_type_id')->dropDownList($paymentTypes) ?>
+                        <?= $form->field($model, 'date')->label(yii::t('order', 'Date'))->textInput(['value' => date('Y-m-d H:i:s')]) ?>
                     </div>
-                    <div class="col-lg-12 col-xs-12">
-                        <?= $form->field($model, 'is_assigment')->label(yii::t('order', 'Type'))->dropDownList(['0' => yii::t('order', 'Order'), '1' => yii::t('order', 'Assigment')]) ?>
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6">
+                            <?= $form->field($model, 'is_assigment')->label(yii::t('order', 'Type'))->dropDownList(['0' => yii::t('order', 'Order'), '1' => yii::t('order', 'Assigment')]) ?>
+                        </div> 
+                        <div class="col-lg-6 col-xs-6">
+                            <?= $form->field($model, 'payment_type_id')->dropDownList($paymentTypes) ?>
+                        </div>
                     </div>
+
                     <div class="col-lg-12 col-xs-12">
                         <?= $form->field($model, 'comment')->textArea(['maxlength' => true]) ?>
                     </div>

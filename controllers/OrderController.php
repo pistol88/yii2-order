@@ -70,6 +70,10 @@ class OrderController  extends Controller
         } else {
             $dataProvider->query->andWhere('(order.is_assigment IS NULL OR order.is_assigment = 0)');
         }
+        
+        if(yii::$app->request->get('time_start')) {
+            $dataProvider->query->orderBy('order.timestamp ASC');
+        }
 
         $dataProvider->pagination = ["pageSize" => 100];
         
