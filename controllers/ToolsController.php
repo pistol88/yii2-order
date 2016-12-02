@@ -83,20 +83,26 @@ class ToolsController  extends Controller
         
         die(json_encode($json));
     }
-    
-    public function actionUserInfo()
+        public function actionUserInfo()
     {
-        $userId = (int)yii::$app->request->post('userId');
+        $userId = yii::$app->request->post('userId');
         
         $model = new $this->module->userModel;
         
-        $userModel = $model::findOne($userId);
+        if($userId) {
+            $userModel = $model::find()->where(['id' => $userId])->one();
+        } else {
+            die([
+                'status' => 'fail',
+                'message' => yii::t('order', 'Not found')
+            ]);
+        }
         
         $promocode = false;
         
         if(!$userModel) {
             foreach($this->module->userModelCustomFields as $field) {
-                if($userModel = $model::findOne([$field => $userId])) {
+                if($userModel = $model::find()->where([$field => $userId])->one()) {
                     break;
                 }
             }
@@ -127,7 +133,6 @@ class ToolsController  extends Controller
         
         die(json_encode($json));
     }
-    
 	public function actionAjaxElementsList()
 	{
 		$model = yii::$app->order->get(yii::$app->request->post('orderId'));
