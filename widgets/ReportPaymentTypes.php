@@ -12,6 +12,7 @@ class ReportPaymentTypes extends \yii\base\Widget
     public $dateStart = null;
     public $dateStop = [];
     public $withAssigment = false;
+    public $types = [];
     
     public function init()
     {
@@ -24,17 +25,30 @@ class ReportPaymentTypes extends \yii\base\Widget
 
     public function run()
     {
-        $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
-        
+        if($this->types) {
+            $paymentTypes = ArrayHelper::map(PaymentType::find()->where(['id' => $this->types])->all(), 'id', 'name');
+        } else {
+            $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
+        }
+
         $report = [];
+        $hasReport = false;
         
         foreach($paymentTypes as $pid => $pname) {
-           $query = Order::find()->where('date >= :dateStart AND date <= :dateStop', [':dateStart' => $this->dateStart, ':dateStop' => $this->dateStop]);;
+           $query = Order::find()->where('date >= :dateStart AND date <= :dateStop', [':dateStart' => $this->dateStart, ':dateStop' => $this->dateStop]);
            $sum = $query->andWhere(['payment_type_id' => $pid])
                    ->distinct()
                    ->sum('cost');
 
            $report[$pname] = $sum;
+           
+           if($sum) {
+               $hasReport = true;
+           }
+        }
+        
+        if(!$hasReport) {
+            return '';
         }
         
         return $this->render('report-payment-types', [
