@@ -5,6 +5,7 @@ use yii;
 use pistol88\order\models\tools\OrderSearch;
 use pistol88\order\models\Order;
 use pistol88\order\models\Payment;
+use pistol88\order\models\Element;
 use pistol88\order\models\tools\ElementSearch;
 use pistol88\order\models\Field;
 use pistol88\order\models\FieldValue;
@@ -26,7 +27,7 @@ class OrderController  extends Controller
         return [
             'adminAccess' => [
                 'class' => AccessControl::className(),
-				'only' => ['create', 'update', 'index', 'view', 'print', 'delete', 'editable', 'to-order', 'update-status'],
+				'only' => ['create', 'update', 'index', 'view', 'push-elements', 'print', 'delete', 'editable', 'to-order', 'update-status'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -38,6 +39,7 @@ class OrderController  extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'push-elements' => ['post'],
                     'to-order' => ['post'],
                 ],
             ],
@@ -92,9 +94,39 @@ class OrderController  extends Controller
         ]);
     }
 
-    public function actionView($id)
+    public function actionPushElements($id, $push_cart = false)
     {
         $model = $this->findModel($id);
+        
+        if($elements = yii::$app->cart->elements) {
+            foreach($elements as $element) {
+                $count = $element->getCount();
+
+                $orderElementModel = new Element;
+                $orderElementModel->order_id = $model->id;
+                $orderElementModel->is_assigment = $model->is_assigment;
+                $orderElementModel->model = $element->getModel(false);
+                $orderElementModel->item_id = $element->getItemId();
+                $orderElementModel->count = $count;
+                $orderElementModel->base_price = $element->getPrice(false);
+                $orderElementModel->price = $element->getPrice();
+                $orderElementModel->options = json_encode($element->getOptions());
+                $orderElementModel->description = '';
+                $orderElementModel->save();
+                
+                $element->getModel()->minusAmount($count);
+            }
+            
+            yii::$app->cart->truncate();
+        }
+
+        $this->redirect(['/order/order/view', 'id' => $id]);
+    }
+    
+    public function actionView($id, $push_cart = false)
+    {
+        $model = $this->findModel($id);
+        
         $searchModel = new ElementSearch;
         $params = yii::$app->request->queryParams;
         if(empty($params['ElementSearch'])) {

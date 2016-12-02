@@ -151,4 +151,5 @@ return [
     'Assigments' => 'Наряды',
     'To order' => 'В заказ',
     'Reset' => 'Сбросить',
+    'Add to order' => 'Добавить к заказу',
 ];

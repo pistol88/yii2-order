@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
 use pistol88\order\assets\Asset;
@@ -194,9 +195,15 @@ Asset::register($this);
                     return Html::tag('div', $return, ['class' => 'outcomingWidget '.$class, 'style' => $style]);
                 }
             ],
-            //['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],
+            ['class' => 'yii\grid\ActionColumn', 'controller' => '/order/element', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 75px;']],
         ],
     ]); ?>
+    
+    <?php
+    if($elementToOrderUrl = yii::$app->getModule('order')->elementToOrderUrl) {
+        echo '<div style="text-align: right;"><a href="'.Url::toRoute([$elementToOrderUrl, 'order_id' => $model->id]).'" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i></a></div>';
+    }
+    ?>
     <h3 align="right">
         <?=Yii::t('order', 'In total'); ?>:
         <?=$model->count;?> <?=Yii::t('order', 'on'); ?>

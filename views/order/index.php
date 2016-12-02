@@ -222,6 +222,15 @@ $columns[] = [
 
 $columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']];
 
+if($module->elementToOrderUrl) {
+    $columns[] = [
+        'label' => yii::t('order', 'Add to order'),
+        'content' => function($model) use ($module) {
+            return '<a href="'.Url::toRoute([$module->elementToOrderUrl, 'order_id' => $model->id]).'" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i></a>';
+        }
+    ];
+}
+
 $order = yii::$app->order;
 ?>
 

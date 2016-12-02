@@ -54,6 +54,8 @@ class Module extends \yii\base\Module
     
     public $workers = [];
     
+    public $elementToOrderUrl = false;
+    
     private $mail;
 
     public function init()
