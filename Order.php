@@ -2,6 +2,7 @@
 namespace pistol88\order;
 
 use pistol88\order\models\Order as OrderModel;
+use pistol88\order\models\Element;
 use yii\base\Component;
 use yii\db\Query;
 use yii;
@@ -10,7 +11,10 @@ class Order extends Component
 {
     private $organization_id;
     private $is_assigment = false;
-    
+
+    public $payedStatus = 'payed';
+    public $halfpayedStatus = 'halfpayed';
+
     public function init()
     {
         parent::init();
@@ -185,6 +189,38 @@ class Order extends Component
             $connection = Yii::$app->getDb();
             $command = $connection->createCommand()->update('order', ['status' => $status], "id = $orderId");
             return $result = $command->execute();
+        }
+    }
+
+    public function pushCartElements($id)
+    {
+        if($elements = yii::$app->cart->elements) {
+
+            if($model = $this->get($id)) {
+                foreach($elements as $element) {
+                    $count = $element->getCount();
+
+                    $orderElementModel = new Element;
+                    $orderElementModel->order_id = $id;
+                    $orderElementModel->is_assigment = $model->is_assigment;
+                    $orderElementModel->model = $element->getModel(false);
+                    $orderElementModel->item_id = $element->getItemId();
+                    $orderElementModel->count = $count;
+                    $orderElementModel->base_price = $element->getPrice(false);
+                    $orderElementModel->price = $element->getPrice();
+                    $orderElementModel->options = json_encode($element->getOptions());
+                    $orderElementModel->description = '';
+                    $orderElementModel->save();
+
+                    $element->getModel()->minusAmount($count);
+                }
+
+                $model->reCount();
+
+                if ($model->status === $this->payedStatus) {
+                    \Yii::$app->order->setStatus($model->id, $this->halfpayedStatus);
+                }
+            }
         }
     }
 }

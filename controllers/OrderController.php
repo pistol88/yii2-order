@@ -94,30 +94,10 @@ class OrderController  extends Controller
         ]);
     }
 
-    public function actionPushElements($id, $push_cart = false)
+    public function actionPushElements($id)
     {
-        $model = $this->findModel($id);
-        
-        if($elements = yii::$app->cart->elements) {
-            foreach($elements as $element) {
-                $count = $element->getCount();
-
-                $orderElementModel = new Element;
-                $orderElementModel->order_id = $model->id;
-                $orderElementModel->is_assigment = $model->is_assigment;
-                $orderElementModel->model = $element->getModel(false);
-                $orderElementModel->item_id = $element->getItemId();
-                $orderElementModel->count = $count;
-                $orderElementModel->base_price = $element->getPrice(false);
-                $orderElementModel->price = $element->getPrice();
-                $orderElementModel->options = json_encode($element->getOptions());
-                $orderElementModel->description = '';
-                $orderElementModel->save();
-                
-                $element->getModel()->minusAmount($count);
-            }
-            
-            yii::$app->cart->truncate();
+        if($model = $this->findModel($id)) {
+            yii::$app->order->pushCartElements($id);
         }
 
         $this->redirect(['/order/order/view', 'id' => $id]);
@@ -274,6 +254,7 @@ class OrderController  extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         // $model->staffer = yii::$app->request->post();
         if ($model->load(yii::$app->request->post()) && $model->save()) {
+            $model = yii::$app->order->get($model->id);
 
             if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                 $sender = yii::$app->getModule('order')->mail
@@ -304,7 +285,6 @@ class OrderController  extends Controller
             }
 
             if ($this->module->paymentFreeTypeIds && in_array($model->payment_type_id, $this->module->paymentFreeTypeIds)) {
-                $nextStepAction = false;
                 \Yii::$app->order->setStatus($model->id, 'payed');
             }
 

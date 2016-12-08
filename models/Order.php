@@ -33,7 +33,7 @@ class Order extends \yii\db\ActiveRecord
             [['status', 'date', 'payment', 'comment', 'delivery_time', 'promocode', 'address', 'is_assigment'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type', 'address'], 'safe'],
-            [['seller_user_id', 'user_id', 'organization_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
+            [['seller_user_id', 'cost', 'base_cost', 'user_id', 'organization_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
         ];
     }
 
@@ -215,13 +215,17 @@ class Order extends \yii\db\ActiveRecord
     {
         $this->count = 0;
         $this->cost = 0;
-        
-        foreach($this->hasMany(Element::className(), ['order_id' => 'id'])->all() as $element) {
+        $this->base_cost = 0;
+
+        foreach($this->getElementsRelation()->all() as $element) {
             $this->count += $element->count;
             $this->cost += $element->count*$element->price;
+            $this->base_cost += $element->count*$element->base_price;
         }
-        
-        return $this->save(false);
+
+        $this->save(false);
+
+        return $this;
     }
     
     public function beforeSave($insert)
@@ -235,17 +239,6 @@ class Order extends \yii\db\ActiveRecord
         }
         
         if($this->isNewRecord) {
-            $cartService = yii::$app->cart;
-
-            if(empty($this->cost)) {
-                $this->cost = $cartService->cost;
-                $this->base_cost = $cartService->getCost(false);
-            }
-
-            if(empty($this->count)) {
-                $this->count = $cartService->count;
-            }
-
             if(empty($this->date)) {
                 $this->date = date('Y-m-d H:i:s');
             } else {
@@ -262,7 +255,6 @@ class Order extends \yii\db\ActiveRecord
     
     public function afterSave($insert, $changedAttributes)
     {
-
         if($fieldValues = yii::$app->request->post('FieldValue')['value']) {
             foreach($fieldValues as $field_id => $fieldValue) {
                 $fieldValueModel = new FieldValue;
@@ -272,35 +264,16 @@ class Order extends \yii\db\ActiveRecord
                 $fieldValueModel->save();
             }
         }
-        
-        if(empty($this->elements)) {
-            $cartService = yii::$app->cart;
 
-            if($elements = $cartService->elements) {
-                foreach($elements as $element) {
-                    $count = $element->getCount();
-
-                    $orderElementModel = new Element;
-                    $orderElementModel->order_id = $this->id;
-                    $orderElementModel->is_assigment = $this->is_assigment;
-                    $orderElementModel->model = $element->getModel(false);
-                    $orderElementModel->item_id = $element->getItemId();
-                    $orderElementModel->count = $count;
-                    $orderElementModel->base_price = $element->getPrice(false);
-                    $orderElementModel->price = $element->getPrice();
-                    $orderElementModel->options = json_encode($element->getOptions());
-                    $orderElementModel->description = '';
-                    $orderElementModel->save();
-                    
-                    $element->getModel()->minusAmount($count);
-                }
-            }
+        //Кто хочет немного бизнес логики?
+        if($insert) {
+            yii::$app->order->pushCartElements($this->id);
 
             if(yii::$app->has('promocode')) {
                 yii::$app->promocode->clear();
             }
-            
-            $cartService->truncate();
+
+            yii::$app->cart->truncate();
         }
         
         return parent::afterSave($insert, $changedAttributes);

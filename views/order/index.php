@@ -219,9 +219,6 @@ $columns[] = [
     }
 ];
 
-
-$columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']];
-
 if($module->elementToOrderUrl) {
     $columns[] = [
         'label' => yii::t('order', 'Add to order'),
@@ -230,6 +227,9 @@ if($module->elementToOrderUrl) {
         }
     ];
 }
+
+$columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']];
+
 
 $order = yii::$app->order;
 ?>

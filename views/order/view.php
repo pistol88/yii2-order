@@ -29,8 +29,42 @@ Asset::register($this);
         ]) ?>
     </p>
 
-    <?=pistol88\order\widgets\ChangeStatus::widget(['model' => $model]);?>
-    
+    <div class="row">
+        <div class="col-md-6">
+            <?=pistol88\order\widgets\ChangeStatus::widget(['model' => $model]);?>
+        </div>
+        <div class="col-md-6">
+            <?php
+            if(class_exists('\halumein\cashbox\widgets\RepaymentForm') && yii::$app->getModule('cashbox')) {
+                ?>
+
+                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#payment-<?=$model->id;?>">Оплата</button>
+
+                <div id="payment-<?=$model->id;?>" class="modal fade" role="dialog" data-role="modal-repayment">
+                    <div class="modal-dialog" style="width: 430px;">
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Оплата заказа № <?=$model->id;?></h4>
+                            </div>
+                            <div class="modal-body">
+                                <?=\halumein\cashbox\widgets\RepaymentForm::widget(['useAjax' => true, 'order' => $model]); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+            }
+            ?>
+        </div>
+
+    </div>
+
+
+    <hr />
+
     <?php
     $detailOrder = [
         'model' => $model,
@@ -204,6 +238,7 @@ Asset::register($this);
         echo '<div style="text-align: right;"><a href="'.Url::toRoute([$elementToOrderUrl, 'order_id' => $model->id]).'" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i></a></div>';
     }
     ?>
+
     <h3 align="right">
         <?=Yii::t('order', 'In total'); ?>:
         <?=$model->count;?> <?=Yii::t('order', 'on'); ?>
@@ -218,4 +253,5 @@ Asset::register($this);
             
         } ?>
     </h3>
+
 </div>

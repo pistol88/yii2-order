@@ -83,7 +83,8 @@ class ToolsController  extends Controller
         
         die(json_encode($json));
     }
-        public function actionUserInfo()
+
+    public function actionUserInfo()
     {
         $userId = yii::$app->request->post('userId');
         
@@ -133,6 +134,7 @@ class ToolsController  extends Controller
         
         die(json_encode($json));
     }
+
 	public function actionAjaxElementsList()
 	{
 		$model = yii::$app->order->get(yii::$app->request->post('orderId'));
