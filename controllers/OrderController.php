@@ -286,6 +286,7 @@ class OrderController  extends Controller
 
             if ($this->module->paymentFreeTypeIds && in_array($model->payment_type_id, $this->module->paymentFreeTypeIds)) {
                 \Yii::$app->order->setStatus($model->id, 'payed');
+                $nextStepAction = false;
             }
 
             return [
