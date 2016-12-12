@@ -269,6 +269,10 @@ class Order extends \yii\db\ActiveRecord
         if($insert) {
             yii::$app->order->pushCartElements($this->id);
 
+            $this->cost = yii::$app->cart->cost;
+            $this->base_cost = yii::$app->cart->getCost(false);
+            $this->save(false);
+            
             if(yii::$app->has('promocode')) {
                 yii::$app->promocode->clear();
             }
