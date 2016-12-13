@@ -75,10 +75,9 @@ class OrderController  extends Controller
         
         if(yii::$app->request->get('time_start')) {
             $dataProvider->query->orderBy('order.timestamp ASC');
+            $dataProvider->pagination = ["pageSize" => 100];
         }
 
-        $dataProvider->pagination = ["pageSize" => 100];
-        
         $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
         $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
 
