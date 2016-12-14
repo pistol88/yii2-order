@@ -29,7 +29,7 @@ $timeStop = yii::$app->request->get('time_stop');
 
 $columns = [];
 
-if(yii::$app->request->get('time_start')) {
+if(yii::$app->request->get('time_start')) { 
     $columns[] = [
         'class' => \yii\grid\SerialColumn::className(),
     ];
