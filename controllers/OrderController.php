@@ -27,7 +27,7 @@ class OrderController  extends Controller
         return [
             'adminAccess' => [
                 'class' => AccessControl::className(),
-				'only' => ['create', 'update', 'index', 'view', 'push-elements', 'print', 'delete', 'editable', 'to-order', 'update-status'],
+				'only' => ['create', 'update', 'index', 'view', 'push-elements', 'print', 'delete', 'editable', 'to-order', 'update-status', 'fast-create'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -194,6 +194,32 @@ class OrderController  extends Controller
         ]);
     }
 
+    public function actionFastCreate()
+    {
+        $orderModel = yii::$app->orderModel;
+
+        $model = new $orderModel;
+
+        if ($model->load(yii::$app->request->post()) && $model->validate() && $model->save()) {
+            if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
+                $sender = yii::$app->getModule('order')->mail
+                    ->compose('admin_notification', ['model' => $model])
+                    ->setTo($ordersEmail)
+                    ->setFrom(yii::$app->getModule('order')->robotEmail)
+                    ->setSubject(Yii::t('order', 'New order')." #{$model->id} ({$model->client_name})")
+                    ->send();
+            }
+
+            $module = $this->module;
+            $orderEvent = new OrderEvent(['model' => $model, 'elements' => $model->elements]);
+            $this->module->trigger($module::EVENT_ORDER_CREATE, $orderEvent);
+        } else {
+            
+        }
+        
+        return $this->redirect(yii::$app->request->referrer);
+    }
+    
     public function actionCreate()
     {
         $orderModel = yii::$app->orderModel;

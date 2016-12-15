@@ -30,7 +30,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             //[['status'], 'required'],
-            [['status', 'date', 'payment', 'comment', 'delivery_time', 'promocode', 'address', 'is_assigment'], 'string'],
+            [['status', 'date', 'payment', 'comment', 'delivery_time', 'address', 'is_assigment'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type', 'address'], 'safe'],
             [['seller_user_id', 'cost', 'base_cost', 'organization_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
