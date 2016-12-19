@@ -44,7 +44,7 @@ class Module extends \yii\base\Module
     public $productSearchModel = 'pistol88\shop\models\product\ProductSearch';
     public $productCategories = null;
     
-    public $orderColumns = ['client_name', 'phone', 'email:email', 'payment_type_id', 'shipping_type_id'];
+    public $orderColumns = ['client_name', 'phone', 'email', 'payment_type_id', 'shipping_type_id'];
     
 	public $elementModels = []; //depricated
 	
