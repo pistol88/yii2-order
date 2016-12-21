@@ -182,6 +182,10 @@ class Order extends Component
 
         $this->resetConditions();
         
+        if(!$result) {
+            return ['total' => 0, 'count_elements' => 0, 'count_orders' => 0];
+        }
+        
         return array_map('intval', $result);
     }
 
