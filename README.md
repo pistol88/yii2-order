@@ -98,7 +98,7 @@ php yii migrate --migrationPath=vendor/pistol88/yii2-order/migrations
 В Module:
 
  * create - создание заказа
- * delete - удаление заказа
+ * delete_order - удаление заказа
  * delete_element - удаление элемента заказа
 
 Пример использования через конфиг:
