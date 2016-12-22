@@ -7,9 +7,9 @@ use yii;
 class Module extends \yii\base\Module
 {
     const EVENT_ORDER_CREATE = 'create';
-    const EVENT_ORDER_DELETE = 'delete_order';
+    const EVENT_ORDER_DELETE = 'delete';
     const EVENT_ELEMENT_DELETE = 'delete_element';
-    
+
     public $orderStatuses = ['new' => 'Новый', 'approve' => 'Подтвержден', 'cancel' => 'Отменен', 'process' => 'В обработке', 'done' => 'Выполнен'];
     public $defaultStatus = 'new';
     public $successUrl = '/order/info/thanks/';
