@@ -24,7 +24,7 @@
     color: black;
     padding: 2px;
     font-size: 12px;
-    
+
 }
 
 .order-informer .bad-result {
@@ -57,7 +57,7 @@
     margin-bottom: 10px;
 }
 .menu-container li {
-    
+
 }
 
 .nav-link .active {
@@ -67,4 +67,8 @@
 .export {
     text-align: right;
     padding-right: 110px;
+}
+
+.choose-user-modal-window {
+    min-width: 80%;
 }
