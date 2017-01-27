@@ -19,6 +19,11 @@ $(document).on('keypress', function(e) {
 });
 
 $(document).on('click', '#order-form-light-submit', function(e) {
+    var self = this;
+    $(self).prop("disabled", true);
+    setTimeout(function() {
+        $(self).prop("disabled", false);
+    }, 2000);
     halumein.orderFormLight.sendData(e);
 });
 
