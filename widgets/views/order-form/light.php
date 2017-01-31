@@ -18,7 +18,7 @@ use pistol88\order\widgets\ChooseClient;
         ]);
     ?>
         <div class="form-group offer">
-            <?= Html::button(Yii::t('order', 'Create order'), ['class' => 'btn btn-success', 'id' => 'order-form-light-submit']); ?>
+            <?= Html::button(Yii::t('order', 'Create order'), ['class' => 'btn btn-success', 'id' => 'order-form-light-submit', 'data-role' => 'order-light-form-submit']); ?>
         </div>
 
         <div class="panel panel-default">
@@ -117,7 +117,7 @@ use pistol88\order\widgets\ChooseClient;
             </div>
         </div>
         <div class="form-group offer">
-            <?= Html::button(Yii::t('order', 'Create order'), ['class' => 'btn btn-success', 'id' => 'order-form-light-submit']); ?>
+            <?= Html::button(Yii::t('order', 'Create order'), ['class' => 'btn btn-success', 'id' => 'order-form-light-submit', 'data-role' => 'order-light-form-submit']); ?>
         </div>
     <?php ActiveForm::end(); ?>
 </div>

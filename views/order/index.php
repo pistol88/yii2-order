@@ -33,13 +33,13 @@ $columns[] = [
     'class' => \yii\grid\SerialColumn::className(),
 ];
 
-$columns[] = [
-    'attribute' => 'id',
-    'options' => ['style' => 'width: 49px;'],
-    'contentOptions' => [
-        'class' => 'show-details'
-    ],
-];
+// $columns[] = [
+//     'attribute' => 'id',
+//     'options' => ['style' => 'width: 49px;'],
+//     'contentOptions' => [
+//         'class' => 'show-details'
+//     ],
+// ];
 
 $columns[] = [
     'attribute' => 'count',
