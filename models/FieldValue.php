@@ -16,6 +16,7 @@ class FieldValue extends \yii\db\ActiveRecord
     {
         return [
             [['order_id', 'field_id'], 'required'],
+            [['order_id', 'field_id'], 'unique', 'targetAttribute' => ['order_id', 'field_id']],
             [['value'], 'string'],
             [['value'], 'safe'],
         ];
