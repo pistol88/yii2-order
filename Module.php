@@ -57,6 +57,8 @@ class Module extends \yii\base\Module
     public $elementToOrderUrl = false;
     
     private $mail;
+    
+    public $discountDescriptionCallback = '';
 
     public function init()
     {

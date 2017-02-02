@@ -71,6 +71,16 @@ $columns[] = [
         if($model->promocode) {
             $total .= Html::tag('div', $model->promocode, ['style' => 'color: orange; font-size: 80%;', yii::t('order', 'Promocode')]);
         }
+        if  (is_object(yii::$app->getModule('order')->discountDescriptionCallback)) {
+
+            $callback = yii::$app->getModule('order')->discountDescriptionCallback;
+            $certificate = $callback($model->id);
+            if  ($certificate) {
+                $total .= Html::tag('div',$certificate->code, ['style' => 'color: green; font-size: 80%;', yii::t('order', 'Certificate')]);
+            }
+        } else {
+            $total .= '';
+        }
 
         return $total;
     },
