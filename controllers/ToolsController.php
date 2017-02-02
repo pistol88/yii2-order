@@ -140,7 +140,14 @@ class ToolsController  extends Controller
 		$model = yii::$app->order->get(yii::$app->request->post('orderId'));
 		$elements = '';
         if  ($model->promocode) {
-            $elements .= Html::tag('div','Был использован промокод: <strong>'.$model->promocode.'</strong>');
+            $promocode = yii::$app->promocode->checkExists($model->promocode);
+            if  ($promocode->type === 'quantum') {
+                $discountType = 'рублей';
+            } else {
+                $discountType = '%';
+            }
+            $elements .= Html::tag('div','Был использован промокод: <strong>'.$promocode->code.'</strong>');
+            $elements .= Html::tag('div','Скидка по промокоду: <strong>'.$promocode->discount.'</strong> '.$discountType);
         }
         if (yii::$app->has('certificate')) {
             $certificate = yii::$app->certificate->getCertificateByOrderId($model->id);
