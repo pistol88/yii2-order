@@ -55,6 +55,8 @@ class Module extends \yii\base\Module
     public $workers = [];
     
     public $elementToOrderUrl = false;
+
+    public $showPaymentColumn = false;
     
     private $mail;
     

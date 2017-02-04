@@ -86,6 +86,21 @@ $columns[] = [
     },
 ];
 
+if(Yii::$app->getModule('order')->showPaymentColumn){
+    $columns[] = [
+        'attribute' => 'payment',
+        'filter' => Html::activeDropDownList(
+            $searchModel,
+            'payment',
+            ['yes' => yii::t('order', 'yes'), 'no' => yii::t('order', 'no')],
+            ['class' => 'form-control', 'prompt' => Yii::t('order', 'Paid')]
+        ),
+        'value' => function($model){
+            return yii::t('order', $model->payment);
+        }
+    ];
+ }
+
 foreach(Yii::$app->getModule('order')->orderColumns as $column) {
     if($column == 'payment_type_id') {
         $column = [
@@ -298,6 +313,19 @@ $order = yii::$app->order;
                                     }
                                     echo '</div>';
                                 }
+                                if(Yii::$app->getModule('order')->showPaymentColumn){
+                                    ?>
+                                    <div class="col-md-2">
+                                        <label><?=yii::t('order', 'Paid');?></label>
+                                        <select class="form-control" name="OrderSearch[payment]">
+                                            <option value="">Все</option>
+                                            <?php foreach(['yes' => yii::t('order', 'yes'), 'no' => yii::t('order', 'no')] as $status => $statusName) { ?>
+                                                <option <?php if($status == yii::$app->request->get('OrderSearch')['payment']) echo ' selected="selected"';?> value="<?=$status;?>"><?=$statusName;?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <?php
+                                }
                                 ?>
                                 <div class="col-md-4">
                                     <label><?=yii::t('order', 'Date');?></label>
@@ -404,7 +432,19 @@ $order = yii::$app->order;
                     </h3>
                 </div>
                 <div class="col-md-4">
-
+                    <?php
+                    if(Yii::$app->getModule('order')->showPaymentColumn){
+                        ?>
+                        <h3>
+                            <?php
+                            echo yii::t('order', 'Paid') . ": ";
+                            $query = clone $dataProvider->query;
+                            echo number_format($query->where('payment <> \'no\'')->sum('cost'), 2, ',', '.') . $module->currency;
+                            ?>
+                        </h3>
+                    <?php
+                    }
+                    ?>
                 </div>
                 <div class="col-md-4 export">
                     <?php
