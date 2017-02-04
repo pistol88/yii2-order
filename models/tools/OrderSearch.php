@@ -13,7 +13,7 @@ class OrderSearch extends Order
     {
         return [
             [['id', 'user_id', 'shipping_type_id', 'payment_type_id', 'seller_user_id'], 'integer'],
-            [['client_name', 'phone', 'email', 'status', 'time', 'date', 'promocode'], 'safe'],
+            [['payment', 'client_name', 'phone', 'email', 'status', 'time', 'date', 'promocode'], 'safe'],
         ];
     }
 
@@ -50,6 +50,7 @@ class OrderSearch extends Order
         $query->andFilterWhere([
             'id' => $this->id,
             'user_id' => $this->user_id,
+            'payment' => $this->payment,
             'status' => $this->status,
             'promocode' => $this->promocode,
             'seller_user_id' => $this->seller_user_id,
