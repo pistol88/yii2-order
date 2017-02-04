@@ -19,6 +19,12 @@ $(document).on('keypress', function(e) {
 });
 
 $(document).on('click', '#order-form-light-submit', function(e) {
+    var self = this;
+    $('[data-role=order-light-form-submit]').prop("disabled", true);
+    // $(self).prop("disabled", true);
+    // setTimeout(function() {
+    //     $(self).prop("disabled", false);
+    // }, 2000);
     halumein.orderFormLight.sendData(e);
 });
 
@@ -44,6 +50,7 @@ halumein.orderFormLight = {
                     if (response.status === 'success' && typeof response.nextStep != 'undefined' && response.nextStep != false) {
                         $form.parent().animate({width:'toggle'},350);
                         $form.parent().parent().load(response.nextStep);
+                        $('[data-role=order-submit-button]').prop("disabled", false);
                     } else {
                         pistol88.service.clearServiceOrder();
                     }

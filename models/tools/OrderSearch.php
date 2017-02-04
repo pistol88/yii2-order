@@ -26,7 +26,7 @@ class OrderSearch extends Order
     {
         $query = Order::find();
 
-		$query->joinWith('elementsRelation');
+		$query->joinWith('elementsRelation')->groupBy('order.id');
 		
 		if($elementTypes = yii::$app->request->get('element_types')) {
 			$query->andFilterWhere(['order_element.model' => $elementTypes])->groupBy('order.id');
@@ -68,6 +68,7 @@ class OrderSearch extends Order
             $query->andWhere("promocode IS NOT NULL");
         }
 
+        //Убрать это все в контроллер
         if($customField = yii::$app->request->get('order-custom-field')) {
             $orderIds = [];
             foreach($customField as $id => $str) {
@@ -85,12 +86,29 @@ class OrderSearch extends Order
 			}
         }
 
-        if($dateStart = yii::$app->request->get('date_start')) {
+        $dateStart = yii::$app->request->get('date_start');
+        
+        if($dateStart) {
+            $dateStop = yii::$app->request->get('date_stop');
+            if($dateStop) {
+                $dateStop = date('Y-m-d', strtotime($dateStop));
+            }
+            
             $dateStart = date('Y-m-d', strtotime($dateStart));
-            if(!yii::$app->request->get('date_stop')) {
-                $query->andWhere('DATE_FORMAT(date, "%Y-%m-%d") = :dateStart', [':dateStart' => $dateStart]);
+
+            if($dateStart == $dateStop) {
+                $query->andWhere(['DATE_FORMAT(date, "%Y-%m-%d")' => $dateStart]);
             } else {
-                $query->andWhere('date >= :dateStart', [':dateStart' => $dateStart]);
+                if(!$dateStop) {
+                    $query->andWhere('DATE_FORMAT(date, "%Y-%m-%d") = :dateStart', [':dateStart' => $dateStart]);
+                } else {
+                    $query->andWhere('date >= :dateStart', [':dateStart' => $dateStart]);
+                }
+                
+                if($dateStop = yii::$app->request->get('date_stop')) {
+                    $dateStop = date('Y-m-d', strtotime($dateStop));
+                    $query->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
+                }
             }
         } else {
             if($timeStart = yii::$app->request->get('time_start')) {
@@ -103,11 +121,6 @@ class OrderSearch extends Order
                 }
                 $query->andWhere('date <= :timeStop', [':timeStop' => $timeStop]);
             }
-        }
-        
-        if($dateStop = yii::$app->request->get('date_stop')) {
-            $dateStop = date('Y-m-d', strtotime($dateStop));
-            $query->andWhere('date <= :dateStop', [':dateStop' => $dateStop]);
         }
 
         return $dataProvider;

@@ -138,8 +138,29 @@ class ToolsController  extends Controller
 	public function actionAjaxElementsList()
 	{
 		$model = yii::$app->order->get(yii::$app->request->post('orderId'));
-		
-		$elements = Html::ul($model->elements, ['item' => function($item, $index) {
+		$elements = '';
+        if  ($model->promocode) {
+            $promocode = yii::$app->promocode->checkExists($model->promocode);
+            if  ($promocode->type === 'quantum') {
+                $discountType = 'рублей';
+            } else {
+                $discountType = '%';
+            }
+            $elements .= Html::tag('div','Был использован промокод: <strong>'.$promocode->code.'</strong>');
+            $elements .= Html::tag('div','Скидка по промокоду: <strong>'.$promocode->discount.'</strong> '.$discountType);
+        }
+        if (yii::$app->has('certificate')) {
+            $certificate = yii::$app->certificate->getCertificateByOrderId($model->id);
+            if ($certificate) {
+                $elements .= Html::tag('div','Был использован сертификат: <strong><a href="'.Url::to(['/certificate/certificate/update','id'=>$certificate->id]).'" target=_bank>'.$certificate->code.'</a></strong>');
+                if ($certificate->type == 'sum') {
+                    $elements .= Html::tag('div','С сертификата списано: <strong>'.yii::$app->certificate->getCertificateUsedSum($model->id).' р.</strong>');
+                } else {
+                    $elements .= Html::tag('div','Использовано единиц с сертификата: <strong>'.yii::$app->certificate->getCertificateUsedSum($model->id).'</strong>');
+                }
+            }
+        }
+		$elements .= Html::ul($model->elements, ['item' => function($item, $index) {
 			return Html::tag(
 				'li',
 				"{$item->getModel()->getCartName()} - {$item->base_price} {$this->module->currency}x{$item->count}",

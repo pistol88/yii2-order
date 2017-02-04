@@ -18,15 +18,16 @@ use pistol88\order\widgets\ChooseClient;
         ]);
     ?>
         <div class="form-group offer">
-            <?= Html::button(Yii::t('order', 'Create order'), ['class' => 'btn btn-success', 'id' => 'order-form-light-submit']); ?>
+            <?= Html::button(Yii::t('order', 'Create order'), ['class' => 'btn btn-success', 'id' => 'order-form-light-submit', 'data-role' => 'order-light-form-submit']); ?>
         </div>
-        
+
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="headingOne">
                 <h4 class="panel-title">
                     <a class="heading collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseTwo">
                         Клиент
                     </a>
+                    <?=Html::a('<i class="glyphicon glyphicon-search"></i> Найти клиента', '#usersModal', ['id' => 'choose-user-id', 'class' => 'pull-right', 'data-toggle' => "modal", 'data-target' => "#usersModal"]);?>
                 </h4>
             </div>
             <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false">
@@ -84,7 +85,7 @@ use pistol88\order\widgets\ChooseClient;
                     <div class="row">
                         <div class="col-lg-6 col-xs-6">
                             <?= $form->field($model, 'is_assigment')->label(yii::t('order', 'Type'))->dropDownList(['0' => yii::t('order', 'Order'), '1' => yii::t('order', 'Assigment')]) ?>
-                        </div> 
+                        </div>
                         <div class="col-lg-6 col-xs-6">
                             <?= $form->field($model, 'payment_type_id')->dropDownList($paymentTypes) ?>
                         </div>
@@ -116,7 +117,7 @@ use pistol88\order\widgets\ChooseClient;
             </div>
         </div>
         <div class="form-group offer">
-            <?= Html::button(Yii::t('order', 'Create order'), ['class' => 'btn btn-success', 'id' => 'order-form-light-submit']); ?>
+            <?= Html::button(Yii::t('order', 'Create order'), ['class' => 'btn btn-success', 'id' => 'order-form-light-submit', 'data-role' => 'order-light-form-submit']); ?>
         </div>
     <?php ActiveForm::end(); ?>
 </div>

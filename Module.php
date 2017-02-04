@@ -9,7 +9,7 @@ class Module extends \yii\base\Module
     const EVENT_ORDER_CREATE = 'create';
     const EVENT_ORDER_DELETE = 'delete';
     const EVENT_ELEMENT_DELETE = 'delete_element';
-    
+
     public $orderStatuses = ['new' => 'Новый', 'approve' => 'Подтвержден', 'cancel' => 'Отменен', 'process' => 'В обработке', 'done' => 'Выполнен'];
     public $defaultStatus = 'new';
     public $successUrl = '/order/info/thanks/';
@@ -44,9 +44,9 @@ class Module extends \yii\base\Module
     public $productSearchModel = 'pistol88\shop\models\product\ProductSearch';
     public $productCategories = null;
     
-    public $orderColumns = ['client_name', 'phone', 'email:email', 'payment_type_id', 'shipping_type_id'];
+    public $orderColumns = ['client_name', 'phone', 'email', 'payment_type_id', 'shipping_type_id'];
     
-	public $elementModels = [];
+	public $elementModels = []; //depricated
 	
     public $sellers = null; //collable, return seller list
     
@@ -57,6 +57,8 @@ class Module extends \yii\base\Module
     public $elementToOrderUrl = false;
     
     private $mail;
+    
+    public $discountDescriptionCallback = '';
 
     public function init()
     {

@@ -164,12 +164,13 @@ class Order extends Component
         if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
             $dateStop = date('Y-m-d H:i:s');
         }
-        
+
         $query = $this->orderQuery();
         $query->addSelect(['sum(e.count*e.price) as total, sum(e.count) as count_elements, COUNT(DISTINCT order_id) as count_orders'])
                 ->from (['order_element e'])
                 ->leftJoin('order', 'order.id = e.order_id')
-                ->andWhere('e.is_assigment != 1')
+                //->groupBy('order.id')
+                ->andWhere('order.is_assigment != 1')
                 ->andWhere('order.date >= :dateStart AND order.date <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop])
                 ->andWhere(['e.model' => $model]);
 
@@ -180,6 +181,10 @@ class Order extends Component
         $result = $query->one();
 
         $this->resetConditions();
+        
+        if(!$result) {
+            return ['total' => 0, 'count_elements' => 0, 'count_orders' => 0];
+        }
         
         return array_map('intval', $result);
     }

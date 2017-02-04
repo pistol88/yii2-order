@@ -29,19 +29,17 @@ $timeStop = yii::$app->request->get('time_stop');
 
 $columns = [];
 
-if(yii::$app->request->get('time_start')) { 
-    $columns[] = [
-        'class' => \yii\grid\SerialColumn::className(),
-    ];
-}
-
 $columns[] = [
-    'attribute' => 'id',
-    'options' => ['style' => 'width: 49px;'],
-    'contentOptions' => [
-        'class' => 'show-details'
-    ],
+    'class' => \yii\grid\SerialColumn::className(),
 ];
+
+// $columns[] = [
+//     'attribute' => 'id',
+//     'options' => ['style' => 'width: 49px;'],
+//     'contentOptions' => [
+//         'class' => 'show-details'
+//     ],
+// ];
 
 $columns[] = [
     'attribute' => 'count',
@@ -72,6 +70,16 @@ $columns[] = [
         $total = $model->cost;
         if($model->promocode) {
             $total .= Html::tag('div', $model->promocode, ['style' => 'color: orange; font-size: 80%;', yii::t('order', 'Promocode')]);
+        }
+        if  (is_object(yii::$app->getModule('order')->discountDescriptionCallback)) {
+
+            $callback = yii::$app->getModule('order')->discountDescriptionCallback;
+            $certificate = $callback($model->id);
+            if  ($certificate) {
+                $total .= Html::tag('div',$certificate->code, ['style' => 'color: green; font-size: 80%;', yii::t('order', 'Certificate')]);
+            }
+        } else {
+            $total .= '';
         }
 
         return $total;
@@ -357,17 +365,6 @@ $order = yii::$app->order;
                                     </div>
                                 <?php } ?>
 
-                                <?php if($module->elementModels) { ?>
-                                    <div class="col-md-2">
-                                        <label><?=yii::t('order', 'With elements');?></label>
-                                        <select class="form-control" name="element_types[]" multiple>
-                                            <?php foreach($module->elementModels as $elementModel => $elementName) { ?>
-                                                <option <?php if(yii::$app->request->get('element_types') && in_array($elementModel, yii::$app->request->get('element_types'))) echo ' selected="selected"';?> value="<?=$elementModel;?>"><?=$elementName;?></option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                <?php } ?>
-
                                 <?php if($sellers = yii::$app->getModule('order')->getSellerList()) { ?>
                                     <div class="col-md-2">
                                         <select class="form-control" name="OrderSearch[seller_user_id]">
@@ -401,35 +398,13 @@ $order = yii::$app->order;
             
             <div class="summary row">
                 <div class="col-md-4">
-                    <?php if($elementModels = $module->elementModels) { ?>
-                        <h3><?=yii::t('order', 'Total');?>:</h3>
-                        <?php foreach($elementModels as $elementModel => $elementName) { ?>
-                            <?php $query = clone $dataProvider->query; ?>
-                            <?php if($total = number_format($query->andWhere(['order_element.model' => $elementModel])->sum('order_element.count * order_element.price'))) { ?>
-                                <p>«<?=$elementName;?>»: <?=$total; ?> <?=$module->currency;?></p>
-                            <?php } ?>
-                        <?php } ?>
-                    <?php } else { ?>
-                        <h3>
-                            <?=number_format($dataProvider->query->sum('cost'), 2, ',', '.');?>
-                            <?=$module->currency;?>
-                        </h3>
-                    <?php } ?>
+                    <h3>
+                        <?=number_format($dataProvider->query->sum('cost'), 2, ',', '.');?>
+                        <?=$module->currency;?>
+                    </h3>
                 </div>
                 <div class="col-md-4">
-                    <ul>
-                        <?php
-                        foreach($paymentTypes as $pid => $pname) {
-                           $query = clone $dataProvider->query;
-                           $sum = $query
-                                   ->andWhere(['payment_type_id' => $pid])
-                                   ->distinct()
-                                   ->sum('cost');
 
-                           echo '<li>'.$pname.': '.(int)$sum.' '.yii::$app->getModule('order')->currency.'</li>';
-                        }
-                        ?>
-                    </ul>
                 </div>
                 <div class="col-md-4 export">
                     <?php
