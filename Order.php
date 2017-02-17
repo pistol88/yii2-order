@@ -145,8 +145,13 @@ class Order extends Component
 
         $query = $this->orderQuery();
         $query->addSelect(['sum(cost) as total, sum(count) as count_elements, COUNT(DISTINCT id) as count_orders'])
-                ->from(['order'])
-                ->andWhere('date >= :dateStart AND date <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop]);
+                ->from(['order']);
+        
+        if($dateStart == $dateStop) {
+            $query->andWhere('DATE_FORMAT(date,\'%Y-%m-%d\') = :date', [':date' => $dateStart]);
+        } else {
+            $query->andWhere('date >= :dateStart AND date <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop]);
+        }
 
         if($where) {
             $query->andWhere($where);
