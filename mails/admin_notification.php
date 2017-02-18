@@ -17,6 +17,10 @@ use yii\widgets\DetailView;
     <?php if($model->phone) { ?>
         <li><?=$model->phone;?></li>
     <?php } ?>
+    
+     <?php if($model->email) { ?>
+        <li><?=$model->email;?></li>
+    <?php } ?>
  
     <?php if($model->comment) { ?>
         <li><?=$model->comment;?></li>
