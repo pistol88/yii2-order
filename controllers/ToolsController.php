@@ -19,7 +19,7 @@ class ToolsController  extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-				'only' => ['user-info', 'ajax-elements-list', 'outcoming', 'find-users-window', 'user-info'],
+                'only' => ['user-info', 'ajax-elements-list', 'outcoming', 'find-users-window', 'user-info'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -135,10 +135,10 @@ class ToolsController  extends Controller
         die(json_encode($json));
     }
 
-	public function actionAjaxElementsList()
-	{
-		$model = yii::$app->order->get(yii::$app->request->post('orderId'));
-		$elements = '';
+    public function actionAjaxElementsList()
+    {
+        $model = yii::$app->order->get(yii::$app->request->post('orderId'));
+        $elements = '';
         if  ($model->promocode) {
             $promocode = yii::$app->promocode->checkExists($model->promocode);
             if  ($promocode->type === 'quantum') {
@@ -160,19 +160,19 @@ class ToolsController  extends Controller
                 }
             }
         }
-		$elements .= Html::ul($model->elements, ['item' => function($item, $index) {
-			return Html::tag(
-				'li',
-				"{$item->getModel()->getCartName()} - {$item->base_price} {$this->module->currency}x{$item->count}",
-				['class' => 'post']
-			);
-		}]);
-		
+        $elements .= Html::ul($model->elements, ['item' => function($item, $index) {
+            return Html::tag(
+                'li',
+                "{$item->getModel()->getCartName()} - {$item->base_price} {$this->module->currency}x{$item->count}",
+                ['class' => 'post']
+            );
+        }]);
+        
         die(json_encode([
             'elementsHtml' => $elements,
         ]));
-	}
-	
+    }
+    
     public function actionCartInfo()
     {
         die(json_encode([
@@ -234,10 +234,10 @@ class ToolsController  extends Controller
             die(json_encode($json));
         }
     }
-	
-	public function actionOutcoming()
-	{
-		$stockId = yii::$app->request->post('stock_id');
+    
+    public function actionOutcoming()
+    {
+        $stockId = yii::$app->request->post('stock_id');
         $productId = yii::$app->request->post('product_id');
         $count = yii::$app->request->post('count');
         $orderId = yii::$app->request->post('order_id');
@@ -254,5 +254,5 @@ class ToolsController  extends Controller
         }
         
         die(json_encode($json));
-	}
+    }
 }
