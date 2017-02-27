@@ -3,10 +3,10 @@ if (typeof pistol88 == "undefined" || !pistol88) {
 }
 
 pistol88.order = {
-	outcomingAction: null,
+    outcomingAction: null,
     init: function() {
         $(document).on('change', ".order-widget-shipping-type select", this.updateShippingType);
-		
+        
         $('.outcomingWidget button').on('click', this.outcoming);
         
         $('.outcomingWidget input[type=text]').on('click', function() {
@@ -20,7 +20,7 @@ pistol88.order = {
         });
 
     },
-	outcoming: function() {
+    outcoming: function() {
         var data = {};
         
         var widget = $(this).parents('.outcomingWidget');
@@ -49,7 +49,7 @@ pistol88.order = {
         
         $(widget).css('opacity', '0.3');
         
-		$.post(pistol88.order.outcomingAction, data, function(json) {
+        $.post(pistol88.order.outcomingAction, data, function(json) {
             $(widget).css('opacity', '1');
             
             if(json.result == 'success') {
@@ -57,7 +57,7 @@ pistol88.order = {
                 $(widget).css({'text-decoration': 'line-through'});
             }
         }, 'json');
-	},
+    },
     updateCartUrl: '',
     updateShippingType: function() {
         jQuery.post(pistol88.order.updateShippingType, {shipping_type_id: $(this).val()},
