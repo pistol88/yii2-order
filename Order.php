@@ -78,7 +78,6 @@ class Order extends Component
     
     public function getOrdersByDatePeriod($dateStart, $dateStop, $where = null)
     {
-
         if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
             $dateStop = date('Y-m-d H:i:s');
         }
@@ -199,6 +198,7 @@ class Order extends Component
         if ($orderId && $status) {
             $connection = Yii::$app->getDb();
             $command = $connection->createCommand()->update('order', ['status' => $status], "id = $orderId");
+            
             return $result = $command->execute();
         }
     }
@@ -206,7 +206,6 @@ class Order extends Component
     public function pushCartElements($id)
     {
         if($elements = yii::$app->cart->elements) {
-
             if($model = $this->get($id)) {
                 foreach($elements as $element) {
                     $count = $element->getCount();
