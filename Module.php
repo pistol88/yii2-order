@@ -46,7 +46,7 @@ class Module extends \yii\base\Module
     
     public $orderColumns = ['client_name', 'phone', 'email', 'payment_type_id', 'shipping_type_id'];
     
-	public $elementModels = []; //depricated
+    public $elementModels = []; //depricated
 	
     public $sellers = null; //collable, return seller list
     
