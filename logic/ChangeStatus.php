@@ -1,7 +1,7 @@
 <?php
 namespace pistol88\order\logic;
 
-class ChangetSatus extends \yii\base\Component
+class ChangetSatus
 {
     public $order;
     public $status;

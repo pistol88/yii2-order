@@ -3,7 +3,7 @@ namespace pistol88\order\logic;
 
 use pistol88\order\interfaces\User;
 
-class SetSeller extends \yii\base\Component
+class SetSeller
 {
     public $order;
     
@@ -12,8 +12,6 @@ class SetSeller extends \yii\base\Component
     public function __construct(User $user, $config = [])
     {
         $this->user = $user;
-        
-        return parent::__construct($config);
     }
     
     public function execute()

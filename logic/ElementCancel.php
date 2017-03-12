@@ -3,7 +3,7 @@ namespace pistol88\order\logic;
 
 use pistol88\order\interfaces\Element;
 
-class ElementCancel extends \yii\base\Component
+class ElementCancel
 {
     public $element;
 

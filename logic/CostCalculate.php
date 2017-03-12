@@ -3,7 +3,7 @@ namespace pistol88\order\logic;
 
 use yii;
 
-class CostCalculate extends \yii\base\Component
+class CostCalculate
 {
     public $order;
     
