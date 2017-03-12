@@ -3,7 +3,7 @@ namespace pistol88\order\logic;
 
 use pistol88\order\interfaces\Order;
 
-class OrderRecovery extends \yii\base\Component
+class OrderRecovery
 {
     public $order;
     

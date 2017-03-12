@@ -3,7 +3,7 @@ namespace pistol88\order\logic;
 
 use yii;
 
-class CountCalculate extends \yii\base\Component
+class CountCalculate
 {
     public $order;
     

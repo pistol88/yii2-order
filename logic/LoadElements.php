@@ -5,7 +5,7 @@ use pistol88\order\interfaces\Cart;
 use pistol88\order\interfaces\OrderElement;
 use yii;
 
-class LoadElements extends \yii\base\Component
+class LoadElements
 {
     public $order;
     
@@ -16,8 +16,6 @@ class LoadElements extends \yii\base\Component
     {
         $this->cart = $cart;
         $this->element = $element;
-        
-        return parent::__construct($config);
     }
     
     public function execute()
