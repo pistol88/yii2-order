@@ -30,14 +30,14 @@ class Order extends Component
         parent::init();
     }
     
-    public function putElements(OrderInterface $order)
+    public function loadElements(OrderInterface $order)
     {
-        return yii::createObject(['class' => OrderDelete::class, 'order' => $order])->execute();
+        return yii::createObject(['class' => LoadElements::class, 'order' => $order])->execute();
     }
     
     public function cancel(OrderInterface $order)
     {
-        return yii::createObject(['class' => OrderDelete::class, 'order' => $order])->execute();
+        return yii::createObject(['class' => OrderCancel::class, 'order' => $order])->execute();
     }
     
     public function recovery(OrderInterface $order)

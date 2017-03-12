@@ -4,7 +4,7 @@ namespace pistol88\order\logic;
 use pistol88\order\interfaces\Cart;
 use yii;
 
-class PutElements extends \yii\base\Component
+class LoadElements extends \yii\base\Component
 {
     public $order;
     
