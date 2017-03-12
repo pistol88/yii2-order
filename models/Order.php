@@ -7,10 +7,9 @@ use pistol88\order\models\ShippingType;
 use pistol88\order\models\Element;
 use pistol88\order\models\FieldValue;
 use pistol88\order\models\tools\OrderQuery;
-use pistol88\order\interfaces\Order as OrderInterface;
 use yii\db\Query;
 
-class Order extends \yii\db\ActiveRecord implements OrderInterface
+class Order extends \yii\db\ActiveRecord
 {
     public $sessionId;
 
