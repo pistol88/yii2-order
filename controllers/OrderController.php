@@ -61,7 +61,8 @@ class OrderController  extends Controller
         $searchModel = new OrderSearch();
 
         $searchParams = yii::$app->request->queryParams;
-
+        $searchParams['OrderSearch']['is_deleted'] = 0;
+        
         //if(!yii::$app->user->can(current(yii::$app->getModule('order')->adminRoles))) {
         //    $searchParams['OrderSearch']['seller_user_id'] = yii::$app->user->id;
         //}
@@ -464,7 +465,7 @@ class OrderController  extends Controller
 
     protected function findModel($id)
     {
-        $orderModel = Order;
+        $orderModel = new Order;
 
         if (($model = $orderModel::findOne($id)) !== null) {
             return $model;

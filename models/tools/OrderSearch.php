@@ -12,7 +12,7 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['id', 'user_id', 'shipping_type_id', 'payment_type_id', 'seller_user_id'], 'integer'],
+            [['id', 'user_id', 'is_deleted', 'shipping_type_id', 'payment_type_id', 'seller_user_id'], 'integer'],
             [['payment', 'client_name', 'phone', 'email', 'status', 'time', 'date', 'promocode'], 'safe'],
         ];
     }
@@ -55,6 +55,10 @@ class OrderSearch extends Order
             'promocode' => $this->promocode,
             'seller_user_id' => $this->seller_user_id,
         ]);
+        
+        if(isset($this->is_deleted)) {
+            $query->andWhere(['order.is_deleted' => $this->is_deleted]);
+        }
 
         $query->andFilterWhere(['like', 'client_name', $this->client_name])
                 ->andFilterWhere(['like', 'shipping_type_id', $this->shipping_type_id])

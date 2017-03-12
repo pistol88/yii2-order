@@ -8,8 +8,8 @@ class ChangetSatus extends \yii\base\Component
 
     public function execute()
     {
-        $this->order->status = $this->status;
-        $this->order->save();
+        $this->order->setStatus($this->status);
+        $this->order->saveData();
         
         return true;
     }

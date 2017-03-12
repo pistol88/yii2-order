@@ -4,7 +4,7 @@ namespace pistol88\order\models;
 
 use yii;
 use yii\db\Query;
-use pistol88\order\interfaces\Element as ElementInterface;
+use pistol88\order\interfaces\OrderElement as ElementInterface;
 
 class Element extends \yii\db\ActiveRecord implements ElementInterface
 {
@@ -57,7 +57,7 @@ class Element extends \yii\db\ActiveRecord implements ElementInterface
     
     public function setModelName($modelName)
     {
-        $this->model_name = $modelName;
+        $this->model = $modelName;
         
         return $this;
     }

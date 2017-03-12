@@ -9,8 +9,8 @@ class OrderCancel extends \yii\base\Component
     
     public function execute()
     {
-        $this->order->is_deleted = 1;
-        $this->order->save();
+        $this->order->setDeleted(1);
+        $this->order->saveData();
 
         return true;
     }

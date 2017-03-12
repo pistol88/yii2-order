@@ -7,9 +7,10 @@ use pistol88\order\models\ShippingType;
 use pistol88\order\models\Element;
 use pistol88\order\models\FieldValue;
 use pistol88\order\models\tools\OrderQuery;
+use pistol88\order\interfaces\Order as OrderInterface;
 use yii\db\Query;
 
-class Order extends \yii\db\ActiveRecord
+class Order extends \yii\db\ActiveRecord implements OrderInterface
 {
     public $sessionId;
 
@@ -28,7 +29,7 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            //[['status'], 'required'],
+            [['email'], 'required'],
             [['status', 'date', 'payment', 'comment', 'delivery_time', 'address'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type', 'address'], 'safe'],
@@ -76,6 +77,25 @@ class Order extends \yii\db\ActiveRecord
         ];
     }
 
+    public function setDeleted($deleted)
+    {
+        $this->is_deleted = $deleted;
+        
+        return $this;
+    }
+    
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        
+        return $this;
+    }
+    
+    public function saveData()
+    {
+        return $this->save(false);
+    }
+    
     public function getId()
     {
         return $this->id;
@@ -176,7 +196,7 @@ class Order extends \yii\db\ActiveRecord
     
     public function getElementsRelation()
     {
-        return $this->hasMany(Element::className(), ['order_id' => 'id'])->where('(is_deleted IS NULL OR is_deleted != 1)');
+        return $this->hasMany(Element::className(), ['order_id' => 'id'])->where('(order_element.is_deleted IS NULL OR order_element.is_deleted != 1)');
     }
     
     public function getElements($withModel = true)
