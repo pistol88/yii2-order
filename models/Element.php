@@ -109,6 +109,47 @@ class Element extends \yii\db\ActiveRecord implements ElementInterface
         return $this;
     }
     
+
+    public function getOrderId()
+    {
+        return $this->order_id;
+    }
+    
+    public function getAssigment()
+    {
+        return $this->is_assigment;
+    }
+    
+    public function getModelName()
+    {
+        return $this->model;
+    }
+    
+    public function getName()
+    {
+        return $this->name;
+    }
+    
+    public function getItemId()
+    {
+        return $this->item_id;
+    }
+    
+    public function getBasePrice()
+    {
+        return $this->base_price;
+    }
+    
+    public function getOptions()
+    {
+        return $this->options;
+    }
+    
+    public function getDescription()
+    {
+        return $this->description;
+    }
+    
     public function saveData()
     {
         return $this->save();

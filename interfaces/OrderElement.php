@@ -3,6 +3,17 @@ namespace pistol88\order\interfaces;
 
 interface OrderElement
 {
+    public function getOrderId();
+    public function getAssigment();
+    public function getModelName();
+    public function getName();
+    public function getItemId();
+    public function getCount();
+    public function getBasePrice();
+    public function getPrice();
+    public function getOptions();
+    public function getDescription();
+    
     public function setOrderId($orderId);
     public function setAssigment($isAssigment);
     public function setModelName($modelName);
