@@ -41,14 +41,82 @@ class Element extends \yii\db\ActiveRecord implements ElementInterface
         ];
     }
 
+    public function setOrderId($orderId)
+    {
+        $this->order_id = $orderId;
+        
+        return $this;
+    }
+    
+    public function setAssigment($isAssigment)
+    {
+        $this->is_assigment = $isAssigment;
+        
+        return $this;
+    }
+    
+    public function setModelName($modelName)
+    {
+        $this->model_name = $modelName;
+        
+        return $this;
+    }
+    
+    public function setName($name)
+    {
+        $this->name = $name;
+        
+        return $this;
+    }
+    
+    public function setItemId($itemId)
+    {
+        $this->item_id = $itemId;
+        
+        return $this;
+    }
+    
+    public function setCount($count)
+    {
+        $this->count = $count;
+    }
+    
+    public function setBasePrice($basePrice)
+    {
+        $this->base_price = $basePrice;
+        
+        return $this;
+    }
+    
+    public function setPrice($price)
+    {
+        $this->price = $price;
+        
+        return $this;
+    }
+    
+    public function setOptions($options)
+    {
+        $this->options = $options;
+        
+        return $this;
+    }
+    
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        
+        return $this;
+    }
+    
+    public function saveData()
+    {
+        return $this->save();
+    }
+    
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getName()
-    {
-        return $this->name;
     }
     
     public function getPrice()

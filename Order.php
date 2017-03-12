@@ -3,6 +3,7 @@ namespace pistol88\order;
 
 use pistol88\order\models\Order as OrderModel;
 use pistol88\order\models\Element;
+use pistol88\order\logic\LoadElements;
 use pistol88\order\logic\OrderCancel;
 use pistol88\order\logic\OrderRecovery;
 use pistol88\order\logic\SetSeller;

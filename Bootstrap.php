@@ -8,7 +8,7 @@ class Bootstrap implements BootstrapInterface
 {
     public function bootstrap($app)
     {
-        yii::$container->set('pistol88\order\interfaces\Element', 'pistol88\order\models\Element');
+        yii::$container->set('pistol88\order\interfaces\OrderElement', 'pistol88\order\models\Element');
         
         if(!$app->has('order')) {
             $app->set('order', ['class' => 'pistol88\order\Order']);

@@ -2,6 +2,7 @@
 namespace pistol88\order\logic;
 
 use pistol88\order\interfaces\Cart;
+use pistol88\order\interfaces\OrderElement;
 use yii;
 
 class LoadElements extends \yii\base\Component
@@ -9,10 +10,12 @@ class LoadElements extends \yii\base\Component
     public $order;
     
     protected $cart;
+    protected $element;
 
-    public function __construct(Cart $cart, $config = [])
+    public function __construct(Cart $cart, OrderElement $element, $config = [])
     {
         $this->cart = $cart;
+        $this->element = $element;
         
         return parent::__construct($config);
     }
@@ -20,20 +23,20 @@ class LoadElements extends \yii\base\Component
     public function execute()
     {
         foreach($this->cart->elements as $element) {
-            $elementModel = yii::$container->get('pistol88\order\interfaces\Element');
+            $elementModel = $this->element;
             $elementModel = new $elementModel;
             
-            $elementModel->order_id = $this->order->id;
-            $elementModel->is_assigment = $this->order->is_assigment;
-            $elementModel->model = $element->getModelName();
-            $elementModel->name = $element->getName();
-            $elementModel->item_id = $element->getItemId();
-            $elementModel->count = $element->getCount();
-            $elementModel->base_price = $element->getPrice(false);
-            $elementModel->price = $element->getPrice();
-            $elementModel->options = json_encode($element->getOptions());
-            $elementModel->description = '';
-            $elementModel->save();
+            $elementModel->setOrderId($this->order->id);
+            $elementModel->setAssigment($this->order->is_assigment);
+            $elementModel->setModelName($element->getModelName());
+            $elementModel->setName($element->getName());
+            $elementModel->setItemId($element->getItemId());
+            $elementModel->setCount($element->getCount());
+            $elementModel->setBasePrice($element->getPrice(false));
+            $elementModel->setPrice($element->getPrice());
+            $elementModel->setOptions(json_encode($element->getOptions()));
+            $elementModel->setDescription('');
+            $elementModel->saveData();
         }
         
         $this->cart->truncate();
