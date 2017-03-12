@@ -4,8 +4,9 @@ namespace pistol88\order\models;
 
 use yii;
 use yii\db\Query;
+use pistol88\order\interfaces\Element as ElementInterface;
 
-class Element extends \yii\db\ActiveRecord
+class Element extends \yii\db\ActiveRecord implements ElementInterface
 {
     public static function tableName()
     {
@@ -16,9 +17,9 @@ class Element extends \yii\db\ActiveRecord
     {
         return [
             [['order_id', 'model', 'item_id'], 'required'],
-            [['description', 'model', 'options'], 'string'],
+            [['description', 'model', 'options', 'name'], 'string'],
             [['price'], 'double'],
-            [['item_id', 'count'], 'integer'],
+            [['item_id', 'count', 'is_deleted'], 'integer'],
         ];
     }
 
@@ -26,6 +27,7 @@ class Element extends \yii\db\ActiveRecord
     {
         return [
             'id' => yii::t('order', 'ID'),
+            'name' => yii::t('order', 'Name'),
             'price' => yii::t('order', 'Price'),
             'base_price' => yii::t('order', 'Base price'),
             'description' => yii::t('order', 'Description'),
@@ -35,9 +37,30 @@ class Element extends \yii\db\ActiveRecord
             'item_id' => yii::t('order', 'Product'),
             'count' => yii::t('order', 'Count'),
             'is_assigment' => yii::t('order', 'Assigment'),
+            'is_deleted' => yii::t('order', 'Deleted'),
         ];
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+    
+    public function getPrice()
+    {
+        return $this->price;
+    }
+    
+    public function getCount()
+    {
+        return $this->count;
+    }
+    
     public function getProduct()
     {
         $modelStr = $this->model;
@@ -87,17 +110,13 @@ class Element extends \yii\db\ActiveRecord
     {
         parent::afterDelete();
         
-        $this->order->reCount();
-
         return true;
     }
     
     public function beforeDelete()
     {
         parent::beforeDelete();
-        
-        $this->getModel()->plusAmount($this->count);
-        
+
         return true;
     }
 }

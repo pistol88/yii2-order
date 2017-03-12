@@ -3,6 +3,16 @@ namespace pistol88\order;
 
 use pistol88\order\models\Order as OrderModel;
 use pistol88\order\models\Element;
+use pistol88\order\logic\OrderCancel;
+use pistol88\order\logic\OrderRecovery;
+use pistol88\order\logic\SetSeller;
+use pistol88\order\logic\SetClient;
+use pistol88\order\logic\ElementCancel;
+use pistol88\order\logic\CountCalculate;
+use pistol88\order\logic\CostCalculate;
+use pistol88\order\interfaces\Order as OrderInterface;
+use pistol88\order\interfaces\Element as ElementInterface;
+use pistol88\order\interfaces\User as UserInterface;
 use yii\base\Component;
 use yii\db\Query;
 use yii;
@@ -14,17 +24,54 @@ class Order extends Component
 
     public $payedStatus = 'payed';
     public $halfpayedStatus = 'halfpayed';
-
+    
     public function init()
     {
         parent::init();
     }
+    
+    public function putElements(OrderInterface $order)
+    {
+        return yii::createObject(['class' => OrderDelete::class, 'order' => $order])->execute();
+    }
+    
+    public function cancel(OrderInterface $order)
+    {
+        return yii::createObject(['class' => OrderDelete::class, 'order' => $order])->execute();
+    }
+    
+    public function recovery(OrderInterface $order)
+    {
+        return yii::createObject(['class' => OrderRecovery::class, 'order' => $order])->execute();
+    }
+    
+    public function cancelElement(ElementInterface $element)
+    {
+        return yii::createObject(['class' => OrderRecovery::class, 'element' => $element])->execute();
+    }
 
+    public function setClient(OrderInterface $order, UserInterface $client)
+    {
+        return yii::createObject(['class' => SetClient::class, 'order' => $order, 'client' => $client])->execute();
+    }
+    
+    public function setSeller(OrderInterface $order, UserInterface $seller)
+    {
+        return yii::createObject(['class' => SetSeller::class, 'order' => $order, 'seller' => $seller])->execute();
+    }
+    
+    public function changeStatus(OrderInterface $order, $status)
+    {
+        return yii::createObject(['class' => ChangeStatus::class, 'order' => $order, 'status' => $status])->execute();
+    }
+    
     private function buildQuery($query)
     {
         if($this->organization_id) {
             $query->andWhere('(organization_id IS NULL OR organization_id = :organization_id)', [':organization_id' => $this->organization_id]);
         }
+        
+        $query->andWhere('(order.is_deleted IS NULL OR order.is_deleted != 1)');
         
         if($this->is_assigment) {
             $query->andWhere('order.is_assigment = 1');
@@ -48,7 +95,7 @@ class Order extends Component
         
         return $this->buildQuery($return);
     }
-    
+
     public function resetConditions()
     {
         $this->organization_id = null;
@@ -191,46 +238,5 @@ class Order extends Component
         }
         
         return array_map('intval', $result);
-    }
-
-    public function setStatus($orderId, $status)
-    {
-        if ($orderId && $status) {
-            $connection = Yii::$app->getDb();
-            $command = $connection->createCommand()->update('order', ['status' => $status], "id = $orderId");
-            
-            return $result = $command->execute();
-        }
-    }
-
-    public function pushCartElements($id)
-    {
-        if($elements = yii::$app->cart->elements) {
-            if($model = $this->get($id)) {
-                foreach($elements as $element) {
-                    $count = $element->getCount();
-
-                    $orderElementModel = new Element;
-                    $orderElementModel->order_id = $id;
-                    $orderElementModel->is_assigment = $model->is_assigment;
-                    $orderElementModel->model = $element->getModel(false);
-                    $orderElementModel->item_id = $element->getItemId();
-                    $orderElementModel->count = $count;
-                    $orderElementModel->base_price = $element->getPrice(false);
-                    $orderElementModel->price = $element->getPrice();
-                    $orderElementModel->options = json_encode($element->getOptions());
-                    $orderElementModel->description = '';
-                    $orderElementModel->save();
-
-                    $element->getModel()->minusAmount($count);
-                }
-
-                $model->reCount();
-
-                if ($model->status === $this->payedStatus) {
-                    \Yii::$app->order->setStatus($model->id, $this->halfpayedStatus);
-                }
-            }
-        }
     }
 }

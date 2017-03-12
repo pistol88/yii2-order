@@ -153,4 +153,5 @@ return [
     'Reset' => 'Сбросить',
     'Add to order' => 'Добавить к заказу',
 	'Certificate' => 'Сертификат',
+    'Deleted' => 'Удалено',
 ];

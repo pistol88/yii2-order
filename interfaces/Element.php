@@ -1,7 +1,7 @@
 <?php
 namespace pistol88\order\interfaces;
 
-interface User
+interface Element
 {
     function getId();
     function getName();

@@ -11,6 +11,7 @@ use pistol88\order\models\Field;
 use pistol88\order\models\FieldValue;
 use pistol88\order\models\PaymentType;
 use pistol88\order\models\ShippingType;
+use pistol88\order\logic\PutElements;
 use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -96,7 +97,7 @@ class OrderController  extends Controller
     public function actionPushElements($id)
     {
         if($model = $this->findModel($id)) {
-            yii::$app->order->pushCartElements($id);
+            yii::createObject(['class' => PutElements::class, 'order' => $model])->execute();
         }
 
         $this->redirect(['/order/order/view', 'id' => $id]);
@@ -196,11 +197,11 @@ class OrderController  extends Controller
 
     public function actionFastCreate()
     {
-        $orderModel = yii::$app->orderModel;
-
-        $model = new $orderModel;
+        $model = new Order;
 
         if ($model->load(yii::$app->request->post()) && $model->validate() && $model->save()) {
+            yii::$app->order->create($model);
+            
             if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                 $sender = yii::$app->getModule('order')->mail
                     ->compose('admin_notification', ['model' => $model])
@@ -222,14 +223,14 @@ class OrderController  extends Controller
     
     public function actionCreate()
     {
-        $orderModel = yii::$app->orderModel;
-
-        $model = new $orderModel;
+        $model = new Order;
 
         $this->getView()->registerJs("jQuery('.buy-by-code-input').focus();");
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
 
+            yii::$app->order->create($model);
+        
             if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                 $sender = yii::$app->getModule('order')->mail
                     ->compose('admin_notification', ['model' => $model])
@@ -261,9 +262,7 @@ class OrderController  extends Controller
 
     public function actionCreateAjax()
     {
-        $orderModel = yii::$app->orderModel;
-
-        $model = new $orderModel;
+        $model = new Order;
 
         if ((yii::$app->has('worksess')) && $session = yii::$app->worksess->soon()) {
             $model->sessionId = $session->id;
@@ -272,14 +271,12 @@ class OrderController  extends Controller
         }
 
         $order = yii::$app->request->post('Order');
-        if (isset($order['staffer'])) {
-            $model->staffer = $order['staffer'];
-        }
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        // $model->staffer = yii::$app->request->post();
+
         if ($model->load(yii::$app->request->post()) && $model->save()) {
             $model = yii::$app->order->get($model->id);
+            yii::$app->order->create($model);
 
             if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                 $sender = yii::$app->getModule('order')->mail
@@ -310,7 +307,7 @@ class OrderController  extends Controller
             }
 
             if ($this->module->paymentFreeTypeIds && in_array($model->payment_type_id, $this->module->paymentFreeTypeIds)) {
-                \Yii::$app->order->setStatus($model->id, 'payed');
+                \Yii::$app->order->changeStatus($model, 'payed');
                 $nextStepAction = false;
             }
 
@@ -339,6 +336,8 @@ class OrderController  extends Controller
             $model->user_id = yii::$app->user->id;
 
             if($model->save()) {
+                yii::$app->order->create($model);
+                
                 if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                     $sender = yii::$app->getModule('order')->mail
                         ->compose('admin_notification', ['model' => $model])
@@ -387,8 +386,8 @@ class OrderController  extends Controller
     {
         if($id = yii::$app->request->post('id')) {
             $model = Order::findOne($id);
-            $model->status = yii::$app->request->post('status');
-            if($model->save(false)) {
+            $status = yii::$app->request->post('status');
+            if(yii::$app->order->changeStatus($model, $status)) {
                 die(json_encode(['result' => 'success']));
             } else {
                 die(json_encode(['result' => 'fail', 'error' => 'enable to save']));
@@ -403,6 +402,16 @@ class OrderController  extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
+            if($fieldValues = yii::$app->request->post('FieldValue')['value']) {
+                foreach($fieldValues as $field_id => $fieldValue) {
+                    $fieldValueModel = new FieldValue;
+                    $fieldValueModel->value = $fieldValue;
+                    $fieldValueModel->order_id = $this->id;
+                    $fieldValueModel->field_id = $field_id;
+                    $fieldValueModel->save();
+                }
+            }
+            
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -419,7 +428,7 @@ class OrderController  extends Controller
         $orderEvent = new OrderEvent(['model' => $model]);
         $this->module->trigger($module::EVENT_ORDER_DELETE, $orderEvent);
 
-        $model->delete();
+        yii::$app->order->cancel($model);
 
         return $this->redirect(['index']);
     }
@@ -439,10 +448,6 @@ class OrderController  extends Controller
             $order->date = date('Y-m-d H:i:s');
             $order->timestamp = time();
 
-            if($staffers = yii::$app->request->post('staffers')) {
-                $order->staffer = $staffers;
-            }
-
             $order->save(false);
 
             $module = $this->module;
@@ -459,7 +464,7 @@ class OrderController  extends Controller
 
     protected function findModel($id)
     {
-        $orderModel = yii::$app->orderModel;
+        $orderModel = Order;
 
         if (($model = $orderModel::findOne($id)) !== null) {
             return $model;

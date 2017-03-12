@@ -91,12 +91,12 @@ class OperatorController  extends Controller
     
     protected function findModel($id)
     {
-        $orderModel = yii::$app->orderModel;
+        $orderModel = Order;
         
         if (($model = $orderModel::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('The requested order does not exist.');
         }
     }
 }

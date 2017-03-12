@@ -7,11 +7,11 @@ use pistol88\order\models\ShippingType;
 use pistol88\order\models\Element;
 use pistol88\order\models\FieldValue;
 use pistol88\order\models\tools\OrderQuery;
+use pistol88\order\interfaces\Order as OrderInterface;
 use yii\db\Query;
 
-class Order extends \yii\db\ActiveRecord
+class Order extends \yii\db\ActiveRecord implements OrderInterface
 {
-    public $staffer;
     public $sessionId;
 
     public static function tableName()
@@ -30,10 +30,10 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             //[['status'], 'required'],
-            [['status', 'date', 'payment', 'comment', 'delivery_time', 'address', 'is_assigment'], 'string'],
+            [['status', 'date', 'payment', 'comment', 'delivery_time', 'address'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type', 'address'], 'safe'],
-            [['seller_user_id', 'cost', 'base_cost', 'organization_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min'], 'integer'],
+            [['seller_user_id', 'cost', 'base_cost', 'organization_id', 'shipping_type_id', 'payment_type_id', 'delivery_time_hour', 'delivery_time_min', 'is_deleted', 'is_assigment'], 'integer'],
         ];
     }
 
@@ -64,6 +64,7 @@ class Order extends \yii\db\ActiveRecord
             'address' => yii::t('order', 'Address'),
             'organization_id' => yii::t('order', 'organization'),
             'is_assigment' => yii::t('order', 'Assigment'),
+            'is_deleted' => yii::t('order', 'Deleted'),
         ];
     }
 
@@ -134,6 +135,11 @@ class Order extends \yii\db\ActiveRecord
         return null;
     }
     
+    public function getClient()
+    {
+        return $this->getUser();
+    }
+    
     public function getSeller()
     {
         $userModel = yii::$app->getModule('order')->sellerModel;
@@ -171,7 +177,7 @@ class Order extends \yii\db\ActiveRecord
     
     public function getElementsRelation()
     {
-        return $this->hasMany(Element::className(), ['order_id' => 'id']);
+        return $this->hasMany(Element::className(), ['order_id' => 'id'])->where('(is_deleted IS NULL OR is_deleted != 1)');
     }
     
     public function getElements($withModel = true)
@@ -192,11 +198,6 @@ class Order extends \yii\db\ActiveRecord
         return $returnModels;
     }
 
-    public function getElementByModel(\pistol88\cart\models\tools\CartElementInterface $model)
-    {
-        return $this->hasMany(Element::className(), ['order_id' => 'id'])->andWhere(['model' => get_class($model), 'item_id' => $model->id])->one();
-    }
-
     public function getElementById($id)
     {
         return $this->hasMany(Element::className(), ['order_id' => 'id'])->andWhere(['id' => $id])->one();
@@ -211,29 +212,8 @@ class Order extends \yii\db\ActiveRecord
         }
     }
     
-    public function reCount()
-    {
-        $this->count = 0;
-        $this->cost = 0;
-        $this->base_cost = 0;
-
-        foreach($this->getElementsRelation()->all() as $element) {
-            $this->count += $element->count;
-            $this->cost += $element->count*$element->price;
-            $this->base_cost += $element->count*$element->base_price;
-        }
-
-        $this->save(false);
-
-        return $this;
-    }
-    
     public function beforeSave($insert)
     {
-        if(empty($this->seller_user_id)) {
-            $this->seller_user_id = yii::$app->user->id;
-        }
-        
         if(empty($this->timestamp)) {
             $this->timestamp = time();
         }
@@ -244,55 +224,8 @@ class Order extends \yii\db\ActiveRecord
             } else {
                 $this->timestamp = strtotime($this->date);
             }
-
-            if(empty($this->promocode) && yii::$app->has('promocode')) {
-                $this->promocode = yii::$app->promocode->code;
-            }
         }
         
         return parent::beforeSave($insert);
-    }
-    
-    public function afterSave($insert, $changedAttributes)
-    {
-        if($fieldValues = yii::$app->request->post('FieldValue')['value']) {
-            foreach($fieldValues as $field_id => $fieldValue) {
-                $fieldValueModel = new FieldValue;
-                $fieldValueModel->value = $fieldValue;
-                $fieldValueModel->order_id = $this->id;
-                $fieldValueModel->field_id = $field_id;
-                $fieldValueModel->save();
-            }
-        }
-
-        //Кто хочет немного бизнес логики?
-        if($insert) {
-            yii::$app->order->pushCartElements($this->id);
-
-            $this->cost = yii::$app->cart->cost;
-            $this->base_cost = yii::$app->cart->getCost(false);
-            $this->save(false);
-            
-            if(yii::$app->has('promocode')) {
-                yii::$app->promocode->clear();
-            }
-
-            yii::$app->cart->truncate();
-        }
-        
-        return parent::afterSave($insert, $changedAttributes);
-    }
-    
-    public function beforeDelete()
-    {
-        foreach ($this->hasMany(Element::className(), ['order_id' => 'id'])->all() as $elem) {
-            $elem->delete();
-        }
-        
-        foreach ($this->hasMany(FieldValue::className(), ['order_id' => 'id'])->all() as $val) {
-            $val->delete();
-        }
-        
-        return parent::beforeDelete();
     }
 }
