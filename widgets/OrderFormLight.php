@@ -32,7 +32,7 @@ class OrderFormLight extends \yii\base\Widget
     {
         $paymentTypes = ArrayHelper::map(PaymentType::find()->orderBy('order DESC')->all(), 'id', 'name');
 
-        $orderModel = yii::$app->orderModel;
+        $orderModel = Order;
         $model = new $orderModel;
 
         $this->getView()->registerJs("pistol88.createorder.updateCartUrl = '".Url::toRoute(['tools/cart-info'])."';");

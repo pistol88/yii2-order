@@ -194,7 +194,7 @@ class ToolsController  extends Controller
     
     public function actionOneClick()
     {
-        $orderModel = yii::$app->orderModel;
+        $orderModel = Order;
 
         $model = new $orderModel;
 

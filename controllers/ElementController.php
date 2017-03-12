@@ -41,7 +41,7 @@ class ElementController extends Controller
         $orderEvent = new ElementEvent(['model' => $model, 'orderModel' => $model->order, 'productModel' => $model->getModel()]);
         $this->module->trigger($module::EVENT_ELEMENT_DELETE, $orderEvent);
         
-        $model->delete();
+        yii::$app->order->cancelElement($model);
 
         return $this->redirect(Yii::$app->request->referrer);
     }

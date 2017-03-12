@@ -3,9 +3,6 @@ namespace pistol88\order\interfaces;
 
 interface User
 {
-    function getUserProfile();
-    function getEmail();
-    function getPhone();
+    function getId();
     function getName();
-    function getFullName();
 }

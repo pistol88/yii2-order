@@ -19,7 +19,6 @@
         "php": ">=5.4.0",
         "yiisoft/yii2": "*",
         "yiisoft/yii2-bootstrap": "*",
-        "pistol88/yii2-cart": "*",
         "2amigos/yii2-grid-view-library": "*",
         "kartik-v/yii2-grid": "*",
         "kartik-v/yii2-export": "@dev",
