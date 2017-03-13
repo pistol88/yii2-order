@@ -8,6 +8,7 @@ use pistol88\order\logic\OrderCancel;
 use pistol88\order\logic\OrderRecovery;
 use pistol88\order\logic\SetSeller;
 use pistol88\order\logic\SetClient;
+use pistol88\order\logic\ChangeStatus;
 use pistol88\order\logic\ElementCancel;
 use pistol88\order\logic\CountCalculate;
 use pistol88\order\logic\CostCalculate;

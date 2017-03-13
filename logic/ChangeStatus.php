@@ -1,7 +1,7 @@
 <?php
 namespace pistol88\order\logic;
 
-class ChangetSatus
+class ChangeStatus
 {
     public $order;
     public $status;
