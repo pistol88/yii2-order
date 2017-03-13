@@ -11,7 +11,7 @@ use pistol88\order\models\Field;
 use pistol88\order\models\FieldValue;
 use pistol88\order\models\PaymentType;
 use pistol88\order\models\ShippingType;
-use pistol88\order\logic\loadElements;
+use pistol88\order\logic\Filling;
 use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -69,15 +69,19 @@ class OrderController  extends Controller
 
         $dataProvider = $searchModel->search($searchParams);
 
-        if($tab == 'assigments') {
-            $dataProvider->query->andWhere(['order.is_assigment' => '1']);
-        } else {
-            $dataProvider->query->andWhere('(order.is_assigment IS NULL OR order.is_assigment = 0)');
+        if(!yii::$app->request->get('sort')) {
+            $dataProvider->query->orderBy('id DESC');
         }
         
         if(yii::$app->request->get('time_start')) {
             $dataProvider->query->orderBy('order.timestamp ASC');
             $dataProvider->pagination = ["pageSize" => 100]; 
+        }
+        
+        if($tab == 'assigments') {
+            $dataProvider->query->andWhere(['order.is_assigment' => '1']);
+        } else {
+            $dataProvider->query->andWhere('(order.is_assigment IS NULL OR order.is_assigment = 0)');
         }
 
         $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
@@ -98,7 +102,7 @@ class OrderController  extends Controller
     public function actionPushElements($id)
     {
         if($model = $this->findModel($id)) {
-            yii::$app->order->loadElements($model);
+            yii::$app->order->Filling($model);
         }
 
         $this->redirect(['/order/order/view', 'id' => $id]);
@@ -201,7 +205,7 @@ class OrderController  extends Controller
         $model = new Order;
 
         if ($model->load(yii::$app->request->post()) && $model->validate() && $model->save()) {
-            yii::$app->order->loadElements($model);
+            yii::$app->order->Filling($model);
             
             if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                 $sender = yii::$app->getModule('order')->mail
@@ -230,7 +234,7 @@ class OrderController  extends Controller
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
 
-            yii::$app->order->loadElements($model);
+            yii::$app->order->Filling($model);
         
             if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                 $sender = yii::$app->getModule('order')->mail
@@ -277,7 +281,7 @@ class OrderController  extends Controller
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
             $model = yii::$app->order->get($model->id);
-            yii::$app->order->loadElements($model);
+            yii::$app->order->Filling($model);
 
             if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                 $sender = yii::$app->getModule('order')->mail
@@ -337,7 +341,7 @@ class OrderController  extends Controller
             $model->user_id = yii::$app->user->id;
 
             if($model->save()) {
-                yii::$app->order->loadElements($model);
+                yii::$app->order->Filling($model);
                 
                 if($ordersEmail = yii::$app->getModule('order')->ordersEmail) {
                     $sender = yii::$app->getModule('order')->mail
