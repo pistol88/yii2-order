@@ -29,7 +29,7 @@ class Order extends \yii\db\ActiveRecord implements OrderInterface
     public function rules()
     {
         return [
-            [['email'], 'required'],
+            //[['email'], 'required'],
             [['status', 'date', 'payment', 'comment', 'delivery_time', 'address'], 'string'],
             [['email'], 'email'],
             [['status', 'date', 'payment', 'client_name', 'phone', 'email', 'comment', 'delivery_time_date', 'delivery_type', 'address'], 'safe'],
