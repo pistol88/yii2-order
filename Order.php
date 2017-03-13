@@ -3,7 +3,7 @@ namespace pistol88\order;
 
 use pistol88\order\models\Order as OrderModel;
 use pistol88\order\models\Element;
-use pistol88\order\logic\LoadElements;
+use pistol88\order\logic\Filling;
 use pistol88\order\logic\OrderCancel;
 use pistol88\order\logic\OrderRecovery;
 use pistol88\order\logic\SetSeller;
@@ -31,9 +31,9 @@ class Order extends Component
         parent::init();
     }
     
-    public function loadElements(OrderInterface $order)
+    public function filling(OrderInterface $order)
     {
-        return yii::createObject(['class' => LoadElements::class, 'order' => $order])->execute();
+        return yii::createObject(['class' => Filling::class, 'order' => $order])->execute();
     }
     
     public function cancel(OrderInterface $order)
