@@ -19,7 +19,7 @@ use yii\widgets\DetailView;
     <?php } ?>
     
      <?php if($model->email) { ?>
-        <li><?=$model->email;?></li>
+        <li><?=Html::a($model->email, 'mailto:'.$model->email);?></li>
     <?php } ?>
  
     <?php if($model->comment) { ?>
