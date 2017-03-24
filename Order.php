@@ -198,7 +198,7 @@ class Order extends Component
         if($dateStart == $dateStop) {
             $query->andWhere('DATE_FORMAT(date,\'%Y-%m-%d\') = :date', [':date' => $dateStart]);
         } else {
-            $query->andWhere('date >= :dateStart AND date <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop]);
+            $query->andWhere('DATE_FORMAT(date,\'%Y-%m-%d\') >= :dateStart AND DATE_FORMAT(date,\'%Y-%m-%d\') <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop]);
         }
 
         if($where) {
