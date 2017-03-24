@@ -132,7 +132,7 @@ class Order extends Component
         }
         
         $query = $this->orderFinder()
-            ->andWhere('date >= :dateStart AND date <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop])
+            ->andWhere('DATE_FORMAT(date,\'%Y-%m-%d\') >= :dateStart AND DATE_FORMAT(date,\'%Y-%m-%d\') <= :dateStop', [':dateStart' => $dateStart, ':dateStop' => $dateStop])
             ->orderBy('timestamp ASC');
         
         if($where) {
