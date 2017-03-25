@@ -26,11 +26,11 @@ class OrderSearch extends Order
     {
         $query = Order::find();
 
-		$query->joinWith('elementsRelation')->groupBy('order.id');
-		
-		if($elementTypes = yii::$app->request->get('element_types')) {
-			$query->andFilterWhere(['order_element.model' => $elementTypes])->groupBy('order.id');
-		}
+        $query->joinWith('elementsRelation')->groupBy('order.id');
+        
+        if($elementTypes = yii::$app->request->get('element_types')) {
+            $query->andFilterWhere(['order_element.model' => $elementTypes])->groupBy('order.id');
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -77,18 +77,18 @@ class OrderSearch extends Order
         if($customField = yii::$app->request->get('order-custom-field')) {
             $orderIds = [];
             foreach($customField as $id => $str) {
-				if(!empty($str)) {
-					if($values = FieldValue::find()->select('order_id')->where(['field_id' => $id])->andWhere(['LIKE', 'value', $str])->all()) {
-						foreach($values as $value) {
-							$orderIds[] = $value->order_id;
-						}
-					}
-				}
+                if(!empty($str)) {
+                    if($values = FieldValue::find()->select('order_id')->where(['field_id' => $id])->andWhere(['LIKE', 'value', $str])->all()) {
+                        foreach($values as $value) {
+                            $orderIds[] = $value->order_id;
+                        }
+                    }
+                }
             }
-			
-			if($orderIds) {
-				$query->andWhere(['order.id' => $orderIds]);           
-			}
+            
+            if($orderIds) {
+                $query->andWhere(['order.id' => $orderIds]);           
+            }
         }
 
         $dateStart = yii::$app->request->get('date_start');
