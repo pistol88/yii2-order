@@ -28,7 +28,7 @@ class OrderController  extends Controller
         return [
             'adminAccess' => [
                 'class' => AccessControl::className(),
-				'only' => ['create', 'update', 'index', 'view', 'push-elements', 'print', 'delete', 'editable', 'to-order', 'update-status', 'fast-create'],
+                'only' => ['create', 'update', 'index', 'view', 'push-elements', 'print', 'delete', 'editable', 'to-order', 'update-status', 'fast-create'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -87,14 +87,14 @@ class OrderController  extends Controller
         $paymentTypes = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
         $shippingTypes = ArrayHelper::map(ShippingType::find()->all(), 'id', 'name');
 
-		$this->getView()->registerJs('pistol88.orders_list.elementsUrl = "'.Url::toRoute(['/order/tools/ajax-elements-list']).'";');
+        $this->getView()->registerJs('pistol88.orders_list.elementsUrl = "'.Url::toRoute(['/order/tools/ajax-elements-list']).'";');
 
         return $this->render('index', [
             'tab' => Html::encode($tab),
             'searchModel' => $searchModel,
             'shippingTypes' => $shippingTypes,
             'paymentTypes' => $paymentTypes,
-			'module' => $this->module,
+            'module' => $this->module,
             'dataProvider' => $dataProvider,
         ]);
     }
