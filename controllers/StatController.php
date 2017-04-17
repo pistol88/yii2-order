@@ -35,7 +35,7 @@ class StatController  extends Controller
 
     public function actionIndex()
     {
-        $model = new Model;
+        $model = new Order;
 
         return $this->render('index', [
             'model' => $model,
@@ -47,7 +47,7 @@ class StatController  extends Controller
         $m = Html::encode($m);
         $y = Html::encode($y);
 
-        $model = new Model;
+        $model = new Order;
 
         return $this->render('month', [
             'm' => $m,
