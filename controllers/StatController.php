@@ -34,7 +34,7 @@ class StatController  extends Controller
 
     public function actionIndex()
     {
-        $model = yii::$app->orderModel;
+        $model = new Model;
 
         return $this->render('index', [
             'model' => $model,
@@ -46,7 +46,7 @@ class StatController  extends Controller
         $m = Html::encode($m);
         $y = Html::encode($y);
 
-        $model = yii::$app->orderModel;
+        $model = new Model;
 
         return $this->render('month', [
             'm' => $m,
