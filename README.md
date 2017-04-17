@@ -165,3 +165,16 @@ php yii migrate --migrationPath=common/modules/order/migrations
 * Paymaster.ru: [pistol88/yii2-paymaster](https://github.com/pistol88/yii2-paymaster)
 * Liqpay: [pistol88/yii2-liqpay](https://github.com/pistol88/yii2-liqpay)
 * Сбербанк: [pistol88/yii2-sberbank-payment](https://github.com/pistol88/yii2-sberbank-payment)
+
+Скриншоты
+---------------------------------
+Форма заказа
+![1](https://cloud.githubusercontent.com/assets/27691515/25094364/7dbb15a6-239f-11e7-992d-1325560546f3.png)
+Главная панель
+![2](https://cloud.githubusercontent.com/assets/27691515/25094385/91f5be9a-239f-11e7-8803-1c0f491f2f13.png)
+Поиск по заказам
+![3](https://cloud.githubusercontent.com/assets/27691515/25094387/91f8d224-239f-11e7-8ec4-88c93598121e.png)
+Статистика
+![4](https://cloud.githubusercontent.com/assets/27691515/25094384/91f52e44-239f-11e7-803b-f3454a74eed1.png)
+Добавление заказа
+![5](https://cloud.githubusercontent.com/assets/27691515/25094386/91f61e80-239f-11e7-8ce1-5e8e2e2471d3.png)
