@@ -47,6 +47,39 @@ yii::$container->set('pistol88\order\interfaces\Cart', 'app\objects\Cart');
 
 app\objects\Cart должен содержать класс, имплементирующий \pistol88\order\interfaces\Cart.
 
+Установка как модуля
+---------------------------------
+Если Вы планируете вносить множество измененией в код, лучшей практикой будет установить расширение как модуль.
+
+Клонируете с Github расширение в нужную папку:
+```
+git clone https://github.com/pistol88/yii2-order.git
+```
+
+В composer.json добавляете путь до модуля:
+```
+"autoload": {
+    "psr-4": {
+      "pistol88\\order\\": "common/modules/order"
+    }
+  }
+```
+Запускаете update:
+```
+php composer update
+```
+
+Делаете миграции:
+```
+php yii migrate --migrationPath=common/modules/order/migrations
+```
+
+Добавляете в конфиг:
+```
+'bootstrap' => ['pistol88\order\Bootstrap'],
+```
+Связываете с корзиной, как описано выше.
+
 Подключение и настройка
 ---------------------------------
 В конфигурационный файл приложения добавить модуль order
