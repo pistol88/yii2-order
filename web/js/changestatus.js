@@ -23,6 +23,8 @@ pistol88.changestatus = {
             function(json) {
                 if(json.result == 'success') {
                     $(link).css('opacity', '1');
+                    let modalOperatorka = window.parent.document.getElementById('operatorkaModal');
+                    jQuery(modalOperatorka).find('.close').click();
                 }
                 else {
                     console.log(json.error);
