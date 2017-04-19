@@ -123,7 +123,7 @@ $columns[] = [
             <?php } ?>
         </div>
         <div class="col-lg-10">
-            <?= $this->render('/parts/menu.php', ['active' => 'operator']); ?>
+
         </div>
     </div>
 

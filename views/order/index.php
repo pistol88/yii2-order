@@ -10,6 +10,7 @@ use pistol88\order\assets\OrdersListAsset;
 use pistol88\order\widgets\AssigmentToOrder;
 
 $this->title = yii::t('order', 'Orders');
+$this->params['breadcrumbs'][] = ['label' => yii::t('order', 'Orders'), 'url' => ['/order/default/index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -188,31 +189,7 @@ $columns[] = [
             return null;
         }
 
-        if(class_exists('\halumein\cashbox\widgets\RepaymentForm') && yii::$app->getModule('cashbox')) {
-            // TODO отрефакторить всё это безобразие
-
-            $modalHtml = '<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#payment-'.$model->id.'">Форма оплаты</button>
-
-            <div id="payment-'.$model->id.'" class="modal fade" role="dialog" data-role="modal-repayment">
-              <div class="modal-dialog" style="width: 430px;">
-
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Оплата заказа № '.$model->id.'</h4>
-                  </div>
-                  <div class="modal-body">
-                    '.
-                    \halumein\cashbox\widgets\RepaymentForm::widget(['useAjax' => true, 'order' => $model])
-                    .'
-                  </div>
-                </div>
-              </div>
-            </div>';
-        } else {
-            $modalHtml = '';
-        }
-
+        $modalHtml = '';
 
         if (in_array($model->status, ['new', 'halfpayed'])) {
             $return = Yii::$app->getModule('order')->orderStatuses[$model->status].'<br>'.$modalHtml;
@@ -269,14 +246,15 @@ $order = yii::$app->order;
         <?php } ?>
     </div>
     <div class="col-lg-10">
-        <?= $this->render('/parts/menu.php', ['active' => 'orders']); ?>
+
     </div>
 </div>
+<br />
 
 <div class="informer-widget">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title"><a href="#" onclick="$('.order-statistics-body').toggle(); return false;"><?=yii::t('order', 'Statistics');?>...</a></h3>
+            <h3 class="panel-title"><a href="#" style="border-bottom: 1px solid #ccc;" onclick="$('.order-statistics-body').toggle(); return false;"><?=yii::t('order', 'Statistics');?>...</a></h3>
         </div>
         <div class="order-statistics-body" style="display: none;">
             <div class="panel-body">
@@ -291,7 +269,7 @@ $order = yii::$app->order;
         <div class="box-body">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><a href="#" onclick="$('.order-search-body').toggle(); return false;"><?=yii::t('order', 'Search');?>...</a></h3>
+                    <h3 class="panel-title"><a href="#" style="border-bottom: 1px solid #ccc;" onclick="$('.order-search-body').toggle(); return false;"><?=yii::t('order', 'Search');?>...</a></h3>
                 </div>
                 <div class="order-search-body" <?php if(!yii::$app->request->get('OrderSearch') && !yii::$app->request->get('time_start')) { ?> style="display: none;"<?php } ?>>
                     <div class="panel-body">
@@ -406,9 +384,12 @@ $order = yii::$app->order;
                                 <div class="col-md-2">
                                     <input type="checkbox" <?php if(yii::$app->request->get('promocode')) echo ' checked="checked"'; ?> name="promocode" value="1" id="order-promocode" />
                                     <label for="order-promocode"><?=yii::t('order', 'Promocode');?></label>
-                                    <input class="btn btn-success form-control" type="submit" value="<?=Yii::t('order', 'Search');?>"  />
-                                    <a href="<?=Url::toRoute(['/order/order/index', 'tab' => $tab]);?>" class="btn btn-default form-control"><i class="glyphicon glyphicon-remove-sign"></i> <?=Yii::t('order', 'Reset');?></a>
-                                </div>
+                                    <p>
+                                        <input class="btn btn-success" type="submit" value="<?=Yii::t('order', 'Search');?>"  />
+                                        <a href="<?=Url::toRoute(['/order/order/index', 'tab' => $tab]);?>" class="btn btn-default"><i class="glyphicon glyphicon-remove-sign"></i></a>
+
+                                    </p>
+                                 </div>
                             </form>
                         <?php } ?>
                     </div>

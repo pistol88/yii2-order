@@ -27,7 +27,6 @@ class Module extends \yii\base\Module
     public $paymentFormAction = false;
     public $paymentFreeTypeIds = false;
 
-    public $adminMenu = ['orders', 'field', 'payment-type', 'payment'];
     public $superadminRole = 'superadmin';
     
     public $createOrderButton = true;
@@ -35,8 +34,8 @@ class Module extends \yii\base\Module
     public $operatorRoles = ['manager', 'admin', 'superadmin'];
     public $operatorOpenStatus = 'process';
     
-    public $userModel = '\common\models\User';
-    public $userSearchModel = 'backend\models\search\UserSearch';
+    public $userModel = '\pistol88\client\models\Client';
+    public $userSearchModel = '\pistol88\client\models\client\ClientSearch';
     
     public $userModelCustomFields = [];
     

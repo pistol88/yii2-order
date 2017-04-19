@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $month;
             
         </div>
         <div class="col-lg-10">
-            <?= $this->render('/parts/menu.php', ['active' => 'statistics']); ?>
+
         </div>
     </div>
     <div class="container">
