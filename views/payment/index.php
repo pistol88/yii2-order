@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'ip',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}'],
         ],
     ]); ?>
 </div>

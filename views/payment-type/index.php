@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute' => 'id', 'options' => ['style' => 'width: 55px;']],
 			'name',
             'widget',
-            ['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 145px;']],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}'],
         ],
     ]); ?>
 

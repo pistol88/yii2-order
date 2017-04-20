@@ -230,7 +230,7 @@ if($module->elementToOrderUrl) {
     ];
 }
 
-$columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 100px;']];
+$columns[] = ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {delete}'];
 
 
 $order = yii::$app->order;
