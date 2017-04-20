@@ -172,21 +172,30 @@ $columns[] = [
     </style>
 
     <script>
-    window.onload = function() {
-        setInterval(function() {
+		window.onload = function() {
+
+            let idAutoUpdateInterval = setInterval(operatorkaAutoUpdate , 5000);
+            
+            $(document).on('click', '.operatorka thead td', function() {
+                clearInterval(idAutoUpdateInterval);
+            });
+
+			$(document).on('click', '.operatorka tbody td', function() {
+				$('#operatorkaModal .modal-body').html('<iframe src="'+$(this).parent('tr').find('.view-url').data('href')+'"></iframe>');
+				$('#operatorkaModal').modal().show();
+
+                clearInterval(idAutoUpdateInterval);
+                idAutoUpdateInterval = setInterval(operatorkaAutoUpdate , 5000);
+			});
+		}
+		
+		function operatorkaAutoUpdate() {
             console.log($('.operatorka .pagination .active a').html());
             if($('.pagination .active a').html() == '1') {
                 $('.operator-update').click();
             }
-            
-        }, 5000);
-        
-        $(document).on('click', '.operatorka td', function() {
-            $('#operatorkaModal .modal-body').html('<iframe src="'+$(this).parent('tr').find('.view-url').data('href')+'"></iframe>');
-            $('#operatorkaModal').modal().show();
-        });
-    }
-    </script>
+        }
+	</script>
 
     <div class="box">
         <div class="box-body">
