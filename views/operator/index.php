@@ -181,7 +181,7 @@ $columns[] = [
             
         }, 5000);
         
-        $(document).on('click', '.operatorka td', function() {
+        $(document).on('click', '.operatorka tbody td', function() {
             $('#operatorkaModal .modal-body').html('<iframe src="'+$(this).parent('tr').find('.view-url').data('href')+'"></iframe>');
             $('#operatorkaModal').modal().show();
         });
