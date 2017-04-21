@@ -14,7 +14,7 @@ class ChangeStatus extends \yii\base\Widget
         parent::init();
 
         \pistol88\order\assets\ChangeStatusAsset::register($this->getView());
-
+        \pistol88\order\assets\CloseModalAfterChangeStatusAsset::register($this->getView());
         return true;
     }
     
